@@ -139,7 +139,7 @@ app.get('/api/addSet', (req, res) => {
         console.log("add set worked!");
     });
 
-    
+
     //create SQL query for increasing num_sets by 1 for associated user_id
     sql = "UPDATE USERS SET num_sets = num_sets + 1 WHERE user_id = ?;";
 
@@ -157,11 +157,27 @@ app.get('/api/addSet', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
+/**
+ * deleteSet SQL function
+ * 
+ * Delete set in FSETS table with primary key information given by client, 
+ * (user_id, set_id). Additionally decreases num_sets by 1 in USERS table
+ * for user associated with userid
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set being deleted
+ *      setuid - the id of the set being deleted
+ * sends: sucess if no error is thrown
+ */
 app.get('/api/deleteSet', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
 
+    //create SQL query to delete set from FSETS
     let sql = "DELETE FROM FSETS WHERE user_id = ? AND set_id = ?;";
+
+    //run SQL query on connection
     con.query(sql, [userid, setid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -169,11 +185,12 @@ app.get('/api/deleteSet', (req, res) => {
         }
 
         console.log("delete set worked!");
-
-        res.json({ data: 'sucess'});
     });
 
+    //create SQL query to decrease num_sets by 1
     sql = "UPDATE USERS SET num_sets = num_sets - 1 WHERE user_id = ?;";
+
+    //run SQL query on connection
     con.query(sql, [userid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -182,6 +199,9 @@ app.get('/api/deleteSet', (req, res) => {
 
         console.log("delete set updated userid!");
     });
+
+    //send sucess as no error occured
+    res.json({ data: 'sucess'});
 });
 
 app.get('/api/getSetCards', (req, res) => {
