@@ -1,7 +1,9 @@
 form {
     display: grid;
     place-items: center; 
+    
     width: 30vw;
+    margin: 10px;
 }
 
 input {
@@ -9,6 +11,7 @@ input {
     text-align: center;
 }
 
+/* center item in middle of page */
 .center-page {
     width: 30vw;
     height: 30vh;
