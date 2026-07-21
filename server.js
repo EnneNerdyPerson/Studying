@@ -412,27 +412,6 @@ app.get('/api/updateCardQA', (req, res) => {
     });
 });
 
-app.get('/api/updatePercent', (req, res) => {
-    const userid = req.query.userid;
-    const setid = req.query.setid;
-    const cardid = req.query.cardid;
-    const percent = req.query.percent;
-    const favorite = req.query.favorite;
-
-    let sql = "UPDATE CARD SET percent = ? WHERE user_id = ? AND set_id = ? AND card_id = ?;";
-    con.query(sql, [percent, userid, setid, cardid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-
-        console.log("updatePercent worked!");
-
-        res.json({ data: 'sucess'});
-    });
-});
-
-
 //--------------------------------------------------------------------------------
 //SQL functions MISC -------------------------------------------------------------
 //--------------------------------------------------------------------------------
