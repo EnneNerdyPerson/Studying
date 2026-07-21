@@ -1,33 +1,44 @@
-const mysql = require('mysql2');
-const express = require('express');
-const cors = require('cors');
-const fs = require('node:fs');
+//import important modules
+const express = require('express');     //connect/run server
+const cors = require('cors');           //connect/run server
+const mysql = require('mysql2');        //SQL
+// const fs = require('node:fs');          //reading fies
 
+//set up server connection
 const app = express();
 const PORT = 3000;
 
+// Enable CORS so frontend can access this server
+app.use(cors());
+app.use(express.json());
+
+//set up SQL connection info
 let con = mysql.createConnection({
   host: "localhost",
-  user: "flashcard_user",
+  user: "flashcard_user",        //limited permission user
   password: "FLASH!card12345",
   database: "flashcardData"
 });
 
+//connec to SQL server
 con.connect(function(err) {
   if (err) throw err;
+
+  //inform connection
   console.log("Connected!");
 
+  //check tables
   let sql = "SHOW TABLES;";
   con.query(sql, function (err, result, fields) {
-    if (err) throw err;
+    if (err) {
+        throw err;
+    }
+
     console.log(result);
   });
 });
 
 
-// Enable CORS so frontend can access this server
-app.use(cors());
-app.use(express.json());
 
 app.get('/api/checkSet', (req, res) => {
     const set = req.query.set;
