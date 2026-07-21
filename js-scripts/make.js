@@ -7,14 +7,10 @@ let setname = setnameElement.innerHTML;
 let setid = -1;;
 
 let makeNew = true;
-// let cardSets;
 let cardId = [];
 let favArray = [];
 let questions = [];
 let answers = [];
-
-// console.log(setname);
-// console.log(setname != "home-page-set-name");
 
 if (setname != "home-page-set-name") {
     try {
@@ -49,32 +45,6 @@ if (setname != "home-page-set-name") {
     } catch (error) {
         console.error('Error fetching data:', error)
     }
-
-    // await fetch('http://localhost:3000/api/getCardsEdit?userid='+userid+'&setid='+setid)
-    //     .then(response => response.json())
-    //     .then(data => {
-    //         cardSets = data.data;
-
-    //         for (let i = 0; i < cardSets.length; i++) {
-    //             let curId = cardSets[i]["card_id"];
-    //             let curQuestion = cardSets[i]["question"];
-    //             let curAnswer = cardSets[i]["answer"];
-    //             let curFavorite = cardSets[i]["favorite"];
-
-    //             cardId.push(curId);
-    //             questions.push(curQuestion);
-    //             answers.push(curAnswer);
-
-    //             if (curFavorite) {
-    //                 // console.log("is favorite");
-    //                 favArray.push(i);
-    //             } 
-    //         }
-
-    //         makeNew = false;
-    //     })
-    //     .catch(error => console.error('Error fetching data:', error)
-    // );
 }
 
 //Set Name Script
@@ -85,7 +55,6 @@ const setName = document.getElementById("set-name");
 let firstName = setName.innerHTML;
 
 const changeName = document.getElementById("change-set-name");
-// const setNameElement = document.getElementById("set-name-label");
 
 ///Change Set Name Information
 const nameChangeContainer = document.getElementById("name-change-container");
@@ -107,11 +76,9 @@ changeName.addEventListener("click", function() {
 
 ///Save name changes
 finChangeName.addEventListener("click", function () {
-   // function saveNameChange() {
     console.log("change button made");
 
     setName.innerHTML = changeNameInput.value;
-    // setNameElement.value = changeNameInput.value;
 
     if ((!makeNew) && (oldName != changeNameInput.value)) {
         try {
@@ -158,7 +125,6 @@ function deleteCard(buttonElement) {
 }
 
 newCardButton.addEventListener("click", function () {
-// function newCard() {
     numQuestions++;
     let num = 0;
 
@@ -168,11 +134,9 @@ newCardButton.addEventListener("click", function () {
         num = numQuestions;
     }
 
-    // let containerString = "-container-" + numQuestions;
     let textString = "-text-" + num;
     let inputString = "-input-" + num;
 
-    // console.log("new card is made!");
     let newCardCreation = document.createElement("div");
     newCardCreation.classList.add("flex-container");
     newCardCreation.id = num;
@@ -180,37 +144,30 @@ newCardButton.addEventListener("click", function () {
     // Question Stuff Creation
     let qContainerDiv = document.createElement("div");
     qContainerDiv.classList.add("card-item");
-    // qContainerDiv.id = "q" + containerString;
 
     let questionText = document.createElement("label");
     questionText.innerText = "Question";
     questionText.htmlFor = "question[]";
-    // "q" + inputString;
     qContainerDiv.append(questionText);
 
     let questionInput = document.createElement("input");
     questionInput.type = "text";
     questionInput.id = "-1";
     questionInput.name = "question[]";
-    // "q" + inputString;
     qContainerDiv.append(questionInput);
 
     // Answer Stuff Creation
     let aContainerDiv = document.createElement("div");
     aContainerDiv.classList.add("card-item");
-    // aContainerDiv.id = "a" + containerString;
 
     let answerText = document.createElement("label");
     answerText.innerText = "Answer";
     answerText.htmlFor = "answer[]";
-    // "a" + inputString;
     aContainerDiv.append(answerText);
 
     let answerInput = document.createElement("input");
     answerInput.type = "text";
-    // answerInput.id = "a" + textString;
     answerInput.name = "answer[]";
-    // "a" + inputString;
     aContainerDiv.append(answerInput);
 
     //Delete Button Creation
@@ -225,7 +182,6 @@ newCardButton.addEventListener("click", function () {
     deleteButton.classList.add("delete-button");
     deleteButton.name = num;
     deleteButton.value = "Delete"
-    // deleteButton.onclick = deleteCard();
     deleteButton.addEventListener('click', () => deleteCard(deleteButton));;
     buttonDiv.append(deleteButton);
 
@@ -234,23 +190,16 @@ newCardButton.addEventListener("click", function () {
     newCardCreation.append(aContainerDiv);
     newCardCreation.append(buttonDiv);
 
-    // form.appendChild(newCardCreation);
     buttonContainer.before(newCardCreation);
-    // document.body.insertBefore(newCardCreation, finishButton);
-
-    // elementQueue.enqueue(num, questionInput, answerInput);
-    // elementQueue.print();
 });
 
-// const useridElement = document.getElementById("userid");
 const numsetsElement = document.getElementById("numsets");
 
 async function makeSet(formData) {
     let questionInput = formData.getAll("question[]");
     let answerInput = formData.getAll("answer[]");
 
-    // //DOMPurify.sanitize();
-
+    //TODO: add error message if any question or answer input is blank
     if (answerInput.length != questionInput.length) {
         return;
     }
@@ -267,8 +216,6 @@ async function makeSet(formData) {
         }
     }
 
-
-    // let userid = useridElement.innerHTML;
     let newSetid = (parseInt(numsetsElement.innerHTML, 10) + 1).toString();
     formData.append("numsets", newSetid);
     
@@ -281,7 +228,7 @@ async function makeSet(formData) {
         let checkSetResult = data.data;
 
         if (checkSetResult.length == 0) {
-            console.log("No SET FOUND");
+            // console.log("No SET FOUND");
             await fetch('http://localhost:3000/api/addSet?userid='+userid
                     +'&setid='+newSetid
                     // +'&setid='+'3'
@@ -289,12 +236,11 @@ async function makeSet(formData) {
                 );
         } else {
             //TODO: either remove or update so it has useful functionality
-            console.log("SET EXISTS");
+            // console.log("SET EXISTS");
             newSetid=checkSetResult[0]["set_id"];
         }
 
         for (let i = 0; i < questionInput.length; i++) {
-            console.log("CHECKING");
             await fetch('http://localhost:3000/api/addCard?userid='+userid
                     +'&setid='+newSetid
                     +'&cardid='+i
@@ -315,8 +261,7 @@ async function makeSet(formData) {
 
 async function editSet(formData) {
     let questionIds = Array.from(document.getElementsByName('question[]')).map(question => question.id);
-    // console.log(questionIds);
-    // console.log(cardId);
+
 
     let questionInput = formData.getAll("question[]");
     let answerInput = formData.getAll("answer[]");
@@ -337,7 +282,6 @@ async function editSet(formData) {
         if (questionIds[index] == "-1") {
             break;
         } else if (cardId[i] == questionIds[index]) {
-            // console.log(cardId[i]);
             console.log(questionIds[index]);
             console.log(questionInput[index]);
             console.log(questions[cardId[i]]);
@@ -345,7 +289,6 @@ async function editSet(formData) {
             if (questionInput[index] != questions[cardId[i]] ||
                 answerInput[index] != answers[cardId[i]]
             ) {
-                // console.log("DIFFERENCE!");
                 alteredIds.push(index);
             }
             
@@ -365,12 +308,9 @@ async function editSet(formData) {
         }
     }
 
-    // console.log(index);
-
-    // console.log("Things to be added:");
     for (let i = 0; i < alteredIds.length; i++) {
         let curIndex = alteredIds[i];
-        // console.log(questionInput[alteredIds[i]]);
+
         if (questionInput[curIndex] == "") {
             return;
         } else if (answerInput[curIndex] == "") {
@@ -392,7 +332,7 @@ async function editSet(formData) {
 
 
     for (let i = index; i < questionInput.length; i++) {
-        // console.log(questionInput[i]);
+
         if (questionInput[i] == "") {
             return;
         } else if (answerInput[i] == "") {
@@ -439,10 +379,10 @@ form.addEventListener("submit", async function() {
 
 
 function start(makeNew) {
-    console.log("start!");
+    // console.log("start!");
 
     if (!makeNew) {
-        console.log("not make new");
+        // console.log("not make new");
         changeNameInput.value = setname;
         setName.innerHTML = changeNameInput.value;
 
@@ -509,12 +449,8 @@ function start(makeNew) {
             // form.appendChild(newCardCreation);
             buttonContainer.before(newCardCreation);
         }
-
-        // for (let i = 0; i < favArray.length; i++ ) {
-
-        // }
     } else {
-        console.log("makeone new card");
+        // console.log("makeone new card");
         let newCardCreation = document.createElement("div");
         newCardCreation.classList.add("flex-container");
         newCardCreation.id = "1";
@@ -575,6 +511,3 @@ function start(makeNew) {
 }
 
 start(makeNew);
-
-//TODO: add functionality to delete set (homepage)
-//
