@@ -39,12 +39,26 @@ con.connect(function(err) {
 });
 
 
-
+/**
+ * checkSet SQL function
+ * 
+ * Check if set with given set name and userid exists. If it exists
+ * then send back the set_id of the the given set
+ * 
+ * parameters: 
+ *      set - the name of the set
+ *      userid - the id of the user associated with set
+ * sends: set_id of found set
+ */
 app.get('/api/checkSet', (req, res) => {
+    //save parameters from client's query
     const set = req.query.set;
     const userid = req.query.userid;
+
+    //create SQL statement
     let sql = "SELECT set_id FROM FSETS WHERE user_id = ? AND set_name = ?;";
 
+    //on SQL connection, run query
     con.query(sql, [userid, set], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -52,9 +66,9 @@ app.get('/api/checkSet', (req, res) => {
         }
 
         console.log("checkSet worked!");
-        res.json({ 
-            data: result
-        });
+        
+        //send result of query back to client
+        res.json({ data: result});
     });
 });
 
