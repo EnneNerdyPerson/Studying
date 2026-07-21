@@ -1,10 +1,4 @@
-// const filepath = document.getElementById("logo").dataset.data;
-// let fileData;
-// let splitData;
-
-let useridElement = document.getElementById("userid");
-let userid = useridElement.innerHTML;
-
+let userid = document.getElementById("username").dataset.data;
 let dataArray;
 
 await fetch('http://localhost:3000/api/homepage?userid='+userid)

@@ -32,7 +32,10 @@
                 >New Set</button>
 
             <!--User name display-->
-            <h4 class="username-display">Username: 
+            <h4 id="username"
+                class="username-display"
+                data-data="<?php echo htmlspecialchars($_SESSION['userid']) ?>"
+                >Username: 
                 <?php echo $_SESSION['username']."<br>" ?>
             </h4> 
 
