@@ -416,10 +416,22 @@ app.get('/api/updateCardQA', (req, res) => {
 //SQL functions MISC -------------------------------------------------------------
 //--------------------------------------------------------------------------------
 
+/** homepage SQL function
+ * 
+ * Get all attributes for set from FSETS table to send to homepage that 
+ * is associated with a given user, given by user_id
+ * 
+ * parameters: userid - the id of the user to get all set info from
+ * sends: results of query -- all info of sets associated with users
+ */
 app.get('/api/homepage', (req, res) => {
+    //save userid query value
     const userid = req.query.userid;
 
+    //create SQL statement to get necessary infromation
     let sql = "SELECT * FROM FSETS WHERE user_id=?;";
+
+    //run SQL statement on connection
     con.query(sql, [userid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -428,6 +440,7 @@ app.get('/api/homepage', (req, res) => {
 
         console.log("homepage worked!");
 
+        //send results of query
         res.json({ data: result});
     });
 });
