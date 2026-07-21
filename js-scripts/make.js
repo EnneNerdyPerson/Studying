@@ -179,7 +179,7 @@ newCardButton.addEventListener("click", function () {
 
     // Question Stuff Creation
     let qContainerDiv = document.createElement("div");
-    qContainerDiv.classList.add("flex-item");
+    qContainerDiv.classList.add("card-item");
     // qContainerDiv.id = "q" + containerString;
 
     let questionText = document.createElement("label");
@@ -197,7 +197,7 @@ newCardButton.addEventListener("click", function () {
 
     // Answer Stuff Creation
     let aContainerDiv = document.createElement("div");
-    aContainerDiv.classList.add("flex-item");
+    aContainerDiv.classList.add("card-item");
     // aContainerDiv.id = "a" + containerString;
 
     let answerText = document.createElement("label");
@@ -215,14 +215,14 @@ newCardButton.addEventListener("click", function () {
 
     //Delete Button Creation
     let buttonDiv = document.createElement("div");
-    buttonDiv.classList.add("flex-item");
+    buttonDiv.classList.add("card-item");
     buttonDiv.classList.add("button-container");
     buttonDiv.classList.add("flex-container");
 
     let deleteButton = document.createElement("input");
     deleteButton.type = "button";
     deleteButton.classList.add("button");
-    deleteButton.classList.add("delete");
+    deleteButton.classList.add("delete-button");
     deleteButton.name = num;
     deleteButton.value = "Delete"
     // deleteButton.onclick = deleteCard();
@@ -456,7 +456,7 @@ function start(makeNew) {
 
             // Question Stuff Creation
             let qContainerDiv = document.createElement("div");
-            qContainerDiv.classList.add("flex-item");
+            qContainerDiv.classList.add("card-item");
 
             let questionText = document.createElement("label");
             questionText.innerText = "Question";
@@ -472,7 +472,7 @@ function start(makeNew) {
 
             // Answer Stuff Creation
             let aContainerDiv = document.createElement("div");
-            aContainerDiv.classList.add("flex-item");
+            aContainerDiv.classList.add("card-item");
 
             let answerText = document.createElement("label");
             answerText.innerText = "Answer";
@@ -488,14 +488,14 @@ function start(makeNew) {
 
             //Delete Button Creation
             let buttonDiv = document.createElement("div");
-            buttonDiv.classList.add("flex-item");
+            buttonDiv.classList.add("card-item");
             buttonDiv.classList.add("button-container");
             buttonDiv.classList.add("flex-container");
 
             let deleteButton = document.createElement("input");
             deleteButton.type = "button";
             deleteButton.classList.add("button");
-            deleteButton.classList.add("delete");
+            deleteButton.classList.add("delete-button");
             deleteButton.name = num;
             deleteButton.value = "Delete"
             deleteButton.addEventListener('click', () => deleteCard(deleteButton));;
@@ -521,7 +521,7 @@ function start(makeNew) {
 
         // Question Stuff Creation
         let qContainerDiv = document.createElement("div");
-        qContainerDiv.classList.add("flex-item");
+        qContainerDiv.classList.add("card-item");
 
         let questionText = document.createElement("label");
         questionText.innerText = "Question";
@@ -536,7 +536,7 @@ function start(makeNew) {
 
         // Answer Stuff Creation
         let aContainerDiv = document.createElement("div");
-        aContainerDiv.classList.add("flex-item");
+        aContainerDiv.classList.add("card-item");
 
         let answerText = document.createElement("label");
         answerText.innerText = "Answer";
@@ -551,14 +551,14 @@ function start(makeNew) {
 
         //Delete Button Creation
         let buttonDiv = document.createElement("div");
-        buttonDiv.classList.add("flex-item");
+        buttonDiv.classList.add("card-item");
         buttonDiv.classList.add("button-container");
         buttonDiv.classList.add("flex-container");
 
         let deleteButton = document.createElement("input");
         deleteButton.type = "button";
         deleteButton.classList.add("button");
-        deleteButton.classList.add("delete");
+        deleteButton.classList.add("delete-button");
         deleteButton.name = "1";
         deleteButton.value = "Delete"
         deleteButton.addEventListener('click', () => deleteCard(deleteButton));;

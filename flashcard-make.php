@@ -80,17 +80,17 @@
         </div>
         <!--Template for Card Information-->
             <!-- <div class="flex-container" id="1">
-                <div class="flex-item">
+                <div class="card-item">
                     <label for="question[]">Question</label>
                     <input name="question[]" type="text">
                 </div>
-                <div class="flex-item">
+                <div class="card-item">
                     <label for="answer[]">Answer</label>
                     <input name="answer[]" type="text">
                 </div>
-                <div class="flex-item button-container flex-container" >
+                <div class="card-item button-container flex-container" >
                     <input 
-                        class="button delete" 
+                        class="button delete-button" 
                         type="button" 
                         name="1" 
                         value="Delete">
