@@ -334,26 +334,42 @@ app.get('/api/getCardsStudy', (req, res) => {
             return;
         }
 
-        console.log("getSetCards worked!");
+        console.log("getCardsStudy worked!");
 
         //send result of query
         res.json({ data: result});
     });
 });
 
+/** getCardsEdit SQL function
+ * 
+ * Get all cards in a set for editing. This function returns card_id, question, answer
+ * and favorite columns for cards in CARD table that have user_id and set_id assocaited 
+ * with a set being editing. Cards are also ordered by card_id
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set to be edited
+ *      setid - the id of the set to be edited
+ * sends: card_id, question, answer, favorite for all cards in set
+ */
 app.get('/api/getCardsEdit', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
 
+    //create query to get card info associated with cards to be edited
     let sql = "SELECT card_id, question, answer, favorite FROM CARD WHERE user_id = ? AND set_id = ? ORDER BY card_id;";
+
+    //run query on connection
     con.query(sql, [userid, setid], function (err, result, fields) {
         if (err) { 
             throw err;
             return;
         }
 
-        console.log("getCardEdit worked!");
+        console.log("getCardsEdit worked!");
 
+        //send result of query
         res.json({ data: result});
     });
 });
