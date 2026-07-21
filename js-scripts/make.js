@@ -1,35 +1,47 @@
-let useridElement = document.getElementById("userid");
-let setnameElement = document.getElementById("setname");
-
-let userid = useridElement.innerHTML;
-let setname = setnameElement.innerHTML;
+//------------------------------------------------------------------------------
+//Get Set information for editing ----------------------------------------------
+//------------------------------------------------------------------------------
+//DOM information for getting set infromation
+let userid = document.getElementById("username").dataset.userid;
+let setname = document.getElementById("username").dataset.setname;
+let numsets = document.getElementById("username").dataset.numsets;
 
 let setid = -1;;
+let makeNew = true;     //if makeing new set, is true, else false
 
-let makeNew = true;
+//arrays for set infromation
 let cardId = [];
-let favArray = [];
 let questions = [];
 let answers = [];
+let favArray = [];      //for later (TODO: add favorite functionality)
 
+//if setname is home-page-set-name then is editing set
 if (setname != "home-page-set-name") {
     try {
-        let response = await fetch('http://localhost:3000/api/checkSet?set='+setname+'&userid='+userid);
+        //get set_id for set with set_name = setname and user_id = userid
+        let response = await fetch('http://localhost:3000/api/checkSet?set='+setname
+            + '&userid=' + userid);
+        let data = await response.json();  //format response
 
-        let data = await response.json();
+        //set given setid
         setid = data.data[0]["set_id"];;
 
-        response = await fetch('http://localhost:3000/api/getCardsEdit?userid='+userid+'&setid='+setid);
-        data = await response.json();
+        //get card infromation for editing
+        response = await fetch('http://localhost:3000/api/getCardsEdit?userid='+userid
+            + '&setid=' + setid);
+        data = await response.json();  //format response
         
+        //save card info for easy coding
         let cardSets = data.data;
 
+        //iterate through all cards in set to save in arrays
         for (let i = 0; i < cardSets.length; i++) {
-            let curId = cardSets[i]["card_id"];
-            let curQuestion = cardSets[i]["question"];
-            let curAnswer = cardSets[i]["answer"];
-            let curFavorite = cardSets[i]["favorite"];
+            let curId = cardSets[i]["card_id"];         //save card_id
+            let curQuestion = cardSets[i]["question"];  //save question
+            let curAnswer = cardSets[i]["answer"];      //save answer
+            let curFavorite = cardSets[i]["favorite"];  //save favorite
 
+            //add information to arrays
             cardId.push(curId);
             questions.push(curQuestion);
             answers.push(curAnswer);
@@ -40,6 +52,7 @@ if (setname != "home-page-set-name") {
             } 
         }
 
+        //since no errors occured, set makeNew to false
         makeNew = false;
 
     } catch (error) {
@@ -47,6 +60,9 @@ if (setname != "home-page-set-name") {
     }
 }
 
+//------------------------------------------------------------------------------
+//Get varibales from DOM and Create global vairbales ---------------------------
+//------------------------------------------------------------------------------
 //Set Name Script
 ///Set Name Information
 const nameContainer = document.getElementById("name-container");
@@ -66,34 +82,6 @@ let oldName = changeNameInput.value;
 //Form Stuff
 const form = document.getElementById("flashcard-maker");
 
-///Show Change Name HTML
-changeName.addEventListener("click", function() {
-    changeNameInput.value = setName.innerHTML;
-
-    nameContainer.classList.toggle("hidden");
-    nameChangeContainer.classList.toggle("hidden");
-});
-
-///Save name changes
-finChangeName.addEventListener("click", function () {
-    console.log("change button made");
-
-    setName.innerHTML = changeNameInput.value;
-
-    if ((!makeNew) && (oldName != changeNameInput.value)) {
-        try {
-            fetch('http://localhost:3000/api/updateSetName?setname='+setName.innerHTML+'&userid='+userid+'&setid='+setid);
-
-        } catch (error) {
-            //print to console any errors that occur
-            console.error('Error sending data:', error);
-        }
-    }
-
-    nameContainer.classList.toggle("hidden");
-    nameChangeContainer.classList.toggle("hidden");
-});
-
 //Flashcard editing script
 const newCardButton = document.getElementById("new-card");
 const finishButton = document.getElementById("finish");
@@ -112,31 +100,10 @@ if (makeNew) {
 
 let deleteStack = [];
 
-function deleteCard(buttonElement) {
-    let numOfCard = buttonElement.name;
-    deleteStack.push(numOfCard);
-
-    numQuestions--;
-    
-    const div = document.getElementById(numOfCard);
-
-    div.replaceChildren();
-    div.remove();
-}
-
-newCardButton.addEventListener("click", function () {
-    numQuestions++;
-    let num = 0;
-
-    if (deleteStack.length != 0) {
-        num = deleteStack.pop();    
-    } else {
-        num = numQuestions;
-    }
-
-    let textString = "-text-" + num;
-    let inputString = "-input-" + num;
-
+//------------------------------------------------------------------------------
+//Functions ---------------------------
+//------------------------------------------------------------------------------
+function newCard(num, id, questionValue, answerValue) {
     let newCardCreation = document.createElement("div");
     newCardCreation.classList.add("flex-container");
     newCardCreation.id = num;
@@ -152,8 +119,9 @@ newCardButton.addEventListener("click", function () {
 
     let questionInput = document.createElement("input");
     questionInput.type = "text";
-    questionInput.id = "-1";
+    questionInput.id = id;
     questionInput.name = "question[]";
+    questionInput.value = questionValue;
     qContainerDiv.append(questionInput);
 
     // Answer Stuff Creation
@@ -168,6 +136,7 @@ newCardButton.addEventListener("click", function () {
     let answerInput = document.createElement("input");
     answerInput.type = "text";
     answerInput.name = "answer[]";
+    answerInput.value = answerValue;
     aContainerDiv.append(answerInput);
 
     //Delete Button Creation
@@ -191,9 +160,19 @@ newCardButton.addEventListener("click", function () {
     newCardCreation.append(buttonDiv);
 
     buttonContainer.before(newCardCreation);
-});
+}
 
-const numsetsElement = document.getElementById("numsets");
+function deleteCard(buttonElement) {
+    let numOfCard = buttonElement.name;
+    deleteStack.push(numOfCard);
+
+    numQuestions--;
+    
+    const div = document.getElementById(numOfCard);
+
+    div.replaceChildren();
+    div.remove();
+}
 
 async function makeSet(formData) {
     let questionInput = formData.getAll("question[]");
@@ -216,7 +195,7 @@ async function makeSet(formData) {
         }
     }
 
-    let newSetid = (parseInt(numsetsElement.innerHTML, 10) + 1).toString();
+    let newSetid = (parseInt(numsets, 10) + 1).toString();
     formData.append("numsets", newSetid);
     
     let checkSetResult;
@@ -360,6 +339,49 @@ async function editSet(formData) {
         }
     }
 }
+//------------------------------------------------------------------------------
+//Event Listeners ---------------------------
+//------------------------------------------------------------------------------
+///Show Change Name HTML
+changeName.addEventListener("click", function() {
+    changeNameInput.value = setName.innerHTML;
+
+    nameContainer.classList.toggle("hidden");
+    nameChangeContainer.classList.toggle("hidden");
+});
+
+///Save name changes
+finChangeName.addEventListener("click", function () {
+    console.log("change button made");
+
+    setName.innerHTML = changeNameInput.value;
+
+    if ((!makeNew) && (oldName != changeNameInput.value)) {
+        try {
+            fetch('http://localhost:3000/api/updateSetName?setname='+setName.innerHTML+'&userid='+userid+'&setid='+setid);
+
+        } catch (error) {
+            //print to console any errors that occur
+            console.error('Error sending data:', error);
+        }
+    }
+
+    nameContainer.classList.toggle("hidden");
+    nameChangeContainer.classList.toggle("hidden");
+});
+
+newCardButton.addEventListener("click", function () {
+    numQuestions++;
+    let num = 0;
+
+    if (deleteStack.length != 0) {
+        num = deleteStack.pop();    
+    } else {
+        num = numQuestions;
+    }
+
+    newCard(num, "-1", "", "");
+});
 
 form.addEventListener("submit", async function() {
     // Stop the form from submitting normally and reloading
@@ -377,136 +399,21 @@ form.addEventListener("submit", async function() {
     window.location.href = "flashcard-study.php";
 });
 
-
+//------------------------------------------------------------------------------
+//Start function ---------------------------
+//------------------------------------------------------------------------------
 function start(makeNew) {
-    // console.log("start!");
-
-    if (!makeNew) {
-        // console.log("not make new");
+    if (makeNew) {
+        newCard("1", "-1", "", "");
+    } else {
         changeNameInput.value = setname;
         setName.innerHTML = changeNameInput.value;
-
 
         for (let i = 0; i < questions.length; i++) {
             let num = i + 1;
 
-            let newCardCreation = document.createElement("div");
-            newCardCreation.classList.add("flex-container");
-            newCardCreation.id = num;
-
-            // Question Stuff Creation
-            let qContainerDiv = document.createElement("div");
-            qContainerDiv.classList.add("card-item");
-
-            let questionText = document.createElement("label");
-            questionText.innerText = "Question";
-            questionText.htmlFor = "question[]";
-            qContainerDiv.append(questionText);
-
-            let questionInput = document.createElement("input");
-            questionInput.type = "text";
-            questionInput.id =  cardId[i];
-            questionInput.name = "question[]";
-            questionInput.value = questions[i];
-            qContainerDiv.append(questionInput);
-
-            // Answer Stuff Creation
-            let aContainerDiv = document.createElement("div");
-            aContainerDiv.classList.add("card-item");
-
-            let answerText = document.createElement("label");
-            answerText.innerText = "Answer";
-            answerText.htmlFor = "answer[]";
-            aContainerDiv.append(answerText);
-
-            let answerInput = document.createElement("input");
-            answerInput.type = "text";
-            // answerInput.id = "a" + textString;
-            answerInput.name = "answer[]";
-            answerInput.value = answers[i];
-            aContainerDiv.append(answerInput);
-
-            //Delete Button Creation
-            let buttonDiv = document.createElement("div");
-            buttonDiv.classList.add("card-item");
-            buttonDiv.classList.add("button-container");
-            buttonDiv.classList.add("flex-container");
-
-            let deleteButton = document.createElement("input");
-            deleteButton.type = "button";
-            deleteButton.classList.add("button");
-            deleteButton.classList.add("delete-button");
-            deleteButton.name = num;
-            deleteButton.value = "Delete"
-            deleteButton.addEventListener('click', () => deleteCard(deleteButton));;
-            buttonDiv.append(deleteButton);
-
-            //Add everything to newCardCreation
-            newCardCreation.append(qContainerDiv);
-            newCardCreation.append(aContainerDiv);
-            newCardCreation.append(buttonDiv);
-
-            // form.appendChild(newCardCreation);
-            buttonContainer.before(newCardCreation);
+            newCard(num, cardId[i], questions[i], answers[i]);
         }
-    } else {
-        // console.log("makeone new card");
-        let newCardCreation = document.createElement("div");
-        newCardCreation.classList.add("flex-container");
-        newCardCreation.id = "1";
-
-        // Question Stuff Creation
-        let qContainerDiv = document.createElement("div");
-        qContainerDiv.classList.add("card-item");
-
-        let questionText = document.createElement("label");
-        questionText.innerText = "Question";
-        questionText.htmlFor = "question[]";
-        qContainerDiv.append(questionText);
-
-        let questionInput = document.createElement("input");
-        questionInput.type = "text";
-        questionInput.id = "-1";
-        questionInput.name = "question[]";
-        qContainerDiv.append(questionInput);
-
-        // Answer Stuff Creation
-        let aContainerDiv = document.createElement("div");
-        aContainerDiv.classList.add("card-item");
-
-        let answerText = document.createElement("label");
-        answerText.innerText = "Answer";
-        answerText.htmlFor = "answer[]";
-        aContainerDiv.append(answerText);
-
-        let answerInput = document.createElement("input");
-        answerInput.type = "text";
-        // answerInput.id = "a" + textString;
-        answerInput.name = "answer[]";
-        aContainerDiv.append(answerInput);
-
-        //Delete Button Creation
-        let buttonDiv = document.createElement("div");
-        buttonDiv.classList.add("card-item");
-        buttonDiv.classList.add("button-container");
-        buttonDiv.classList.add("flex-container");
-
-        let deleteButton = document.createElement("input");
-        deleteButton.type = "button";
-        deleteButton.classList.add("button");
-        deleteButton.classList.add("delete-button");
-        deleteButton.name = "1";
-        deleteButton.value = "Delete"
-        deleteButton.addEventListener('click', () => deleteCard(deleteButton));;
-        buttonDiv.append(deleteButton);
-
-        //Add everything to newCardCreation
-        newCardCreation.append(qContainerDiv);
-        newCardCreation.append(aContainerDiv);
-        newCardCreation.append(buttonDiv);
-
-        // form.appendChild(newCardCreation);
-        buttonContainer.before(newCardCreation);
     }
 }
 
