@@ -374,14 +374,31 @@ app.get('/api/getCardsEdit', (req, res) => {
     });
 });
 
+/** updateCardQA SQL function
+ * 
+ * Update the question and/or answer column for a specific card, identified
+ * by (user_id, set_id, card_id), given by client.
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with card
+ *      setid - the id of the set associated with card
+ *      cardid - the id of the card to be updated
+ *      question - new question value for card
+ *      answer - new answer value for card
+ * sends: success if no errors occur
+ */
 app.get('/api/updateCardQA', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
     const cardid = req.query.cardid;
     const question = req.query.question;
     const answer = req.query.answer;
 
+    //create SQL query update update question and answer for given card
     let sql = "UPDATE CARD SET question = ?, answer = ? WHERE user_id = ? AND set_id = ? AND card_id = ?;";
+
+    //run SQL query on connection
     con.query(sql, [question, answer, userid, setid, cardid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -390,6 +407,7 @@ app.get('/api/updateCardQA', (req, res) => {
 
         console.log("updateCardQA worked!");
 
+        //send sucess since no errors occured
         res.json({ data: 'sucess'});
     });
 });
