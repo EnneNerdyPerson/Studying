@@ -252,7 +252,8 @@ app.get('/api/addCard', (req, res) => {
             throw err;
             return;
         }
-        console.log("add card updated userid!");
+        
+        console.log("addCard updated num_cards in FSETS!");
     });
 
     //send sucess as no error occured
