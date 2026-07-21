@@ -1,0 +1,69 @@
+h2 {
+    margin: 20px;
+}
+
+label {
+    margin: 0 10px;
+    font-size: 18px;
+}
+
+input[type=text] {
+    width: 75%;
+    height: 20px;
+    padding: 5px;
+}
+
+.quest {
+    min-width: 90%;
+    padding: 5px;
+    border: solid black 2px;
+    border-radius: 5px;
+}
+
+.flex-item {
+    width: 35vw;
+    margin: 20px;
+    padding: 15px;
+
+    border: solid black 1px;
+    border-radius: 5px;
+
+    background-color: #DAF7DC;
+}
+
+.button-container {
+    width: 50px;
+    border-style: none;
+    background-color: transparent;
+}
+
+.delete {
+    padding: 5px 10px;
+    font-size: 17px;
+}
+
+#change-set-name, #fin-set-name {
+    color: black;
+    background-color: #ABC8C0;
+    border: solid black 1px;
+    border-radius: 5px;
+}
+
+#set-name-change {
+    width: 300px;
+    font-size: 20px;
+}
+
+.hidden {
+    position: relative;
+}
+/* .form-button {
+    margin: 10px;
+    padding: 10px;
+} */
+
+/* #name-change-container {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+} */
