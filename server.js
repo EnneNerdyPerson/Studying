@@ -273,11 +273,15 @@ app.get('/api/addCard', (req, res) => {
  * sends: sucess if no error is thrown
  */
 app.get('/api/deleteCard', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
     const cardid = req.query.cardid;
 
+    //create query to delete card from CARD table
     let sql = "DELETE FROM CARD WHERE user_id = ? AND set_id = ? AND card_id = ?;";
+
+    //run query on connection
     con.query(sql, [userid, setid, cardid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -287,15 +291,20 @@ app.get('/api/deleteCard', (req, res) => {
         console.log("deleteCard worked!");
     });
 
+    //create query to decrement num_cards by 1
     sql = "UPDATE FSETS SET num_cards = num_cards - 1 WHERE user_id = ? AND set_id = ?;";
+
+    //run query on conenction
     con.query(sql, [userid, setid], function (err, result, fields) {
         if (err) { 
             throw err;
             return;
         }
+
         console.log("deleteCard updated numcards!");
     });
 
+    //send sucess as no errors occured
     res.json({ data: 'sucess'});
 });
 
