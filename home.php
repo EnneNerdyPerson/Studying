@@ -34,7 +34,7 @@
             <!--User name display-->
             <h4 id="username"
                 class="username-display"
-                data-data="<?php echo htmlspecialchars($_SESSION['userid']) ?>"
+                data-userid="<?php echo htmlspecialchars($_SESSION['userid']) ?>"
                 >Username: 
                 <?php echo $_SESSION['username']."<br>" ?>
             </h4> 
