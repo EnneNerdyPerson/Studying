@@ -308,11 +308,26 @@ app.get('/api/deleteCard', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
+/** getCardsStudy SQL function
+ * 
+ * Get all cards in a set for studying. This function returns all attributes for
+ * cards in CARD table that have user_id and set_id assocaited with a set being
+ * studied.
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set to be studied
+ *      setid - the id of the set to be studied
+ * sends: card_id, question, answer, percent, favorite for all cards in set
+ */
 app.get('/api/getCardsStudy', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
 
+    //create query to get all cards/card info from a given set
     let sql = "SELECT card_id, question, answer, percent, favorite FROM CARD WHERE user_id = ? AND set_id = ?;";
+
+    //run query on connection
     con.query(sql, [userid, setid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -321,6 +336,7 @@ app.get('/api/getCardsStudy', (req, res) => {
 
         console.log("getSetCards worked!");
 
+        //send result of query
         res.json({ data: result});
     });
 });
