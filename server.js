@@ -207,14 +207,33 @@ app.get('/api/updateSetName', (req, res) => {
 //SQL functions for CARD (flashcard) manipulation --------------------------------
 //--------------------------------------------------------------------------------
 
+/** addCard SQL function
+ * 
+ * Add a card with given card_id, question, and answer infromation. user_id and set_id
+ * associated card with a given set and user. percent and favorite are default 0 and
+ * FALSE respectively. Additionally, increase num_cards in FSETS table by 1 for 
+ * associated set, given by (user_id, set_id)
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set/card
+ *      setuid - the id of the set associated with card
+ *      cardid - the id of the new card
+ *      question - the value for the question of the new card
+ *      answer - the value for the answer of the new card
+ * sends: sucess if no error is thrown
+ */
 app.get('/api/addCard', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
     const cardid = req.query.cardid;
     const question = req.query.question;
     const answer = req.query.answer;
 
+    //create query to insert card into CARD table
     let sql = "INSERT INTO CARD (user_id, set_id, card_id, question, answer, percent, favorite) VALUES (?, ?, ?, ?, ?, 0, FALSE);";
+    
+    //run query on connection
     con.query(sql, [userid, setid, cardid, question, answer], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -224,7 +243,10 @@ app.get('/api/addCard', (req, res) => {
         console.log("addCard worked!");
     });
 
+    //create query to update num_cards for associated set
     sql = "UPDATE FSETS SET num_cards = num_cards + 1 WHERE user_id = ? AND set_id = ?;";
+
+    //run query on connection
     con.query(sql, [userid, setid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -233,6 +255,7 @@ app.get('/api/addCard', (req, res) => {
         console.log("add card updated userid!");
     });
 
+    //send sucess as no error occured
     res.json({ data: 'sucess'});
 });
 
