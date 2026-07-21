@@ -1,0 +1,274 @@
+body {
+  /* background-color: #6C969D; */
+}
+
+p {
+  font-size: 32px;
+}
+
+button, label {
+  font-size: 18px;
+}
+
+
+.flip-container {
+  perspective: 1000px; /* Gives 3D depth to the flip */
+  min-width: 300px;
+  width: 70%;
+  height: 60vh;
+}
+
+.flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d; /* Required for 3D elements */
+  cursor: pointer;
+}
+
+/* The JavaScript toggle target */
+.flip-container.flipped .flipper {
+  transform: rotateX(180deg);
+}
+
+.front, .back {
+  position: absolute;
+  backface-visibility: hidden; /* Hides the reverse side during rotation */
+}
+
+.back {
+  transform: rotateX(180deg); /* Starts hidden, pre-rotated */
+}
+
+.flashcard-container {
+  text-align: center;
+  backface-visibility: hidden; /* Hides the reverse side during rotation */
+
+  width: 90%;
+  /* background-image: linear-gradient(to right, #edfaee, #fff9f5dc, #fff9f5dc, #fff9f5dc, #fff9f5dc, #edfaee); */
+  /* background-color: #edfaee; */
+}
+
+.spacing {
+  margin: 20px 0 15px 0;
+  
+}
+
+.learn-button:hover {
+  box-shadow: 2px 2px 2px 2px #888888;
+}
+
+.learn-button {
+  /* box-shadow: 3px 3px 3px 3px #888888; */
+
+  border: solid grey 1px;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  
+  margin: 0 15px;
+
+  font-size: 26px;
+}
+
+.learning-container {
+  /* display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center; */
+  position: absolute;
+  z-index: 5;
+
+  width: 150px;
+}
+
+.button {
+  font-size: 20px;
+  padding: 3px 10px;
+  background-color: #70566D;
+}
+
+.button:hover {
+  background-color: #42273B;
+}
+
+#center {
+  width: 100%;
+  margin: 30px 0 20px 0;
+
+  /* border: style black 2px; */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#flashcard {
+  min-width: 300px;
+  width: 70%;
+  height: 60vh;
+  background-color: #edfaee;
+
+  background-image: radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee);
+  border: solid lightslategrey 1px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#answer {
+  /* width: 100%; */
+  /* visibility: hidden; */
+  /* background-color: grey; */
+  transform: rotateX(180deg);
+  transition: transform 0.6s;
+
+}
+
+#question {
+  /* width: 100%; */
+  /* visibility: visible; */
+  /* background-color: grey; */
+  transition: transform 0.6s;
+}
+
+#random-card {
+  font-size: 15px;
+  color: rgb(251, 255, 247);
+
+  background-color: #70566D;
+  border: solid #70566D 1px;
+  border-radius: 3px;
+
+  padding: 0 10px;
+}
+
+#learn-1 {
+  background-color: #e96f6b;
+}
+
+#learn-2 {
+  background-color: #f0c76e;
+}
+
+#learn-3 {
+  background-color: #f0b46e;
+}
+
+#learn-4 {
+  background-color: #7aea92;
+}
+
+#learn-5 {
+  background-color: #5bb0ed;
+}
+
+#learn-mode {
+  margin: 0;
+  padding: 0;
+
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown:hover + .dropdown-content{
+  display: block;
+  z-index: 3;
+}
+
+.dropdown-content:hover {
+  display: block;
+  z-index: 3;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  width: 175px;
+  margin-left: -5px;
+  /* top: 0px; */
+
+  /* z-index: 3; */
+
+  background-color: #abc8c0d5;
+  padding: 5px;
+}
+
+#learn-mode {
+  font-size: 18px;
+  padding: 2px 0 10px 0;
+  text-align: center;
+  /* margin-bottom: 5px; */
+}
+
+.learning-items {
+  margin: 5px;
+  margin-top: 0;
+  padding: 5px;
+  border: black solid 1px;
+  border-radius: 2;
+
+  width: 125px;
+  height: 30px;
+}
+
+.mutli-button {
+  font-size: 24px;
+  padding: 7px;
+  margin: 15px 0;
+
+  text-align: center;
+  min-width: 25vw;
+}
+
+.multi-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#written-input {
+  width: 60%;
+  margin: 5px;
+  padding: 5px;
+  font-size: 20px
+}
+
+#correct, #wrong {
+  font-size: 24px;
+  margin: 0 40px;
+}
+
+.on-button {
+  border: outset 5px grey;
+  background-color: #42273B;
+}
+
+#right-wrong-container {
+  position: absolute;
+  
+  top: 30vh;
+  left: 35vw;
+  
+  width: 30vw;
+  height: 30vh;
+  /* margin: 35vw 35vw; */
+
+  background-color: #daf7dcda;
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#right-wrong-message {
+  font-size: 15px;
+}
