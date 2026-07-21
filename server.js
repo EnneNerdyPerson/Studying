@@ -107,25 +107,43 @@ app.get('/api/updateSetName', (req, res) => {
     });
 });
 
-
+/**
+ * addSet SQL function
+ * 
+ * Add a set to FSETS table with given user_id, set_id, and set_name from
+ * the client query. Additionally increases by one, the num_sets attribute
+ * in USERS table for associated user_id
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set
+ *      setuid - the id of the new set 
+ *      setname - the name of the new set
+ * sends: sucess if no error is thrown
+ */
 app.get('/api/addSet', (req, res) => {
+    //save parameters from client's query
     const userid = req.query.userid;
     const setid = req.query.setid;
-    const set = req.query.set;
+    const setname = req.query.set;
 
+    //create SQL query for creating new set in FSETS table
     let sql = "INSERT INTO FSETS (user_id, set_id, set_name, num_cards, progress) VALUES (?, ?, ?, 0, 0);";
-    con.query(sql, [userid, setid, set], function (err, result, fields) {
+
+    //run SQL query on connection
+    con.query(sql, [userid, setid, setname], function (err, result, fields) {
         if (err) { 
             throw err;
             return;
         }
 
         console.log("add set worked!");
-
-        res.json({ data: 'sucess'});
     });
 
+    
+    //create SQL query for increasing num_sets by 1 for associated user_id
     sql = "UPDATE USERS SET num_sets = num_sets + 1 WHERE user_id = ?;";
+
+    //run SQL query on connection
     con.query(sql, [userid], function (err, result, fields) {
         if (err) { 
             throw err;
@@ -134,6 +152,9 @@ app.get('/api/addSet', (req, res) => {
 
         console.log("add set updated userid!");
     });
+    
+    //send sucess if no errors occured
+    res.json({ data: 'sucess'});
 });
 
 app.get('/api/deleteSet', (req, res) => {
