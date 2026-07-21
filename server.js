@@ -38,6 +38,9 @@ con.connect(function(err) {
   });
 });
 
+//--------------------------------------------------------------------------------
+//SQL functions for FSETS (set) manipulation -------------------------------------
+//--------------------------------------------------------------------------------
 
 /**
  * checkSet SQL function
@@ -69,41 +72,6 @@ app.get('/api/checkSet', (req, res) => {
         
         //send result of query back to client
         res.json({ data: result});
-    });
-});
-
-/**
- * updateSetName SQL function
- * 
- * Update the name of the set with the given set name that is associated
- * the the primary key info (user_id, set_id) given in the client query
- * 
- * parameters: 
- *      userid - the id of the user associated with set
- *      setuid - the id of the set 
- *      setname - the new name of the set
- * sends: sucess if no error is thrown
- */
-app.get('/api/updateSetName', (req, res) => {
-    //save parameters from client's query
-    const userid = req.query.userid;
-    const setid = req.query.setid;
-    const setname = req.query.setname;
-
-    //create SQL query to update set name
-    let sql = "UPDATE FSETS SET set_name = ? WHERE user_id = ? AND set_id = ?;";
-
-    //send query on SQL connection
-    con.query(sql, [setname, userid, setid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-
-        console.log("updateSetName worked!");
-
-        //send sucess if no error occured
-        res.json({ data: 'sucess'});
     });
 });
 
@@ -204,6 +172,101 @@ app.get('/api/deleteSet', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
+/**
+ * updateSetName SQL function
+ * 
+ * Update the name of the set with the given set name that is associated
+ * the the primary key info (user_id, set_id) given in the client query
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set
+ *      setuid - the id of the set 
+ *      setname - the new name of the set
+ * sends: sucess if no error is thrown
+ */
+app.get('/api/updateSetName', (req, res) => {
+    //save parameters from client's query
+    const userid = req.query.userid;
+    const setid = req.query.setid;
+    const setname = req.query.setname;
+
+    //create SQL query to update set name
+    let sql = "UPDATE FSETS SET set_name = ? WHERE user_id = ? AND set_id = ?;";
+
+    //send query on SQL connection
+    con.query(sql, [setname, userid, setid], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+
+        console.log("updateSetName worked!");
+
+        //send sucess if no error occured
+        res.json({ data: 'sucess'});
+    });
+});
+
+//--------------------------------------------------------------------------------
+//SQL functions for CARD (flashcard) manipulation --------------------------------
+//--------------------------------------------------------------------------------
+
+app.get('/api/addCard', (req, res) => {
+    const userid = req.query.userid;
+    const setid = req.query.setid;
+    const cardid = req.query.cardid;
+    const question = req.query.question;
+    const answer = req.query.answer;
+
+    let sql = "INSERT INTO CARD (user_id, set_id, card_id, question, answer, percent, favorite) VALUES (?, ?, ?, ?, ?, 0, FALSE);";
+    con.query(sql, [userid, setid, cardid, question, answer], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+
+        console.log("addCard worked!");
+    });
+
+    sql = "UPDATE FSETS SET num_cards = num_cards + 1 WHERE user_id = ? AND set_id = ?;";
+    con.query(sql, [userid, setid], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+        console.log("add card updated userid!");
+    });
+
+    res.json({ data: 'sucess'});
+});
+
+app.get('/api/deleteCard', (req, res) => {
+    const userid = req.query.userid;
+    const setid = req.query.setid;
+    const cardid = req.query.cardid;
+
+    let sql = "DELETE FROM CARD WHERE user_id = ? AND set_id = ? AND card_id = ?;";
+    con.query(sql, [userid, setid, cardid], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+
+        console.log("deleteCard worked!");
+    });
+
+    sql = "UPDATE FSETS SET num_cards = num_cards - 1 WHERE user_id = ? AND set_id = ?;";
+    con.query(sql, [userid, setid], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+        console.log("deleteCard updated numcards!");
+    });
+
+    res.json({ data: 'sucess'});
+});
+
 app.get('/api/getSetCards', (req, res) => {
     const userid = req.query.userid;
     const setid = req.query.setid;
@@ -238,33 +301,24 @@ app.get('/api/getCardEdit', (req, res) => {
     });
 });
 
-app.get('/api/addCard', (req, res) => {
+app.get('/api/updateCardQA', (req, res) => {
     const userid = req.query.userid;
     const setid = req.query.setid;
     const cardid = req.query.cardid;
     const question = req.query.question;
     const answer = req.query.answer;
 
-    let sql = "INSERT INTO CARD (user_id, set_id, card_id, question, answer, percent, favorite) VALUES (?, ?, ?, ?, ?, 0, FALSE);";
-    con.query(sql, [userid, setid, cardid, question, answer], function (err, result, fields) {
+    let sql = "UPDATE CARD SET question = ?, answer = ? WHERE user_id = ? AND set_id = ? AND card_id = ?;";
+    con.query(sql, [question, answer, userid, setid, cardid], function (err, result, fields) {
         if (err) { 
             throw err;
             return;
         }
 
-        console.log("addCard worked!");
-    });
+        console.log("updateCardQA worked!");
 
-    sql = "UPDATE FSETS SET num_cards = num_cards + 1 WHERE user_id = ? AND set_id = ?;";
-    con.query(sql, [userid, setid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-        console.log("add card updated userid!");
+        res.json({ data: 'sucess'});
     });
-
-    res.json({ data: 'sucess'});
 });
 
 app.get('/api/updatePercent', (req, res) => {
@@ -287,53 +341,10 @@ app.get('/api/updatePercent', (req, res) => {
     });
 });
 
-app.get('/api/updateCardQA', (req, res) => {
-    const userid = req.query.userid;
-    const setid = req.query.setid;
-    const cardid = req.query.cardid;
-    const question = req.query.question;
-    const answer = req.query.answer;
 
-    let sql = "UPDATE CARD SET question = ?, answer = ? WHERE user_id = ? AND set_id = ? AND card_id = ?;";
-    con.query(sql, [question, answer, userid, setid, cardid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-
-        console.log("updateCardQA worked!");
-
-        res.json({ data: 'sucess'});
-    });
-});
-
-app.get('/api/deleteCard', (req, res) => {
-    const userid = req.query.userid;
-    const setid = req.query.setid;
-    const cardid = req.query.cardid;
-
-    let sql = "DELETE FROM CARD WHERE user_id = ? AND set_id = ? AND card_id = ?;";
-    con.query(sql, [userid, setid, cardid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-
-        console.log("deleteCard worked!");
-    });
-
-    sql = "UPDATE FSETS SET num_cards = num_cards - 1 WHERE user_id = ? AND set_id = ?;";
-    con.query(sql, [userid, setid], function (err, result, fields) {
-        if (err) { 
-            throw err;
-            return;
-        }
-        console.log("deleteCard updated numcards!");
-    });
-
-    res.json({ data: 'sucess'});
-});
-
+//--------------------------------------------------------------------------------
+//SQL functions MISC -------------------------------------------------------------
+//--------------------------------------------------------------------------------
 
 app.get('/api/homepage', (req, res) => {
     const userid = req.query.userid;
