@@ -42,8 +42,7 @@ con.connect(function(err) {
 //SQL functions for FSETS (set) manipulation -------------------------------------
 //--------------------------------------------------------------------------------
 
-/**
- * checkSet SQL function
+/** checkSet SQL function
  * 
  * Check if set with given set name and userid exists. If it exists
  * then send back the set_id of the the given set
@@ -75,8 +74,7 @@ app.get('/api/checkSet', (req, res) => {
     });
 });
 
-/**
- * addSet SQL function
+/** addSet SQL function
  * 
  * Add a set to FSETS table with given user_id, set_id, and set_name from
  * the client query. Additionally increases by one, the num_sets attribute
@@ -125,8 +123,7 @@ app.get('/api/addSet', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
-/**
- * deleteSet SQL function
+/** deleteSet SQL function
  * 
  * Delete set in FSETS table with primary key information given by client, 
  * (user_id, set_id). Additionally decreases num_sets by 1 in USERS table
@@ -172,8 +169,7 @@ app.get('/api/deleteSet', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
-/**
- * updateSetName SQL function
+/** updateSetName SQL function
  * 
  * Update the name of the set with the given set name that is associated
  * the the primary key info (user_id, set_id) given in the client query
