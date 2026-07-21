@@ -82,7 +82,7 @@ app.get('/api/checkSet', (req, res) => {
  * 
  * parameters: 
  *      userid - the id of the user associated with set
- *      setuid - the id of the new set 
+ *      setid - the id of the new set 
  *      setname - the name of the new set
  * sends: sucess if no error is thrown
  */
@@ -131,7 +131,7 @@ app.get('/api/addSet', (req, res) => {
  * 
  * parameters: 
  *      userid - the id of the user associated with set being deleted
- *      setuid - the id of the set being deleted
+ *      setid - the id of the set being deleted
  * sends: sucess if no error is thrown
  */
 app.get('/api/deleteSet', (req, res) => {
@@ -176,7 +176,7 @@ app.get('/api/deleteSet', (req, res) => {
  * 
  * parameters: 
  *      userid - the id of the user associated with set
- *      setuid - the id of the set 
+ *      setid - the id of the set 
  *      setname - the new name of the set
  * sends: sucess if no error is thrown
  */
@@ -216,7 +216,7 @@ app.get('/api/updateSetName', (req, res) => {
  * 
  * parameters: 
  *      userid - the id of the user associated with set/card
- *      setuid - the id of the set associated with card
+ *      setid - the id of the set associated with card
  *      cardid - the id of the new card
  *      question - the value for the question of the new card
  *      answer - the value for the answer of the new card
@@ -252,7 +252,7 @@ app.get('/api/addCard', (req, res) => {
             throw err;
             return;
         }
-        
+
         console.log("addCard updated num_cards in FSETS!");
     });
 
@@ -260,6 +260,18 @@ app.get('/api/addCard', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
+
+/** deleteCard SQL function
+ * 
+ * Delete card with given card_id, user_id, and set_id. This also decrements the num_cards
+ * by one for the associated set given by (user_id, set_id)
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set/card
+ *      setid - the id of the set associated with card
+ *      cardid - the id of the card to be deleted
+ * sends: sucess if no error is thrown
+ */
 app.get('/api/deleteCard', (req, res) => {
     const userid = req.query.userid;
     const setid = req.query.setid;
