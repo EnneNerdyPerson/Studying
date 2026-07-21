@@ -9,31 +9,58 @@ p {
 
 button {
     font-size: 15px;
+
+    /* Box Model Styling */
     padding: 3px 5px;
     margin: 0 7px;
 }
 
+/* Homepage Set Styling */
 .home-set-container {
+    /* Box Model Styling */
     width: 200px;
     height: 400px;
+    margin: 0 45px;
 
+    /* Flex styling */
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    margin: 0 45px;
 }
 
 .home-set {
+    /* Box Model Styling */
     width: 75%;
     height: 150px;
-    background-color: grey;
     margin: 10px;
+
+    background-color: grey;
 }
 
+/* Progress Bar Styling */
+.progress-bar-container {
+    /* Border styling */
+    border: solid grey 1px;
+    border-radius: 5px;
+
+    /* Box Model Styling */
+    width: 70%;
+    height: 5px;
+}
+
+.progress-bar {
+    /* Box Model Styling */
+    height: 100%;
+    width: 0%;
+
+    background-color: #9EE493;
+}
+
+/* Body of webpage styling */
 #body {
     margin: 0 100px;
 
+    /* Flex styling */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -41,33 +68,22 @@ button {
     flex-wrap: wrap;
 }
 
-.progress-bar-container {
-    border: solid grey 1px;
-    border-radius: 5px;
-    width: 70%;
-    height: 5px;
-}
-
-.progress-bar {
-    height: 100%;
-    width: 0%;
-    background-color: #9EE493;
-}
-
+/* Deletion Warning Styling */
 #deletion-warning {
+    position: absolute;
+    text-align: center;
+    background-color: #daf7dcda;
+
+    /* Box Model Styling */
     width: 30vw;
     height: 30vh;
     margin: 25vh 35vw 0 35vw;
-    position: absolute;
 
-    text-align: center;
-
+    /* Flex Styling */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    background-color: #daf7dcda;
 }
 
 #delete-warn-text {
