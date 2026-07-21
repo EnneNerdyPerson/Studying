@@ -20,7 +20,7 @@ await fetch('http://localhost:3000/api/checkSet?set='+setname+'&userid='+userid)
     .catch(error => console.error('Error fetching data:', error)
 );
 
-await fetch('http://localhost:3000/api/getSetCards?userid='+userid+'&setid='+setid)
+await fetch('http://localhost:3000/api/getCardsStudy?userid='+userid+'&setid='+setid)
     .then(response => response.json())
     .then(data => {
         dataArray = data.data;

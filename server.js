@@ -267,7 +267,7 @@ app.get('/api/deleteCard', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
-app.get('/api/getSetCards', (req, res) => {
+app.get('/api/getCardsStudy', (req, res) => {
     const userid = req.query.userid;
     const setid = req.query.setid;
 
@@ -284,7 +284,7 @@ app.get('/api/getSetCards', (req, res) => {
     });
 });
 
-app.get('/api/getCardEdit', (req, res) => {
+app.get('/api/getCardsEdit', (req, res) => {
     const userid = req.query.userid;
     const setid = req.query.setid;
 

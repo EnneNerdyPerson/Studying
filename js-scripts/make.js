@@ -23,7 +23,7 @@ if (setname != "home-page-set-name") {
         let data = await response.json();
         setid = data.data[0]["set_id"];;
 
-        response = await fetch('http://localhost:3000/api/getCardEdit?userid='+userid+'&setid='+setid);
+        response = await fetch('http://localhost:3000/api/getCardsEdit?userid='+userid+'&setid='+setid);
         data = await response.json();
         
         let cardSets = data.data;
@@ -50,7 +50,7 @@ if (setname != "home-page-set-name") {
         console.error('Error fetching data:', error)
     }
 
-    // await fetch('http://localhost:3000/api/getCardEdit?userid='+userid+'&setid='+setid)
+    // await fetch('http://localhost:3000/api/getCardsEdit?userid='+userid+'&setid='+setid)
     //     .then(response => response.json())
     //     .then(data => {
     //         cardSets = data.data;
