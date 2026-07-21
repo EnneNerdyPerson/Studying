@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<header>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tirra:wght@400;500;600;700;800;900&family=Varta:wght@300..700&display=swap" rel="stylesheet">
+</header>
+<html>
+<body>
+    <div class="header">
+        <div class="flex-container">
+            <h1 id="logo">Logo</h1>
+            <h2>Login Page</h2>
+        </div>
+        <!-- <div>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div> -->
+    </div>
+    <div class="center-page">
+        <p id="error-text"></p>
+        <div id="login-form-div">
+            <form id="log-in-form" method="POST">
+                <div class="form-item">
+                    <label for="username">Username: </label>
+                    <input id="user" 
+                        type="text" 
+                        name="username"
+                        placeholder="insert_username">
+                </div>
+                <div class="form-item">
+                    <label for="password">Password: </label>
+                    <input id="pass" 
+                        type="password" 
+                        name="password"
+                        placeholder="insert_password">
+                </div>
+                <div class="form-item">
+                        <input id="open-create" 
+                            class="button" 
+                            type="button" 
+                            value="Create Account">
+                        <input 
+                            class="button" 
+                            type="submit" 
+                            value="Log In">
+                </div>
+            </form>
+        </div>
+        <div id="create-form-div">
+            <form id="create-form" method="POST"  class="hidden">
+                <div class="form-item">
+                    <label for="username">Username: </label>
+                    <input id="user-make" 
+                        type="text" 
+                        name="username"
+                        placeholder="insert_username">
+                </div>
+                <div class="form-item">
+                    <label for="password">Password: </label>
+                    <input id="pass-make" 
+                        type="password" 
+                        name="password" 
+                        placeholder="insert_password">
+                </div>
+                <div class="form-item">
+                    <label for="password-check">Re-Enter Password: </label>
+                    <input id="pass-make-check" 
+                        type="password" 
+                        name="password-check" 
+                        placeholder="insert_password_again">
+                </div>
+                <div class="form-item">
+                    <input id="create" 
+                        class="button" 
+                        type="submit" 
+                        value="Create Account">
+                    <input id="close-create" 
+                        class="button" 
+                        type="button" 
+                        value="Cancel">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script src="js-scripts/login-creation.js"></script>
+
+</html>

@@ -1,0 +1,30 @@
+form {
+    display: grid;
+    place-items: center; 
+    width: 30vw;
+}
+
+input {
+    font-size: 17px;
+    text-align: center;
+}
+
+.center-page {
+    width: 30vw;
+    height: 30vh;
+    margin: 25vh 35vw 0 35vw;
+}
+
+.form-item {
+    width: 100%;
+    margin: 10px;
+    text-align: center;
+}
+
+#login-form-div {
+    z-index: 2;
+}
+
+#create-form-div {
+    z-index: 1;
+}
