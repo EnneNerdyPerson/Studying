@@ -1,0 +1,64 @@
+USER DATABASE
+id
+username
+password
+
+FLASHCARD SET DATABASE
+user_id, set-id, set-name
+num-cards
+completion status
+fav/star
+
+FLASH CARD DATABASE
+First line will indicate how much each card has been studied (sorted by creation time)
+\n
+Each card will have the following information:
+Line one:
+    card_id - based on creation time
+    html for question - include bolding, italics, and color but not font size
+    img path for question - only path (sizing is strict)
+    html for answer - include bolding, italics, and color but not font size
+    img path for answer - only path (sizing is strict)
+    starred_card - check if card is stared or not
+Line two (other possible information):
+    multiple choice other possible answers - maybe? need better sorting methods and choices etc...
+
+======================================================================
+
+CREATE TABLE USERS (
+    user_id int AUTO_INCREMENT PRIMARY KEY,
+    username varchar(100) NOT NULL,
+    pass varchar(200) NOT NULL,
+    salt varchar(200) NOT NULL,
+    num_sets int NOT NULL
+);
+
+CREATE TABLE FSETS (
+    user_id int,
+    set_id int AUTO_INCREMENT,
+    set_name varchar(100) NOT NULL,
+    num_cards int NOT NULL,
+    progress int NOT NULL,
+    PRIMARY KEY (user_id, set_id),
+
+    CONSTRAINT user_key
+    FOREIGN KEY (user_id) REFERENCES USERS(user_id)
+        ON DELETE CASCADE
+        ON UPDATE SET NULL
+);
+
+CREATE TABLE CARD (
+    user_id int,
+    set_id int,
+    card_id int AUTO_INCREMENT,
+    question varchar(300) NOT NULL,
+    answer varchar(300) NOT NULL,
+    percent int NOT NULL,
+    favorite BOOL NOT NULL,
+
+    PRIMARY KEY (user_id, set_id, card_id),
+    CONSTRAINT set_key
+    FOREIGN KEY (user_id, set_id) REFERENCES FSETS(user_id, set_id)
+        ON DELETE CASCADE
+        ON UPDATE SET NULL
+);
