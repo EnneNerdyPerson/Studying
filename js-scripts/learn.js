@@ -1,12 +1,19 @@
+//------------------------------------------------------------------------------
+//Get Set information for studying ---------------------------------------------
+//------------------------------------------------------------------------------
+//DOM information for getting set infromation
+let userid = document.getElementById("username").dataset.userid;
+let setname = document.getElementById("username").dataset.setname;
+
 // let filepath = document.getElementById("logo").dataset.data;
 // filepath = "database/user/test.txt";
 // console.log(filepath);
 
-let useridElement = document.getElementById("userid");
-let setnameElement = document.getElementById("setname");
+// let useridElement = document.getElementById("userid");
+// let setnameElement = document.getElementById("setname");
 
-let userid = useridElement.innerHTML;
-let setname = setnameElement.innerHTML;
+// let userid = useridElement.innerHTML;
+// let setname = setnameElement.innerHTML;
 
 let dataArray;
 let splitData;
@@ -927,3 +934,5 @@ newsetButton.addEventListener("click",  async function() {
 //------------------------------------------------------------------------------
 
 getNewCard();
+
+//TODO: when ranking, need to ensure can flip card
