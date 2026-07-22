@@ -40,9 +40,11 @@
                 data-setname="<?php echo htmlspecialchars($_SESSION['setname']) ?>"
                 >Username: <?php echo $_SESSION['username']."<br>" ?>
             </h4>
-            <h4 class="hidden" id="userid"><?php echo $_SESSION['userid'] ?></h4>
-            <h4 class="hidden" id="numsets"><?php echo $_SESSION['numsets'] ?></h4>
-            <h4 class="hidden" id="setname"><?php echo $_SESSION['setname'] ?></h4>
+            
+            <!--Debugging information:-->
+            <!-- <h4 class="hidden" id="userid"><?php //echo $_SESSION['userid'] ?></h4>
+            <h4 class="hidden" id="numsets"><?php //echo $_SESSION['numsets'] ?></h4>
+            <h4 class="hidden" id="setname"><?php //echo $_SESSION['setname'] ?></h4> -->
         </div>
     </div>
 
