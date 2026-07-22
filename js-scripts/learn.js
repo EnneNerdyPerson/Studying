@@ -5,8 +5,18 @@
 let userid = document.getElementById("username").dataset.userid;
 let setname = document.getElementById("username").dataset.setname;
 
-let dataArray;  //variable for storing card data
+// let dataArray;  //variable for storing card data
 let setid;      //set_id for set being studied
+
+//Set Up Card Information
+let numCards = 0;
+
+let cardId = [];        //card_id of cards to study (for updating progress)\
+
+let questions = [];     //array of question for each card
+let answers = [];       //array of answers for each card
+let progressBar = [];   //array of progess of each card
+let favArray = [];      //array of favorited cards
 
 try {
     //find set_id for set with given set_name and user_id
@@ -20,7 +30,26 @@ try {
     response = await fetch('http://localhost:3000/api/getCardsStudy?userid='+userid
         + '&setid=' + setid);
     data = await response.json();   //format response
-    dataArray = data.data;
+
+    let dataArray = data.data;      //variable for storing card data
+
+    numCards = dataArray.length;
+
+    //iterate through given SQL statement result saving info
+    for (let i = 0; i < dataArray.length; i++) {
+        let curQuestion = dataArray[i]["question"];
+        let curAnswer = dataArray[i]["answer"];
+        let curPercent = dataArray[i]["percent"];
+        let curFavorite = dataArray[i]["favorite"];
+
+        questions.push(curQuestion);
+        answers.push(curAnswer);
+        progressBar.push(curPercent);
+
+        if (curFavorite) {
+            favArray.push(i);
+        } 
+    }
 
 } catch (error) {
     console.error('Error fetching data:', error);
@@ -95,32 +124,6 @@ const writenButton = document.getElementById("written-button");
 const rightWrongContainer = document.getElementById("right-wrong-container");
 const rightWrongButton = document.getElementById("right-wrong-button");
 const rightWrongMessage = document.getElementById("right-wrong-message");
-
-//Set Up Card Information
-const numCards = dataArray.length;
-
-let cardId = [];        //card_id of cards to study (for updating progress)\
-
-let questions = [];     //array of question for each card
-let answers = [];       //array of answers for each card
-let progressBar = [];   //array of progess of each card
-let favArray = [];      //array of favorited cards
-
-//iterate through given SQL statement result saving info
-for (let i = 0; i < dataArray.length; i++) {
-    let curQuestion = dataArray[i]["question"];
-    let curAnswer = dataArray[i]["answer"];
-    let curPercent = dataArray[i]["percent"];
-    let curFavorite = dataArray[i]["favorite"];
-
-    questions.push(curQuestion);
-    answers.push(curAnswer);
-    progressBar.push(curPercent);
-
-    if (curFavorite) {
-        favArray.push(i);
-    } 
-}
 
 //create randomizedOrder for cards and favorites
 let randomizedOrder = randomizeCards(numCards - 1);
