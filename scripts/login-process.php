@@ -154,13 +154,17 @@
                         } 
                     }
                 }
+
+                //username and password don't match. update sqlStatus of error
+                $sqlStatus = "Log in was a failure. There is an erorr with the username or password.";
+
             } else {
-                //output error if it appears
-                $sqlStatus = "0 results found.";
+                //username is not in database. update sqlStatus of error
+                $sqlStatus = "This username has not been registered. <br> Please create an account.";
                 // echo "0 results found.";
             }
         } else {
-            //output error if it appears
+            //update sqlStatus of SQL error
             $sqlStatus = "error (".  $sql ."): ". $conn->error;
         }
 
