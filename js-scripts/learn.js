@@ -305,51 +305,75 @@ function updateIds() {
     //upperbound percent for getting visited or not-visited cards
     let upperBound = Math.floor(percentNotQueue * 31);  
 
-    if ((numVisited == 1) || (randomNumber <= upperBound && numVisited != num))  {
+    //based on random number, get different id to study
+    if ((numVisited == 1) || (randomNumber <= upperBound && numVisited != num)) {
+        //if first card being studied or randomly chosen from random number
+        //if all cards have been visited at least once, skip
+
         //pull from visited
         let choosen = false;
+
+        //loop until a flashcardId has been chosen
         while (!choosen) {
+            //if studying favorited cards
             if (favoriteBool) {
+                //move to next flashcard
                 flashcardIndex = (flashcardIndex + 1) % favArray.length;
 
+                //if randomized
                 if (randomBool) {
-                    flashcardId = favRandomOrder[flashcardIndex];
+                    //pull from random order array
+                    flashcardId = favArray[favRandomOrder[flashcardIndex]];
                 } else {
+                    //pull from favArray
                     flashcardId = favArray[flashcardIndex];
                 }
             } else {
+                //move to next flashcard in index
                 flashcardIndex = (flashcardIndex + 1) % numCards;
 
+                //if random
                 if (randomBool) {
+                    //pull from randomized order
                     flashcardId = randomizedOrder[flashcardIndex];
                 } else {
+                    //else move to next flashcard
                     flashcardId = flashcardIndex;
                 }
             }
 
+            //if card has not been viisted
             if (!visitedIds[flashcardId]) {
+                //set visited and choosen to true
                 visitedIds[flashcardId] = true;
                 choosen = true;
+
+                //increase number of visited cards
                 numVisited++;
             } 
         }
 
+    //pull from seen queue (little understanding)
     } else if (randomNumber <= 31)  {
         //pull from seen queue
         flashcardId = selectQueue.getSeen();
         
+    //pull from seen recognize (some understanding)
     } else if (randomNumber <= 57)  {
         //pull from recognize queue
         flashcardId = selectQueue.getRecognize();
         
+        //if no items in queue, get from seen queue
         if (flashcardId == -1) {
             flashcardId = selectQueue.getSeen();
         }
-        
+      
+    //pull from seen retained (solid understanding)
     } else if (randomNumber <= 78)  {
         //pull from retained queue
         flashcardId = selectQueue.getRetained();
 
+        //if no items in queue, pull from other queue
         if (flashcardId == -1) {
             if (minPercent == 1) {
                 flashcardId = selectQueue.getSeen();
@@ -358,10 +382,12 @@ function updateIds() {
             }
         }
         
+    //pull from seen proficent (good understanding)
     } else if (randomNumber <= 96)  {
         //pull from proficent queue
         flashcardId = selectQueue.getProficent();
 
+        //if no items in queue, pull from other queue
         if (flashcardId == -1) {
             if (minPercent == 1) {
                 flashcardId = selectQueue.getSeen();
@@ -374,6 +400,7 @@ function updateIds() {
             }
         }
         
+    //pull from seen proficent (close to perfect understanding)
     } else if (randomNumber > 96)  {
         //pull from mastered queue
         flashcardId = selectQueue.getMastered();
@@ -383,10 +410,13 @@ function updateIds() {
     // console.log("flashid: " + flashcardId);
     // console.log("oldId: " + oldId);
     // console.log("oldId == flashcardId:" + oldId == flashcardId);
+
+    //if id didn't change, move to next card
     if (oldId == flashcardId) {
         // console.log("Change!");
         flashcardId = (flashcardId + 1) % num;
     }
+
     // console.log("flashid: " + flashcardId);
 }
 
@@ -412,34 +442,39 @@ function calculateLearnMode(progress) {
     //claculate whhich level progress is in based on boundry
     let level = Math.ceil(progress / boundry);
 
+    //level 3 is last learn mode (only possible for written)
     if (level == 3) {
         currentLearn = LearnMode.WRITTEN;
     } else if (level == 2) {
-        if (standardBool) {
+        //level 2 is second learn mode (either multiple or written)
+        if (multipleBool) {
             currentLearn = LearnMode.MULTIPLE;
         } else if (keyboardBool) {
             currentLearn = LearnMode.WRITTEN;
-        } else if (rankBool) {
-            currentLearn = LearnMode.WRITTEN;
-        }
+        } 
+
     } else if (level == 1) {
         //set 'easiest' learn mode, easiest to hardest (unless single mode only)
         // multiple --> card (standard or ranked) --> written
-        if (multipleBool) {
-            currentLearn = LearnMode.MULTIPLE;
-        } else if (standardBool) {
+        if (standardBool) {
             currentLearn = LearnMode.STANDARD;
         } else if (rankBool) {
             currentLearn = LearnMode.RANKED;
+        } else if (multipleBool) {
+            currentLearn = LearnMode.MULTIPLE;
         } else if (keyboardBool) {
             currentLearn = LearnMode.WRITTEN;
         }
     }
 
+    //update learn mode (hide/unhide learn mode buttons)
     setLearnMode();
 }
 
-function updateInQueue(curProgress, newProgress) {
+/**
+ * Add card back into queue based on it's progress
+ */
+function updateInQueue() {
     let progress = progressBar[flashcardId];
 
     if (progress <= 20) {
@@ -460,60 +495,74 @@ function updateInQueue(curProgress, newProgress) {
     }
 }
 
+/**
+ * Update text for multiple choice buttons, getting random values for each 
+ * button.
+ */
 function multipleChoiceButtonUpdate() {
     let num = numCards;
-
     if (favoriteBool) {
         num = favArray.length;
     }
 
-    let ranIDOne = Math.ceil((Math.random() * num) + 1) % num;
-    let ranIDTwo = (ranIDOne + (Math.ceil(Math.random() * (num - 2)) + 1)) % num;
-    let ranIDThree = 0;
-    let ranIDFour = 0;
+    //generate random two random numbers that are not the same
+    let randomOne = Math.ceil((Math.random() * num) + 1) % num;
+    let randomTwo = (randomOne + (Math.ceil(Math.random() * (num - 2)) + 1)) % num;
 
-    ranIDThree = Math.ceil((Math.random() * num) + 1) % num;
+    //variables for last two random numbers
+    let randomThree = 0;
+    let randomFour = 0;
 
-    if (ranIDOne == ranIDThree) {
-        ranIDThree++;
-        ranIDThree = ranIDThree % num;
+    //generate third random number
+    randomThree = Math.ceil((Math.random() * num) + 1) % num;
+
+    //if 1st and 3rd numbers are the same, change 3
+    if (randomOne == randomThree) {
+        randomThree++;
+        randomThree = randomThree % num;
     }
 
-    if (ranIDTwo == ranIDThree) {
-        ranIDThree++;
-        ranIDThree = ranIDThree % num;
+    //if 2nd and 3rd numbers are the same, change 3
+    if (randomTwo == randomThree) {
+        randomThree++;
+        randomThree = randomThree % num;
     }
 
-    ranIDFour = Math.ceil((Math.random() * num) + 1) % num;
+    //generate 4th random number 
+    randomFour = Math.ceil((Math.random() * num) + 1) % num;
 
-    if (ranIDOne == ranIDFour) {
-        ranIDFour++;
-        ranIDFour = ranIDFour % num;
+    //if 1st and 4th numbers are the same, change 4
+    if (randomOne == randomFour) {
+        randomFour++;
+        randomFour = randomFour % num;
     }
 
-    if (ranIDTwo == ranIDFour) {
-        ranIDFour++;
-        ranIDFour = ranIDFour % num;
+    //if 2nd and 4th numbers are the same, change 4
+    if (randomTwo == randomFour) {
+        randomFour++;
+        randomFour = randomFour % num;
     }
 
-    if (ranIDThree == ranIDFour) {
-        ranIDFour++;
-        ranIDFour = ranIDFour % num;
+    //if 3rd and 4th numbers are the same, change 4
+    if (randomThree == randomFour) {
+        randomFour++;
+        randomFour = randomFour % num;
     }
 
-    
-    multiOne.innerHTML = answers[ranIDOne];
-    multiTwo.innerHTML = answers[ranIDTwo];
-    multiThree.innerHTML = answers[ranIDThree];
-    multiFour.innerHTML = answers[ranIDFour];
+    //set multi-buttons to answers associated with random numbers
+    multiOne.innerHTML = answers[randomOne];
+    multiTwo.innerHTML = answers[randomTwo];
+    multiThree.innerHTML = answers[randomThree];
+    multiFour.innerHTML = answers[randomFour];
 
-    if (ranIDOne != flashcardId &&
-        ranIDTwo != flashcardId &&
-        ranIDThree != flashcardId &&
-        ranIDFour != flashcardId) {
+    //check if answer is one of the values
+    if (randomOne != flashcardId && randomTwo != flashcardId 
+        && randomThree != flashcardId && randomFour != flashcardId) {
+        
+        //get random num (1 through 4)
         let randomNum = Math.floor(Math.random() * 4) + 1;
-        console.log(randomNum);
 
+        //set random number to answer
         if (randomNum == 1) {
             multiOne.innerHTML = answers[flashcardId];
         } else if (randomNum == 2) {
@@ -526,8 +575,54 @@ function multipleChoiceButtonUpdate() {
     } 
 }
 
+/**
+ * Update stying of flash card based on rank prorgess of flashcard
+ */
+function rankUpdate() {
+    //get number of modes
+    let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
+
+    //save rank number
+    let rank = 0;
+
+    if (checkNum == 1) {
+        rank = Math.floor(progressBar[flashcardId] / 20);
+    } else if (checkNum == 2) {
+        rank = Math.floor(progressBar[flashcardId] / 10) % 5;
+    } else if (checkNum == 3) {
+        rank = Math.floor(progressBar[flashcardId] / 6) % 5;
+    }
+
+    //update style based on ranked color
+    if (progressBar[flashcardId] == 0) {
+        flashcards.style.backgroundColor = "#edfaee";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee)";
+    } else if (rank == 5) {
+        flashcards.style.backgroundColor = "#5bb0ed";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #5bb0ed)";
+    } else if (rank == 4) {
+        flashcards.style.backgroundColor = "#7aea92";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #7aea92)";
+    } else if (rank == 3) {
+        flashcards.style.backgroundColor = "#f0b46e";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #f0b46e)";
+    } else if (rank == 2) {
+        flashcards.style.backgroundColor = "#f0c76e";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #f0c76e)";
+    } else if (rank <= 1) {
+        flashcards.style.backgroundColor = "#e96f6b";
+        flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #e96f6b)";
+    } 
+}
+
+/**
+ * Function to get new card infromation, updating the HTML elements
+ * as well.
+ */
 function getNewCard() {
+    //debugging, showing progress change
     console.log("progress: " + progressBar[flashcardId]);
+
     //get new flashcard id
     updateIds();
 
@@ -545,362 +640,296 @@ function getNewCard() {
 
     //if rank, update border color, not set neutral
     if (currentLearn == LearnMode.RANKED) {
-        // multipleChoiceButtonUpdate();
-        let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-        let rank = 0;
-
-        if (checkNum == 1) {
-            rank = Math.floor(progressBar[flashcardId] / 20);
-        } else if (checkNum == 2) {
-            rank = Math.floor(progressBar[flashcardId] / 10) % 5;
-        } else if (checkNum == 3) {
-            rank = Math.floor(progressBar[flashcardId] / 6) % 5;
-        }
-
-        if (progressBar[flashcardId] == 0) {
-            flashcards.style.backgroundColor = "#edfaee";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee)";
-        } else if (rank == 5) {
-            flashcards.style.backgroundColor = "#5bb0ed";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #5bb0ed)";
-        } else if (rank == 4) {
-            flashcards.style.backgroundColor = "#7aea92";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #7aea92)";
-        } else if (rank == 3) {
-            flashcards.style.backgroundColor = "#f0b46e";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #f0b46e)";
-        } else if (rank == 2) {
-            flashcards.style.backgroundColor = "#f0c76e";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #f0c76e)";
-        } else if (rank <= 1) {
-            flashcards.style.backgroundColor = "#e96f6b";
-            flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #e96f6b)";
-        } 
+        rankUpdate();
     } else {
+        //set default color for flashcard
         flashcards.style.backgroundColor = "#edfaee";
         flashcards.style.background = "radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee)";
     }
 }
 
+/**
+ * decrease progress based on number of learn modes
+ */
 function decreaseProgress() {
+    //get number of learn modes
     let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-    let curProgress = progressBar[flashcardId];
 
+    //decrease prorgess based on number of learn modes
     if (checkNum == 1) {
+        //decrease by 20 (100 / (5 * 1))
         progressBar[flashcardId] = Math.max(progressBar[flashcardId] - 20, 1);
 
     } else if (checkNum == 2) {
+        //decrease by 10 (100 / (5 * 2))
         progressBar[flashcardId] = Math.max(progressBar[flashcardId] - 10, 1);
 
     } else if (checkNum == 3) {
+        //decrease by 6 (100 / (5 * 3))
         progressBar[flashcardId] = Math.max(progressBar[flashcardId] - 6, 1);
 
     }
 
-    //add id to seen queue
-    updateInQueue(curProgress, progressBar[flashcardId]);
+    //add card back into priority queue
+    updateInQueue();
 }
 
+/**
+ * increase progress based on number of learn modes
+ */
 function increaseProgress() {
+    //get number of learn modes
     let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-    let curProgress = progressBar[flashcardId];
 
+    //increase prorgess based on number of learn modes
     if (checkNum == 1) {
+        //increase by 20 (100 / (5 * 1))
         progressBar[flashcardId] = Math.min(progressBar[flashcardId] + 20, 101);
 
     } else if (checkNum == 2) {
+        //increase by 20 (100 / (5 * 1))
         progressBar[flashcardId] = Math.min(progressBar[flashcardId] + 10, 101);
 
     } else if (checkNum == 3) {
+        //increase by 20 (100 / (5 * 1))
         progressBar[flashcardId] = Math.min(progressBar[flashcardId] + 6, 97);
 
     }
 
-    //add id to seen queue
-    updateInQueue(curProgress, progressBar[flashcardId]);
+    //add card back into priority queue
+    updateInQueue();
 }
 
+/**
+ * Change progress based on rank and number of learn modes
+ * @param {*} rank 
+ * @returns new progess
+ */
 function rankedProgress(rank) {
+    //save number of learn modes
     let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
 
     let multiplier = 1;
     let divisor = 1;
 
+    //get multiplier and divisor based on learn modes
     if (checkNum == 1) {
-        multiplier = 20;
-        divisor = 102;
+        multiplier = 20;    
+        divisor = 102;      //rank mode is whole progress bar
     } else if (checkNum == 2) {
         multiplier = 10;
-        divisor = 52;
+        divisor = 52;       //rank mode exists in half of progress bar
     } else if (checkNum == 3) {
         multiplier = 6;
-        divisor = 33;
+        divisor = 33;       //rank mode exisits in third of prorgess bar
     }
 
+    //reset progress to lowest value to stay in rank mode
     let progressReset = Math.floor(progressBar[flashcardId] / divisor) + 1;
+
+    //update progress to new value based on rank
     let newProgress = (rank * multiplier) + progressReset;
 
     return newProgress;
 }
 
+/**
+ * Before moving to new page, do following setup
+ */
 async function prePageChange() {
-    /**
-     * File SETUP:
-     * numCards,PROGRESS
-     * fav:favArray
-     * grw:progressBar
-     * id,question,answer
-     * id,question,answer
-     * ...
-     */
-
+    //save total progress of flashcard set
     let totalProgress = 0;
 
-    const formData = new FormData();
+    //create form data to save progress (php)
+    let formData = new FormData();
+
+    //add setid and userid to formdata
     formData.append("setid", setid);
     formData.append("userid", userid);
 
+    //for every card, create form data infromation
     for (let i = 0; i < numCards; i++) {
+        //add favorited cards to favorite[] array
         if (i < favArray.length) {
             formData.append("favorite[]", favArray[i]);
         }
 
+        //update progress bar for total progress ease
         if (progressBar[i] > 96) {
             progressBar[i] = 100;
         }
 
+        //create string of card_id,percent for updating percent
         let string = cardId[i] + "," + progressBar[i];
+
+        //save carddata[] to form
         formData.append("carddata[]", string);
 
+        //add progress to total progress
         totalProgress += Math.min(progressBar[i], 100);
     }
 
+    //calculate total progress
     totalProgress = Math.floor(totalProgress / numCards);
+
+    //add total progress to formData
     formData.append("totalprogess", totalProgress);
 
+    //send data to save progress using save-progress.php file
     try {
-        // Send the data via POST request to login-process.php
+        // Send the data via POST request to save-process.php
         const response = await fetch('scripts/save-progress.php', {
             method: 'POST',
             body: formData
         });
 
-        console.log(response);
+        // console.log(response);
     } catch (error) {
         //print to console any errors that occur
         console.error('Error sending data:', error);
     }
 }
 
+/**
+ * Check for multiple choice and written learn mode if choosen/written
+ * value is correct or not. After checking, update the rightWrongMessage
+ * and make it visible. New card is gotten later, after rightWrongMessage 
+ * has been delt with
+ * 
+ * @param {*} input value to be checked again correct answer
+ */
+function checkCorrectAnswer(input) {
+    //message to inform of correct choice
+    let correctMessage = ["Correct! Keep going", "Correct! You got this", "Correct! Awesome job", 
+        "Correct! You go and get it", "Correct answer! Nice job"];
+
+    //message to infrom of wrong choice
+    let wrongMessage = ["Nice try, but the answer is ", "This isn't it. The answer is ", 
+        "Try try again, until you sucess with the correct answer: ", 
+        "Try try again, until you succeed with the correct answer: ", 
+        "Looks like the answer is actually "];
+
+
+    //check if input value is correct or not
+    if (input == answers[flashcardId]) {
+        //increase progress if correct
+        increaseProgress();
+
+        //get random correct message to display
+        let randomMessageIndex = Math.floor(Math.random() * correctMessage.length);
+        rightWrongMessage.innerHTML = correctMessage[randomMessageIndex];
+    } else {
+        //decrease progress if wrong
+        decreaseProgress();
+
+        //get random wrong message to display
+        let randomMessageIndex = Math.floor(Math.random() * wrongMessage.length);
+        rightWrongMessage.innerHTML = wrongMessage[randomMessageIndex] + answers[flashcardId];
+    }
+
+    //unhide right wrong message infromation
+    rightWrongContainer.classList.toggle("hidden");
+}
+
 //------------------------------------------------------------------------------
 //Event Listeners --------------------------------------------------------------
 //------------------------------------------------------------------------------
+
+//if randomCheck button is clicked, filp randomBool value
 randomCheck.addEventListener("change", function () {
+    //filp randomBool
     if (this.checked) {
         randomBool = true;
     } else {
         randomBool = false;
     }
 });
+
+//if favoriteCheck button is clicked, filp favoriteBool value
 favoriteCheck.addEventListener("change", function () {
     if (this.checked) {
         favoriteBool = true;
     } else {
         favoriteBool = false;
     }
-    console.log("changed");
 });
-multipleCheck.addEventListener("click", function () {
-    // console.log("Button CLICK")
-    multipleCheck.classList.toggle("on-button");
 
-    if (!multipleBool) {
-        multipleBool = true;
-    } else {
-        multipleBool = false;
-    }
-    checkLearning();
-});
-keyboardCheck.addEventListener("click", function () {
-    keyboardCheck.classList.toggle("on-button");
-
-    if (!keyboardBool) {
-        keyboardBool = true;
-    } else {
-        keyboardBool = false;
-    }
-    checkLearning();
-});
+//if flashcardTypeCheck button is clicked, flip through flashcard learn values
 flashcardTypeCheck.addEventListener("click", function () {
-    if (standardBool || rankBool) {
-        if (standardBool) {
-            standardBool = false;
-            rankBool = true;
+    if (standardBool) {
+        //flip to ranked learning
+        standardBool = false;
+        rankBool = true;
 
-            flashcardTypeCheck.value = "Ranked";
+        flashcardTypeCheck.value = "Ranked";
 
-        } else if (rankBool) {
-            rankBool = false;
-            standardBool = false;
+    } else if (rankBool) {
+        // flip to no learning 
+        // (only if multiple and/or written also choosen)
+        rankBool = false;
+        standardBool = false;
 
-            flashcardTypeCheck.value = "None";
-        }
+        flashcardTypeCheck.value = "None";
     } else {
+        //flip to standard learning
         rankBool = false;
         standardBool = true;
 
         flashcardTypeCheck.value = "Right/Wrong";
     }
 
+    //update learn mode buttons
     checkLearning();
 });
 
-/***
- * Next button - after seeing the flashcard for the first time
- * move to the next possible card. Should add current care to 
- * the proability queue
- */
-firstLookNext.addEventListener("click", function() {
-    //update progress to 1
-    progressBar[flashcardId]++;
+// if multiple choice learning is selected
+multipleCheck.addEventListener("click", function () {
+    //style button to show is pressed
+    multipleCheck.classList.toggle("on-button");
 
-    //add id to seen queue
-    updateInQueue(0, 1);
-    
-    //get new card
-    getNewCard();
-});
-
-rankOne.addEventListener("click", function() {
-    decreaseProgress();
-    getNewCard();
-});
-rankTwo.addEventListener("click", function() {
-    let oldProgress = progressBar[flashcardId];
-    let newProgress = rankedProgress(2);
-
-    progressBar[flashcardId] = newProgress;
-
-    updateInQueue(oldProgress, progressBar[flashcardId]);
-    getNewCard();
-});
-rankThree.addEventListener("click", function() {
-    let oldProgress = progressBar[flashcardId];
-    let newProgress = rankedProgress(3);
-
-    progressBar[flashcardId] = newProgress;
-
-    updateInQueue(oldProgress, progressBar[flashcardId]);
-    getNewCard();
-    
-});
-rankFour.addEventListener("click", function() {
-    let oldProgress = progressBar[flashcardId];
-    let newProgress = rankedProgress(4);
-
-    progressBar[flashcardId] = newProgress;
-
-    updateInQueue(oldProgress, progressBar[flashcardId]);
-    getNewCard();
-});
-rankFive.addEventListener("click", function() {
-    increaseProgress();
-    getNewCard();
-});
-
-standWrong.addEventListener("click", function () {
-    decreaseProgress();
-    getNewCard();
-});
-standCorrect.addEventListener("click", function() {
-    increaseProgress();
-    getNewCard();
-});
-
-
-rightWrongButton.addEventListener("click", function() {
-    rightWrongContainer.classList.toggle("hidden");
-    getNewCard();
-});
-
-multiOne.addEventListener("click", function() {
-    if (multiOne.innerHTML == answers[flashcardId]) {
-        increaseProgress();
-        rightWrongMessage.innerHTML = "Correct! Keep going";
+    //flip multipleBool
+    if (!multipleBool) {
+        multipleBool = true;
     } else {
-        decreaseProgress();
-        rightWrongMessage.innerHTML = "Nice try, but the answer is " + answers[flashcardId];
+        multipleBool = false;
     }
 
-    rightWrongContainer.classList.toggle("hidden");
-
-    // getNewCard();
+    //update learn mode buttons
+    checkLearning();
 });
-multiTwo.addEventListener("click", function() {
-    if (multiTwo.innerHTML == answers[flashcardId]) {
-        increaseProgress();
-        rightWrongMessage.innerHTML = "Correct! You got this";
+
+// if written choice learning is selected
+keyboardCheck.addEventListener("click", function () {
+    //style button to show is pressed
+    keyboardCheck.classList.toggle("on-button");
+
+    //flip keyboardBool
+    if (!keyboardBool) {
+        keyboardBool = true;
     } else {
-        decreaseProgress();
-        rightWrongMessage.innerHTML = "This isn't it. The answer is " + answers[flashcardId];
+        keyboardBool = false;
     }
 
-    rightWrongContainer.classList.toggle("hidden");
-
-    // getNewCard();
-});
-multiThree.addEventListener("click", function() {
-    if (multiThree.innerHTML == answers[flashcardId]) {
-        increaseProgress();
-        rightWrongMessage.innerHTML = "Correct! Awesome job";
-    } else {
-        decreaseProgress();
-        rightWrongMessage.innerHTML = "Try try again, until you sucess with the correct answer: " + answers[flashcardId];
-    }
-
-    rightWrongContainer.classList.toggle("hidden");
-
-    // getNewCard();
-});
-multiFour.addEventListener("click", function() {
-    if (multiFour.innerHTML == answers[flashcardId]) {
-        increaseProgress();
-        rightWrongMessage.innerHTML = "Correct! You go and get it";
-    } else {
-        decreaseProgress();
-        rightWrongMessage.innerHTML = "Looks like the answer is actually " + answers[flashcardId];
-    }
-
-    rightWrongContainer.classList.toggle("hidden");
-
-    // getNewCard();
-});
-writenButton.addEventListener("click", function() {
-    if (writtenInput.value == answers[flashcardId]) {
-        increaseProgress();
-        rightWrongMessage.innerHTML = "Correct answer! Nice job";
-    } else {
-        decreaseProgress();
-        rightWrongMessage.innerHTML = "Looks like the answer is actually " + answers[flashcardId];
-    }
-
-    rightWrongContainer.classList.toggle("hidden");
-
-    // getNewCard();
-
-    writtenInput.value = "";
+    //update learn mode buttons
+    checkLearning();
 });
 
-
+//Flashcard Event Listener -----------------------------------------------------
+//When flashcard is clicked, it flips
 flashcards.addEventListener("click", function () {
-    // console.log("click");
-    if (currentLearn == LearnMode.STANDARD || progressBar[flashcardId] < 1) {
-        const questionStyle = window.getComputedStyle(question);
+    //check learn mode is correct for flip
+    if (currentLearn == LearnMode.STANDARD 
+        || currentLearn == LearnMode.RANKED
+        || progressBar[flashcardId] < 1) {
+        
+        //get visibility of flashcard
+        const flashcardStyle = window.getComputedStyle(question);
+        const visibility = flashcardStyle.visibility;
 
-        const visibility = questionStyle.visibility;
-        flashcardContainer.classList.toggle('flipped');
-        // answer.classList.toggle('flipped');
+        //add flipped class to flashcard
+        flashcardContainer.classList.toggle("flipped");
 
+        //flip visibility of question and answer with 200ms delay
         if (visibility == "hidden") {
             setTimeout(() => {
                 question.style.visibility = "visible";
@@ -915,18 +944,143 @@ flashcards.addEventListener("click", function () {
     }
 });
 
+/***
+ * Next button - after seeing the flashcard for the first time
+ * move to the next possible card. Should add current care to 
+ * the proability queue
+ */
+firstLookNext.addEventListener("click", function() {
+    //update progress to 1
+    progressBar[flashcardId]++;
+
+    //add id to seen queue
+    updateInQueue();
+    
+    //get new card
+    getNewCard();
+});
+
+//Rank Buttons Event Listeners ------------------------------------------------
+//when rank 1 is pressed, decrease progress, and get new card
+rankOne.addEventListener("click", function() {
+    //decrease progress (already added to queue)
+    decreaseProgress();
+
+    //get new card
+    getNewCard();
+});
+
+//when rank 2 is pressed, update progress based on ranked progress, 
+// and get new card
+rankTwo.addEventListener("click", function() {
+    //update progress
+    progressBar[flashcardId] = rankedProgress(2);
+
+    //add card in queue
+    updateInQueue();
+
+    //get new card
+    getNewCard();
+});
+
+//when rank 3 is pressed, update progress based on ranked progress, 
+// and get new card
+rankThree.addEventListener("click", function() {
+    //update progress
+    progressBar[flashcardId] = rankedProgress(3);
+
+    //add card in queue
+    updateInQueue();
+
+    //get new card
+    getNewCard();
+    
+});
+
+//when rank 4 is pressed, update progress based on ranked progress, 
+// and get new card
+rankFour.addEventListener("click", function() {
+    //update progress
+    progressBar[flashcardId] = rankedProgress(4);
+
+    //add card in queue
+    updateInQueue();
+
+    //get new card
+    getNewCard();
+});
+
+//when rank 5 is pressed, increase progress and get new card
+rankFive.addEventListener("click", function() {
+    //increase progress (already added to queue)
+    increaseProgress();
+
+    //get new card
+    getNewCard();
+});
+
+
+//Standard Learning Buttons Event Listeners ------------------------------------
+// if standard learning Wrong is pressed, decrease progress
+// and get new card
+standWrong.addEventListener("click", function () {
+    //decrease progress (already added to queue)
+    decreaseProgress();
+
+    //get new card
+    getNewCard();
+});
+
+// if standard learning Correct is pressed, increase progress
+// and get new card
+standCorrect.addEventListener("click", function() {
+    increaseProgress();
+    getNewCard();
+});
+
+//Multiple Choice Buttons Event Listeners -------------------------------------
+//add checkCorrectAnswer function to every multiple choice button event listener
+multiOne.addEventListener("click", function() {
+    checkCorrectAnswer(this.innerHTML);
+});
+multiTwo.addEventListener("click", function() {
+    checkCorrectAnswer(this.innerHTML);
+});
+multiThree.addEventListener("click", function() {
+    checkCorrectAnswer(this.innerHTML);
+});
+multiFour.addEventListener("click", function() {
+    checkCorrectAnswer(this.innerHTML);
+});
+
+//Written Choice Buttons Event Listeners -------------------------------------
+//add checkCorrectAnswer function written button, inputing writtenInput vlaue
+writenButton.addEventListener("click", function() {
+    checkCorrectAnswer(writtenInput.value);
+
+    writtenInput.value = "";
+});
+
+// if standard learning Correct is pressed, increase progress
+// and get new card
+rightWrongButton.addEventListener("click", function() {
+    rightWrongContainer.classList.toggle("hidden");
+    getNewCard();
+});
+
+//when clicking home button, do prePageChange values
 homeButton.addEventListener("click", async function() {
     await prePageChange();
     window.location.href = "home.php";
 });
 
+//when clicking new set button, do prePageChange values
 newsetButton.addEventListener("click",  async function() {
     await prePageChange();
     window.location.href = "flashcard-make.php";
 });
 
 //------------------------------------------------------------------------------
-
 getNewCard();
 
-//TODO: when ranking, need to ensure can flip card
+//TODO: flip question side first when getting new card
