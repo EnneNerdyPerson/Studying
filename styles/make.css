@@ -13,38 +13,40 @@ input[type=text] {
     padding: 5px;
 }
 
-.quest {
-    min-width: 90%;
-    padding: 5px;
-    border: solid black 2px;
-    border-radius: 5px;
-}
-
-.flex-item {
+/* Styling for Card item */
+.card-item {
+    /* Box Model Styling */
     width: 35vw;
     margin: 20px;
     padding: 15px;
 
+    /* Border Styling */
     border: solid black 1px;
     border-radius: 5px;
 
     background-color: #DAF7DC;
 }
 
+/* Styling for Button Container */
 .button-container {
     width: 50px;
     border-style: none;
     background-color: transparent;
 }
 
-.delete {
+/* Styling for Delete Button */
+.delete-button {
     padding: 5px 10px;
     font-size: 17px;
 }
 
+/* Change Set Name Set Styling */
 #change-set-name, #fin-set-name {
+    /* Color Styling */
     color: black;
     background-color: #ABC8C0;
+
+    /* Border Styling */
     border: solid black 1px;
     border-radius: 5px;
 }
@@ -53,17 +55,3 @@ input[type=text] {
     width: 300px;
     font-size: 20px;
 }
-
-.hidden {
-    position: relative;
-}
-/* .form-button {
-    margin: 10px;
-    padding: 10px;
-} */
-
-/* #name-change-container {
-    visibility: hidden;
-    width: 0;
-    height: 0;
-} */

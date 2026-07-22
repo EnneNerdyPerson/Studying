@@ -1,10 +1,8 @@
-<!-- php -S localhost:8000 -->
-
 <?php
-    // Start the session on every page that needs to use it
+    // Start the session 
     session_start();
 
+    //update session varaibles
     $_SESSION["setname"] = $_POST["set-name-change"];
-    $_SESSION['numsets'] = $_POST["numsets"];
-    // int)$_SESSION['numsets'] + 1;
+    $_SESSION["numsets"] = $_POST["numsets"];
 ?>

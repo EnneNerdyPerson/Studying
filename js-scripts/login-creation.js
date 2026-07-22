@@ -18,7 +18,7 @@ const passwordInput = document.getElementById("pass");
 //DOM for username, password, and password check (create account form)
 const userMakeInput = document.getElementById("user-make");
 const passwordMakeInput = document.getElementById("pass-make");
-const passwordCheckMakeInput = document.getElementById("pass-make-check");
+const passwordCheckMakeInput = document.getElementById("pass-check");
 
 //------------------------------------------------------------------------------
 //Functions --------------------------------------------------------------------

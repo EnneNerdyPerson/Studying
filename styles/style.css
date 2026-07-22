@@ -1,12 +1,15 @@
+/* Style page for whole website */
 body {
+    margin: 0px;
+    background-color: #fff9f5dc;
+    
+    /* Font Styling */
     font-family: "Tirra", cursive;
     font-size: 20px;
     margin: 0px;
-
-    background-color: #fff9f5dc;
-    
 }
 
+/* class for setting up flex display */
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -14,16 +17,39 @@ body {
     align-items: center;
 }
 
+/* class for hiding items */
 .hidden {
     visibility: hidden;
     position: absolute;
+
+    /* Box Model Styling */
     width: 0;
     height: 0;
 }
 
+/* button styling */
+.button {
+    /* Font Styling */
+    font-family: "Tirra", cursive;
+    font-size: 15px;
+    color: white;
+
+    /* Box Model Styling */
+    padding: 3px 5px;
+    margin: 0 5px;
+
+    /* Border Styling */
+    background-color: #42273B;
+    border: solid #70566D 1px;
+    border-radius: 3px;
+}
+
+/* Banner header styling */
 .header {
     display: flex;
     justify-content: space-between;
+
+    /* Box Model Styling */
     height: 75px;
     padding: 5px;
     margin: 0 0 10px 0;
@@ -31,103 +57,28 @@ body {
     background-color: #ABC8C0;
 }
 
-.button {
-    font-family: "Tirra", cursive;
-    padding: 3px 5px;
-    margin: 0 5px;
-
-    font-size: 15px;
-    color: white;
-
-    background-color: #42273B;
-    border: solid #70566D 1px;
-    border-radius: 3px;
-}
-
-.username-display {
-    margin: 0 10px 0 0;
-}
-
-#logo {
-    margin: 0 10px 0 0;
-}
-
+/* header buttons styling */
 .header-button {
-    margin: 0 10px;
-    padding: 10px;
     background-color: transparent;
     font-size: 20px;
     border-style: none;
+    
+    /* Box Model Styling */
+    margin: 0 10px;
+    padding: 10px;
 }
 
 .header-button:hover {
     background-color: #DAF7DC;
-    /* color: white; */
-
     border-radius: 5px;
 }
 
-/* #home-button {
-    padding: 10px;
-    background-color: transparent;
-    font-size: 20px;
-    border-style: none;
+/* username display style */
+.username-display {
+    margin: 0 10px 0 0;
 }
 
-#learn-button {
-    padding: 10px;
-    background-color: transparent;
-    font-size: 20px;
-    border-style: none; */
-/* } */
-
-/*
-color palette 1 (autum)
-#BE7C4D
-#92140C
-#353238
-#BE5A38
-#C1B4AE
-
-color palette 2 (pale purple flower)
-#FFFFFF
-#E9FAE3
-#DEE8D5
-#D5C7BC
-#AC92A6
-
-color palette 3 (summer fruits)
-#8CB369
-#F4E285
-#F4A259
-#5B8E7D
-#BC4B51
-
-color palette 4 (dusty green-purple)
-#9EE493
-#DAF7DC
-#ABC8C0
-#70566D
-#42273B
-
-color palette 5 (dark icy auroura)
-#99D5C9
-#6C969D
-#645E9D
-#392B58
-#2D0320
-
-color palette 6 (saturated purpee oregon)
-#231942
-#5E548E
-#9F86C0
-#BE95C4
-#E0B1CB
-
-color palette 7 (blues)
-#BEE9E8
-#62B6CB
-#1B4965
-#CAE9FF
-#5FA8D3
-*/
+/* logo styling */
+#logo {
+    margin: 0 10px 0 0;
+}

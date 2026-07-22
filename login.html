@@ -1,26 +1,33 @@
 <!DOCTYPE html>
+<!--Page for loginning into or creating an account-->
+<!-- php -S localhost:8000 -->
 <header>
+    <!--Link style sheets and google font-->
     <link rel="stylesheet" href="styles/style.css">
-    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/login.css">     <!--specific style sheet for this page-->
     <link href="https://fonts.googleapis.com/css2?family=Tirra:wght@400;500;600;700;800;900&family=Varta:wght@300..700&display=swap" rel="stylesheet">
 </header>
 <html>
 <body>
+    <!--Header banner for website-->
     <div class="header">
         <div class="flex-container">
             <h1 id="logo">Logo</h1>
             <h2>Login Page</h2>
         </div>
-        <!-- <div>
-            <button></button>
-            <button></button>
-            <button></button>
-        </div> -->
     </div>
+
+    <!--Body of website -- logging in or creating new account-->
     <div class="center-page">
+
+        <!--Place to write error message-->
         <p id="error-text"></p>
+
+        <!--Login Data-->
         <div id="login-form-div">
             <form id="log-in-form" method="POST">
+
+                <!--Username input-->
                 <div class="form-item">
                     <label for="username">Username: </label>
                     <input id="user" 
@@ -28,6 +35,8 @@
                         name="username"
                         placeholder="insert_username">
                 </div>
+
+                <!--Password input-->
                 <div class="form-item">
                     <label for="password">Password: </label>
                     <input id="pass" 
@@ -35,20 +44,31 @@
                         name="password"
                         placeholder="insert_password">
                 </div>
+
+                <!--Buttons for Logging in-->
                 <div class="form-item">
-                        <input id="open-create" 
-                            class="button" 
-                            type="button" 
-                            value="Create Account">
-                        <input 
-                            class="button" 
-                            type="submit" 
-                            value="Log In">
+                    <!--Create Account Button: 
+                        show create account information-->
+                    <input id="open-create" 
+                        class="button" 
+                        type="button" 
+                        value="Create Account">
+
+                    <!--Log-in Button (submit form):
+                        log in for given user using password-->
+                    <input 
+                        class="button" 
+                        type="submit" 
+                        value="Log In">
                 </div>
             </form>
         </div>
+
+        <!--Account creation data-->
         <div id="create-form-div">
             <form id="create-form" method="POST"  class="hidden">
+
+                <!--New Username input-->
                 <div class="form-item">
                     <label for="username">Username: </label>
                     <input id="user-make" 
@@ -56,6 +76,8 @@
                         name="username"
                         placeholder="insert_username">
                 </div>
+
+                <!--New Password input-->
                 <div class="form-item">
                     <label for="password">Password: </label>
                     <input id="pass-make" 
@@ -63,18 +85,27 @@
                         name="password" 
                         placeholder="insert_password">
                 </div>
+
+                <!--New Password conformation input-->
                 <div class="form-item">
                     <label for="password-check">Re-Enter Password: </label>
-                    <input id="pass-make-check" 
+                    <input id="pass-check" 
                         type="password" 
                         name="password-check" 
                         placeholder="insert_password_again">
                 </div>
+
+                <!--Buttons for Creating Account-->
                 <div class="form-item">
+                    <!--Create Account Button: Creates account with given 
+                        username and password info-->
                     <input id="create" 
                         class="button" 
                         type="submit" 
                         value="Create Account">
+
+                    <!--Cancel Button: Closes account creation info
+                        and showcases login information-->
                     <input id="close-create" 
                         class="button" 
                         type="button" 
@@ -84,6 +115,8 @@
         </div>
     </div>
 </body>
+
+<!--Link to script associated with page-->
 <script src="js-scripts/login-creation.js"></script>
 
 </html>

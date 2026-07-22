@@ -1,7 +1,4 @@
-body {
-  /* background-color: #6C969D; */
-}
-
+/* Tag Styling */
 p {
   font-size: 32px;
 }
@@ -10,79 +7,24 @@ button, label {
   font-size: 18px;
 }
 
-
-.flip-container {
-  perspective: 1000px; /* Gives 3D depth to the flip */
-  min-width: 300px;
-  width: 70%;
-  height: 60vh;
-}
-
-.flipper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transition: transform 0.6s;
-  transform-style: preserve-3d; /* Required for 3D elements */
-  cursor: pointer;
-}
-
-/* The JavaScript toggle target */
-.flip-container.flipped .flipper {
-  transform: rotateX(180deg);
-}
-
-.front, .back {
-  position: absolute;
-  backface-visibility: hidden; /* Hides the reverse side during rotation */
-}
-
-.back {
-  transform: rotateX(180deg); /* Starts hidden, pre-rotated */
-}
-
-.flashcard-container {
-  text-align: center;
-  backface-visibility: hidden; /* Hides the reverse side during rotation */
-
-  width: 90%;
-  /* background-image: linear-gradient(to right, #edfaee, #fff9f5dc, #fff9f5dc, #fff9f5dc, #fff9f5dc, #edfaee); */
-  /* background-color: #edfaee; */
-}
-
+/* Standard Spacing Styling */
 .spacing {
   margin: 20px 0 15px 0;
-  
 }
 
-.learn-button:hover {
-  box-shadow: 2px 2px 2px 2px #888888;
-}
+#center {
+  /* Box Model Styling */
+  width: 100%;
+  margin: 30px 0 20px 0;
 
-.learn-button {
-  /* box-shadow: 3px 3px 3px 3px #888888; */
-
-  border: solid grey 1px;
-  border-radius: 100%;
-  width: 50px;
-  height: 50px;
-  
-  margin: 0 15px;
-
-  font-size: 26px;
-}
-
-.learning-container {
-  /* display: flex;
+  /* Felx Styling */
+  display: flex;
   flex-direction: row;
-  justify-content: left;
-  align-items: center; */
-  position: absolute;
-  z-index: 5;
-
-  width: 150px;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Standard Button Styling */
 .button {
   font-size: 20px;
   padding: 3px 10px;
@@ -93,150 +35,189 @@ button, label {
   background-color: #42273B;
 }
 
-#center {
-  width: 100%;
-  margin: 30px 0 20px 0;
-
-  /* border: style black 2px; */
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+/* Learning Mode Styling */
+.learning-container {
+  position: absolute; /* have learning mode on side of page */
+  z-index: 5; /* have learning mode at front */
+  width: 150px;
 }
 
-#flashcard {
-  min-width: 300px;
-  width: 70%;
-  height: 60vh;
-  background-color: #edfaee;
+.learning-items {
+  /* Box Model Styling */
+  width: 125px;
+  height: 30px;
+  padding: 5px;
+  margin: 5px;
+  margin-top: 0;
 
-  background-image: radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee);
-  border: solid lightslategrey 1px;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  /* Border Styling */
+  border: black solid 1px;
+  border-radius: 2;
 }
 
-#answer {
-  /* width: 100%; */
-  /* visibility: hidden; */
-  /* background-color: grey; */
-  transform: rotateX(180deg);
-  transition: transform 0.6s;
-
+.learn-button:hover {
+  box-shadow: 2px 2px 2px 2px #888888;
 }
 
-#question {
-  /* width: 100%; */
-  /* visibility: visible; */
-  /* background-color: grey; */
-  transition: transform 0.6s;
+.learn-button {
+  font-size: 26px;
+
+  /* Border Styling */
+  border: solid grey 1px;
+  border-radius: 100%;
+
+  /* Box Model Styling */
+  width: 50px;
+  height: 50px;
+  margin: 0 15px;
 }
 
-#random-card {
-  font-size: 15px;
-  color: rgb(251, 255, 247);
-
-  background-color: #70566D;
-  border: solid #70566D 1px;
-  border-radius: 3px;
-
-  padding: 0 10px;
+/* Pressed Learn Button Styling */
+.on-button {
+  border: outset 5px grey;
+  background-color: #42273B;
 }
 
-#learn-1 {
-  background-color: #e96f6b;
-}
-
-#learn-2 {
-  background-color: #f0c76e;
-}
-
-#learn-3 {
-  background-color: #f0b46e;
-}
-
-#learn-4 {
-  background-color: #7aea92;
-}
-
-#learn-5 {
-  background-color: #5bb0ed;
-}
-
-#learn-mode {
-  margin: 0;
-  padding: 0;
-
-}
-
+/* Drop Down for Learn Mode Styling */
 .dropdown {
   position: relative;
 }
 
+/* on hover, display dropdown content */
 .dropdown:hover + .dropdown-content{
   display: block;
   z-index: 3;
 }
-
 .dropdown-content:hover {
   display: block;
   z-index: 3;
 }
 
+/* dropdown content styling */
 .dropdown-content {
   display: none;
   position: absolute;
+  background-color: #abc8c0d5;
+
+  /* Box Model Styling */
   width: 175px;
   margin-left: -5px;
-  /* top: 0px; */
-
-  /* z-index: 3; */
-
-  background-color: #abc8c0d5;
   padding: 5px;
 }
 
 #learn-mode {
   font-size: 18px;
+  text-align: center;
+
+  /* Box Model Styling */
+  margin: 0;
+  padding: 0;
   padding: 2px 0 10px 0;
+}
+
+/* Flashcard-Flip Styling */
+.flip-container {
+  perspective: 1000px; /* Gives 3D depth to the flip */
+
+  /* Box Model Styling */
+  min-width: 300px;
+  width: 70%;
+  height: 60vh;
+}
+
+/* when 'Flipped' Styling */
+.flipper {
+  position: relative;
+  cursor: pointer;
+
+  /* Box Model Styling */
+  width: 100%;
+  height: 100%;
+
+  /* Transform Styling */
+  transition: transform 0.6s;
+  transform-style: preserve-3d; /* makes flashcard 3D element */
+}
+
+/* the JavaScript toggle class */
+.flip-container.flipped .flipper {
+  /* rotates flashcard and text in flashcard */
+  transform: rotateX(180deg);
+}
+
+.flashcard-container {
   text-align: center;
-  /* margin-bottom: 5px; */
+  backface-visibility: hidden; /* Hides the reverse side during rotation */
+
+  width: 90%;
 }
 
-.learning-items {
-  margin: 5px;
-  margin-top: 0;
-  padding: 5px;
-  border: black solid 1px;
-  border-radius: 2;
-
-  width: 125px;
-  height: 30px;
+/* styling for front and back */
+.front, .back {
+  position: absolute;
+  backface-visibility: hidden; /* Hides the reverse side during rotation */
 }
 
-.mutli-button {
-  font-size: 24px;
-  padding: 7px;
-  margin: 15px 0;
-
-  text-align: center;
-  min-width: 25vw;
+/* starts hidden, pre-rotated */
+.back {
+  transform: rotateX(180deg); 
 }
 
-.multi-container {
+/* transform info for flashcard */
+#answer {
+  transform: rotateX(180deg);
+  transition: transform 0.6s;
+}
+
+#question {
+  transition: transform 0.6s;
+}
+
+/* Flashcard Styling */
+#flashcard {
+  border: solid lightslategrey 1px;
+
+  /* Box Model Styling */
+  min-width: 300px;
+  width: 70%;
+  height: 60vh;
+
+  /* Background Color Styling */
+  background-color: #edfaee;
+  background-image: radial-gradient(#fff9f5dc, #fff9f5dc, #edfaee);
+
+  /* Flex Display Styling */
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Rank Button Colors */
+#rank-1 {
+  background-color: #e96f6b;
+}
+#rank-2 {
+  background-color: #f0c76e;
+}
+#rank-3 {
+  background-color: #f0b46e;
+}
+#rank-4 {
+  background-color: #7aea92;
+}
+#rank-5 {
+  background-color: #5bb0ed;
+}
+
+/* Right/Wrong Button Styling */
 #written-input {
+  font-size: 20px;
+
+  /* Box Model Styling */
   width: 60%;
-  margin: 5px;
   padding: 5px;
-  font-size: 20px
+  margin: 5px;
 }
 
 #correct, #wrong {
@@ -244,25 +225,37 @@ button, label {
   margin: 0 40px;
 }
 
-.on-button {
-  border: outset 5px grey;
-  background-color: #42273B;
+/* Multiple Choice Button Styling */
+.multi-container {
+  display: flex;
+  justify-content: space-evenly;
 }
 
+.mutli-button {
+  font-size: 24px;
+  text-align: center;
+
+  /* Box Model Styling */
+  min-width: 25vw;
+  padding: 7px;
+  margin: 15px 0;
+}
+
+/* Right-Wrong Message Styling */
 #right-wrong-container {
+  background-color: #daf7dcda;
+  text-align: center;
+
+  /* Position Styling */
   position: absolute;
-  
   top: 30vh;
   left: 35vw;
   
+  /* Box Model Styling */
   width: 30vw;
   height: 30vh;
-  /* margin: 35vw 35vw; */
 
-  background-color: #daf7dcda;
-
-  text-align: center;
-
+  /* Flex Sytling */
   display: flex;
   flex-direction: column;
   align-items: center;

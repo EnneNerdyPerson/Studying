@@ -21,6 +21,13 @@ Ranked Learning
 5 (+1) - 6%
 31 + 26 + 21 + 16 + 6 = 57 + 37 + 6 = 94 + 6 = 100
 
+Prorgess to Percent Likeihood of Appearing
+1-20: 31%
+21-40: 26%
+41-60: 21%
+61-80: 16%
+81-100: 6%
+
 Multiple Learning:
 (start at 1)
 100 --> 20 for each change
