@@ -5,28 +5,31 @@
 let userid = document.getElementById("username").dataset.userid;
 let setname = document.getElementById("username").dataset.setname;
 
-let dataArray;
-let splitData;
+let dataArray;  //variable for storing card data
+let setid;      //set_id for set being studied
 
-let setid;
-await fetch('http://localhost:3000/api/checkSet?set='+setname+'&userid='+userid)
-    .then(response => response.json())
-    .then(data => {
-        setid = data.data[0]["set_id"];
-    })
-    .catch(error => console.error('Error fetching data:', error)
-);
+try {
+    //find set_id for set with given set_name and user_id
+    let response = await fetch('http://localhost:3000/api/checkSet?set='+setname
+        + '&userid=' + userid);
+    let data = await response.json();   //format response
 
-await fetch('http://localhost:3000/api/getCardsStudy?userid='+userid+'&setid='+setid)
-    .then(response => response.json())
-    .then(data => {
-        dataArray = data.data;
-        console.log(data);
-    })
-    .catch(error => console.error('Error fetching data:', error)
-);
+    setid = data.data[0]["set_id"];
 
-            
+    //get card info for studying card_id, question, answer, percent, favorite
+    response = await fetch('http://localhost:3000/api/getCardsStudy?userid='+userid
+        + '&setid=' + setid);
+    data = await response.json();   //format response
+    dataArray = data.data;
+
+} catch (error) {
+    console.error('Error fetching data:', error);
+}
+
+//------------------------------------------------------------------------------
+//Get varibales from DOM and Create global vairbales ---------------------------
+//------------------------------------------------------------------------------
+//learn mode enums
 const LearnMode = Object.freeze({
     STANDARD: 'standard',
     RANKED: 'ranked',
@@ -34,53 +37,21 @@ const LearnMode = Object.freeze({
     WRITTEN: 'written - typed'
 });
 
-function randomizeCards(numCards) {
-  // Create an array containing the range of numbers
-  const randomOrder = [];
-  for (let i = 0; i <= numCards; i++) randomOrder.push(i);
+// Banner Buttons
+const homeButton = document.getElementById("home-button");
+const newsetButton = document.getElementById("newset-button");
 
-  // Fisher-Yates Shuffle
-  let i = randomOrder.length;
-  while (i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [randomOrder[i], randomOrder[j]] = [randomOrder[j], randomOrder[i]]; 
-  }
-  return randomOrder;
-}
-
-//------------------------------------------------------------------------------
-//Get varibales from DOM and Create global vairbales ---------------------------
-//------------------------------------------------------------------------------
-
-let randomBool = false;
-let favoriteBool = false;
-
-let standardBool = true;
-let rankBool = false;
-let multipleBool = false;
-let keyboardBool = false;
-let drawingBool = false;
-
-let flashcardIndex = -1;
-let flashcardId = -1;
-
+// Mode Buttons
 const randomCheck = document.getElementById("random");
 const favoriteCheck = document.getElementById("favorite");
 
-// const standardCheck = document.getElementById("flash-stand");
-// const rankCheck = document.getElementById("flash-rank");
+//Learn Mode Buttons
 const flashcardTypeCheck = document.getElementById("standard-vs-ranked");
 const multipleCheck = document.getElementById("multi");
 const keyboardCheck = document.getElementById("writt-key");
-const drawingCheck = document.getElementById("writt-hand");
 
-const standardButtons = document.getElementById("standard-buttons");
-const rankButtons = document.getElementById("ranked-buttons");
-const nextButtons = document.getElementById("next-buttons");
-const multiButtons = document.getElementById("multi-buttons");
-const keyboardButtons = document.getElementById("written-buttons");
-
-const container = document.getElementById("center");
+//Flashcard DOM Elements
+const flashcardContainer = document.getElementById("center");
 
 const flashcards = document.getElementById("flashcard");
 const question = document.getElementById("question");
@@ -89,41 +60,59 @@ const answer = document.getElementById("answer");
 const questionText = document.getElementById("que-text");
 const answerText = document.getElementById("ans-text");
 
+//Conatiners for buttons
+const standardButtons = document.getElementById("standard-buttons");
+const rankButtons = document.getElementById("ranked-buttons");
+const firstLookButtons = document.getElementById("next-buttons");
+const multiButtons = document.getElementById("multi-buttons");
+const keyboardButtons = document.getElementById("written-buttons");
+
+//First Look Next Button
+const firstLookNext = document.getElementById("next-buttons");
+
+//Rank Buttons
 const rankOne = document.getElementById("rank-1");
 const rankTwo= document.getElementById("rank-2");
 const rankThree = document.getElementById("rank-3");
 const rankFour = document.getElementById("rank-4");
 const rankFive = document.getElementById("rank-5");
 
-const next = document.getElementById("next-buttons");
-
+//Standard Learning Correct/Wrong Buttons
 const standCorrect = document.getElementById("correct");
 const standWrong = document.getElementById("wrong");
 
+//Multiple Choice Buttons
 const multiOne = document.getElementById("multi-1");
 const multiTwo = document.getElementById("multi-2");
 const multiThree = document.getElementById("multi-3");
 const multiFour = document.getElementById("multi-4");
 
+//Written Input and Submition Button
 const writtenInput = document.getElementById("written-input");
 const writenButton = document.getElementById("written-button");
 
+//Right/Wrong Message DOM Elements
+const rightWrongContainer = document.getElementById("right-wrong-container");
+const rightWrongButton = document.getElementById("right-wrong-button");
+const rightWrongMessage = document.getElementById("right-wrong-message");
+
+//Set Up Card Information
 const numCards = dataArray.length;
 
-let cardId = [];
-let favArray = [];
-let progressBar = [];
-let questions = [];
-let answers = [];
+let cardId = [];        //card_id of cards to study (for updating progress)\
 
+let questions = [];     //array of question for each card
+let answers = [];       //array of answers for each card
+let progressBar = [];   //array of progess of each card
+let favArray = [];      //array of favorited cards
+
+//iterate through given SQL statement result saving info
 for (let i = 0; i < dataArray.length; i++) {
-    let curId = dataArray[i]["card_id"];
     let curQuestion = dataArray[i]["question"];
     let curAnswer = dataArray[i]["answer"];
     let curPercent = dataArray[i]["percent"];
     let curFavorite = dataArray[i]["favorite"];
 
-    cardId.push(curId);
     questions.push(curQuestion);
     answers.push(curAnswer);
     progressBar.push(curPercent);
@@ -133,78 +122,134 @@ for (let i = 0; i < dataArray.length; i++) {
     } 
 }
 
+//create randomizedOrder for cards and favorites
 let randomizedOrder = randomizeCards(numCards - 1);
 let favRandomOrder = randomizeCards(favArray.length - 1);
-let visitedIds = new Array(numCards).fill(false);
+
+//visited card info
+let visitedIds = new Array(numCards).fill(false);   //array of if card has been visited
 let numVisited = 0;
 
+//create queue for selecting visited cards
 let selectQueue = new ProbabilityQueue();
 
-if (randomBool) {
-    flashcardId = randomizedOrder[flashcardIndex];
-}
-let currentLearn = LearnMode.STANDARD;
+//percents for selecting card
 let maxPercent = 31;
 let minPercent = 0;
 
-let rightWrongContainer = document.getElementById("right-wrong-container");
-let rightWrongButton = document.getElementById("right-wrong-button");
-let rightWrongMessage = document.getElementById("right-wrong-message");
+//learn mode values/booleans
+let currentLearn = LearnMode.STANDARD;
 
-let homeButton = document.getElementById("home-button");
-let newsetButton = document.getElementById("newset-button");
+let randomBool = false;
+let favoriteBool = false;
+
+let standardBool = true;
+let rankBool = false;
+let multipleBool = false;
+let keyboardBool = false;
+
+//index/id of cards
+let flashcardIndex = -1;
+let flashcardId = -1;
 
 //------------------------------------------------------------------------------
 //Functions ---------------------------
 //------------------------------------------------------------------------------
+/**
+ * Function for creating array of random values to get new cards to 
+ * study. Allows for random order of cards
+ * 
+ * @param {*} numCards - number of cards to be studied
+ * @returns array of ints with indexs of cards in random order
+ */
+function randomizeCards(numCards) {
+  // Create an array containing the range of numbers
+  const randomOrder = [];
+  for (let i = 0; i <= numCards; i++) {
+    randomOrder.push(i);
+  }
+
+  // Fisher-Yates Shuffle
+  let i = randomOrder.length;
+
+  while (i != 0) {
+    //get random index (not i) in array
+    const j = Math.floor(Math.random() * (i + 1));
+
+    //flip item at index i to index j and vice versa
+    [randomOrder[i], randomOrder[j]] = [randomOrder[j], randomOrder[i]]; 
+
+    i--;
+  }
+
+  return randomOrder;
+}
+
+/**
+ * Show buttons based on the learn mode currently set and 
+ * hide all other learn mode buttons
+ */
 function setLearnMode() {
+    //hide all buttons
     standardButtons.classList.add("hidden");
     rankButtons.classList.add("hidden");
-    nextButtons.classList.add("hidden");
+    firstLookButtons.classList.add("hidden");
     multiButtons.classList.add("hidden");
     keyboardButtons.classList.add("hidden");
 
+    //if progress is 0, show first look infromation
     if (progressBar[flashcardId] == 0) {
-        nextButtons.classList.remove("hidden");
+        firstLookButtons.classList.remove("hidden");
 
+    //show standing flashcard learn mode buttons
     } else if (currentLearn == LearnMode.STANDARD) {
         standardButtons.classList.remove("hidden");
 
+    //show ranked flashcard learn mode buttons
     } else if (currentLearn == LearnMode.RANKED) {
         rankButtons.classList.remove("hidden");
 
+    //show multiple choice learn mode buttons
     } else if (currentLearn == LearnMode.MULTIPLE) {
         multiButtons.classList.remove("hidden");
 
+    //show written input learn mode buttons
     } else if (currentLearn == LearnMode.WRITTEN) {
-        keyboardButtons.classList.remove("hidden")
-
+        keyboardButtons.classList.remove("hidden");
     }
 }
 
+/**
+ * Check and update currentLearn variable, then call
+ * setLearnMode() function to show learn mode buttons based
+ * on learn mode
+ */
 function checkLearning() {
-    if (multipleBool) {
-        currentLearn = LearnMode.MULTIPLE;
-        setLearnMode();
-    } else if (standardBool) {
-        //want to keep standard info up
+    //TODO: fix this since I don't believe it works as intented
+    if (standardBool) {
         currentLearn = LearnMode.STANDARD;
-        setLearnMode();
     } else if (rankBool) {
         currentLearn = LearnMode.RANKED;
-        setLearnMode();
+    } else if (multipleBool) {
+        currentLearn = LearnMode.MULTIPLE;
     } else if (keyboardBool) {
         currentLearn = LearnMode.WRITTEN;
-        setLearnMode();
     } else {
+        //if no learn mode is selection, Right/Wrong is default
         currentLearn = LearnMode.STANDARD;
-        setLearnMode();
         standardBool = true;
         flashcardTypeCheck.value = "Right/Wrong";
     }
+
+    setLearnMode();
 }
 
+/**
+ * update the max and min levels for drawing random number to ensure
+ * the probability of certain queue selections is updated accordingly
+ */
 function updateMaxMinLevel() {
+    //TODO: double check to ensure this works as needed
     let maxLevel = selectQueue.getMaxLevel();
     let minLevel = selectQueue.getMinLevel();
 
@@ -234,20 +279,31 @@ function updateMaxMinLevel() {
     }
 }
 
+/**
+ * Get new id/index for flashcard to study new flashcard with
+ */
 function updateIds() {
+    //save old flashcard id to ensure no duplicate studies
     let oldId = flashcardId;
 
+    //update percent levels
     updateMaxMinLevel();
+
+    //get random number between maxPercent and minPercent
     let randomNumber = Math.max(Math.ceil(Math.random() * maxPercent), minPercent);
+    // console.log("randomNumber: " + randomNumber);
 
+    //set num (number of cards that can be studied)
     let num = numCards;
-
     if (favoriteBool) {
         num = favArray.length;
     }
 
+    //find percent of cards not in a priority queue
     let percentNotQueue = 1 - (numVisited / num);
-    let upperBound = Math.floor(percentNotQueue * 31);
+
+    //upperbound percent for getting visited or not-visited cards
+    let upperBound = Math.floor(percentNotQueue * 31);  
 
     if ((numVisited == 1) || (randomNumber <= upperBound && numVisited != num))  {
         //pull from visited
@@ -324,9 +380,14 @@ function updateIds() {
         
     }
 
+    // console.log("flashid: " + flashcardId);
+    // console.log("oldId: " + oldId);
+    // console.log("oldId == flashcardId:" + oldId == flashcardId);
     if (oldId == flashcardId) {
+        // console.log("Change!");
         flashcardId = (flashcardId + 1) % num;
     }
+    // console.log("flashid: " + flashcardId);
 }
 
 /**
@@ -608,7 +669,7 @@ async function prePageChange() {
             progressBar[i] = 100;
         }
 
-        let string = i + "," + progressBar[i];
+        let string = cardId[i] + "," + progressBar[i];
         formData.append("carddata[]", string);
 
         totalProgress += Math.min(progressBar[i], 100);
@@ -699,7 +760,7 @@ flashcardTypeCheck.addEventListener("click", function () {
  * move to the next possible card. Should add current care to 
  * the proability queue
  */
-next.addEventListener("click", function() {
+firstLookNext.addEventListener("click", function() {
     //update progress to 1
     progressBar[flashcardId]++;
 
@@ -837,7 +898,7 @@ flashcards.addEventListener("click", function () {
         const questionStyle = window.getComputedStyle(question);
 
         const visibility = questionStyle.visibility;
-        container.classList.toggle('flipped');
+        flashcardContainer.classList.toggle('flipped');
         // answer.classList.toggle('flipped');
 
         if (visibility == "hidden") {
