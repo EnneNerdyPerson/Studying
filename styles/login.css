@@ -6,16 +6,28 @@ form {
     margin: 10px;
 }
 
-input {
+input[type=text], input[type=password] {
+    width: 55%;
     font-size: 17px;
     text-align: center;
 }
 
+input[type=button], input[type=submit] {
+    font-size: 16px;
+    margin: 0 5px;
+    margin: 5px 15px;
+}
+
+input[type=button]:hover, input[type=submit]:hover {
+    box-shadow: 2px 5px 5px #20131d;
+    /* background-color: #70566D; */
+}
+
 /* center item in middle of page */
 .center-page {
-    width: 30vw;
-    height: 30vh;
-    margin: 25vh 35vw 0 35vw;
+    width: 36vw;
+    /* height: 30vh; */
+    margin: 17vh 32vw 0 32vw;
 }
 
 .form-item {
@@ -30,4 +42,11 @@ input {
 
 #create-form-div {
     z-index: 1;
+}
+
+#error-text {
+    margin: 3px 0 0 15px;
+
+    text-align: center;
+    /* font-size: 15px; */
 }
