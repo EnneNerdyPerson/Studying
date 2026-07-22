@@ -1,105 +1,106 @@
 <?php
-    // Start the session on every page that needs to use it
+    // Start the session
     session_start();
+
+    //set up response type as JSON
     header('Content-Type: application/json; charset=utf-8');
 
-
+    //save SQL database connection info
     $servername = "localhost";
-    $username = "flashcard_user";
+    $username = "flashcard_user";       //special user with limited access
     $password = "FLASH!card12345";
     $dbname = "flashcardData";
     $port = 3306;
 
-    // // Create connection
+    // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname, $port);
 
     // Check connection
     $connect = "failed";
     if ($conn->connect_error) {
+        //stop if connection fails
         die("Connection failed: " . $conn->connect_error);
+    } else {
+        $connect = "sucess";
     }
-    // echo "<script>alert('Connected successfully');</script>";
-    $connect = "sucess";
 
-    // $stringing = "";
+    //status of SQL queries
+    $sqlStatus = "completed";
 
+    //save card data as variable for ease of coding
     $card_data = $_POST["carddata"];
+
+    //iterate through each card and its data
     foreach($card_data as $card) {
+        //get individual card_id and percent for card
         $array = explode(",", $card);
         $cardid = (int)$array[0];
         $percent = (int)$array[1];
 
-        // $stringing = $stringing."user_id=".$_POST["userid"].", ";
-        // $stringing = $stringing."set_id=".$_POST["setid"].", ";
-        // $stringing = $stringing."cardid=".$cardid.", ";
-        // $stringing = $stringing."percent=".$percent."|";
-
+        //create SQL query: update percent for card based on card_id and percent
         $sql = "UPDATE CARD SET percent = ? WHERE set_id = ? AND user_id = ? AND  card_id = ?;";
 
+        //prepare SQL statement on connection
         if($stmt = $conn->prepare($sql)) {
-            // Bind parameters
+            // bind parameters to prepared statement
             $stmt->bind_param("iiii", $percent, $_POST["setid"], $_POST["userid"], $cardid);
+            
+            //run SQL statement on connection
             $stmt->execute();
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            //output error if it appears
+            $sqlStatus = "error (".  $sql ."): ". $conn->error;
         }
-
-        // echo "<script>alert('Connected successfully');</script>";
     }
 
+    //check if favorite information has been sent
     if ($_POST["favorite"] != null) {
+
+        //save favorite array for ease of coding
         $favorites = $_POST["favorite"];
+
+        //iterate through each favorited card
         foreach($favorites as $cardid) {        
+
+            //create SQL query to set card (from card_id) to favorite = TRUE
             $sql = "UPDATE CARD SET favorite=TRUE WHERE set_id = ? AND user_id = ? AND  card_id = ?;";
 
+            //prepare SQL statement on connection
             if($stmt = $conn->prepare($sql)) {
-                // Bind parameters
+                // bind parameters to prepared statement
                 $stmt->bind_param("iii", $_POST["setid"], $_POST["userid"], $cardid);
+
+                //run SQL statement on connection
                 $stmt->execute();
             } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                //output error if it appears
+                $sqlStatus = "error (".  $sql ."): ". $conn->error;
             }
         }
     }
     
-
+    //create SQL query to update the progress of a set
     $sql = "UPDATE FSETS SET progress=? WHERE set_id = ? AND user_id = ?;";
 
+    //prepare SQL statement on connection
     if($stmt = $conn->prepare($sql)) {
-       $stmt->bind_param("iii", $_POST["totalprogess"], $_POST["setid"], $_POST["userid"]);
+        // bind parameters to prepared statement
+        $stmt->bind_param("iii", $_POST["totalprogess"], $_POST["setid"], $_POST["userid"]);
+        
+        //run SQL statement on connection
         $stmt->execute();
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        //output error if it appears
+        $sqlStatus = "error (".  $sql ."): ". $conn->error;
     }
 
+    //close connection
     $stmt->close();
     $conn->close();
 
+    //send connection and status info
     echo json_encode([
-        'connect' => "Connection ".$connect
-        // ,
-        // 'status' => "".$stringing
+        'connect' => "Connection ".$connect,
+        'status' => $sqlStatus
     ]);
-
-    // $fileName = "../".$_POST["filepath"];
-    // echo $fileName."<br>";
-    // echo "<script>console.log(" . $fileName . ");</script>";
-
-    // if (!file_exists($fileName)) {
-    //     touch($fileName);
-    // }
-
-    // $myfile = fopen($fileName, 'w') or die('Cannot open file: ' . $fileName);
-
-    // fwrite($myfile, $_POST["num-card"].",".$_POST["progress"].PHP_EOL);
-    // fwrite($myfile, $_POST["fav"].PHP_EOL);
-    // fwrite($myfile, $_POST["card-progress"].PHP_EOL);
-
-    // $card_data = $_POST["card-data"];
-    // foreach($card_data as $card) {
-    //     fwrite($myfile, $card.PHP_EOL);
-    // }
-
-    // fclose($myfile);
-    // echo "<script>console.log(" . "'end'" . ");</script>";
 ?>
