@@ -107,11 +107,11 @@
 
     <!--Ranking Buttons-->
     <div id="ranked-buttons" class="flex-container spacing hidden">
-        <button id="learn-1" class="learn-button">1</button>
-        <button id="learn-2" class="learn-button">2</button>
-        <button id="learn-3" class="learn-button">3</button>
-        <button id="learn-4" class="learn-button">4</button>
-        <button id="learn-5" class="learn-button">5</button>
+        <button id="rank-1" class="learn-button">1</button>
+        <button id="rank-2" class="learn-button">2</button>
+        <button id="rank-3" class="learn-button">3</button>
+        <button id="rank-4" class="learn-button">4</button>
+        <button id="rank-5" class="learn-button">5</button>
     </div>
 
     <!--Right/Wrong Buttons-->

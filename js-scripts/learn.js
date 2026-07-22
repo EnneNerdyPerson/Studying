@@ -88,11 +88,11 @@ const answer = document.getElementById("answer");
 const questionText = document.getElementById("que-text");
 const answerText = document.getElementById("ans-text");
 
-const learnOne = document.getElementById("learn-1");
-const learnTwo= document.getElementById("learn-2");
-const learnThree = document.getElementById("learn-3");
-const learnFour = document.getElementById("learn-4");
-const learnFive = document.getElementById("learn-5");
+const rankOne = document.getElementById("rank-1");
+const rankTwo= document.getElementById("rank-2");
+const rankThree = document.getElementById("rank-3");
+const rankFour = document.getElementById("rank-4");
+const rankFive = document.getElementById("rank-5");
 
 const next = document.getElementById("next-buttons");
 
@@ -703,11 +703,11 @@ function rankedProgress(rank) {
     return newProgress;
 }
 
-learnOne.addEventListener("click", function() {
+rankOne.addEventListener("click", function() {
     decreaseProgress();
     getNewCard();
 });
-learnTwo.addEventListener("click", function() {
+rankTwo.addEventListener("click", function() {
     // decreaseProgress();
     // getNewCard();
 
@@ -721,7 +721,7 @@ learnTwo.addEventListener("click", function() {
     updateInQueue(oldProgress, progressBar[flashcardId]);
     getNewCard();
 });
-learnThree.addEventListener("click", function() {
+rankThree.addEventListener("click", function() {
     let oldProgress = progressBar[flashcardId];
     let newProgress = rankedProgress(3);
 
@@ -733,7 +733,7 @@ learnThree.addEventListener("click", function() {
     getNewCard();
     
 });
-learnFour.addEventListener("click", function() {
+rankFour.addEventListener("click", function() {
     let oldProgress = progressBar[flashcardId];
     let newProgress = rankedProgress(4);
 
@@ -746,7 +746,7 @@ learnFour.addEventListener("click", function() {
     // increaseProgress();
     // getNewCard();
 });
-learnFive.addEventListener("click", function() {
+rankFive.addEventListener("click", function() {
     increaseProgress();
     getNewCard();
 });
