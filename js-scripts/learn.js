@@ -5,16 +5,6 @@
 let userid = document.getElementById("username").dataset.userid;
 let setname = document.getElementById("username").dataset.setname;
 
-// let filepath = document.getElementById("logo").dataset.data;
-// filepath = "database/user/test.txt";
-// console.log(filepath);
-
-// let useridElement = document.getElementById("userid");
-// let setnameElement = document.getElementById("setname");
-
-// let userid = useridElement.innerHTML;
-// let setname = setnameElement.innerHTML;
-
 let dataArray;
 let splitData;
 
@@ -57,6 +47,10 @@ function randomizeCards(numCards) {
   }
   return randomOrder;
 }
+
+//------------------------------------------------------------------------------
+//Get varibales from DOM and Create global vairbales ---------------------------
+//------------------------------------------------------------------------------
 
 let randomBool = false;
 let favoriteBool = false;
@@ -144,22 +138,26 @@ let favRandomOrder = randomizeCards(favArray.length - 1);
 let visitedIds = new Array(numCards).fill(false);
 let numVisited = 0;
 
-// console.log(randomizedOrder);
-
 let selectQueue = new ProbabilityQueue();
-
-//------------------------------------------------------------------------------
 
 if (randomBool) {
     flashcardId = randomizedOrder[flashcardIndex];
 }
-// standardCheck.checked = true;
 let currentLearn = LearnMode.STANDARD;
+let maxPercent = 31;
+let minPercent = 0;
 
+let rightWrongContainer = document.getElementById("right-wrong-container");
+let rightWrongButton = document.getElementById("right-wrong-button");
+let rightWrongMessage = document.getElementById("right-wrong-message");
+
+let homeButton = document.getElementById("home-button");
+let newsetButton = document.getElementById("newset-button");
+
+//------------------------------------------------------------------------------
+//Functions ---------------------------
+//------------------------------------------------------------------------------
 function setLearnMode() {
-    // console.log(flashcardId);
-    // console.log(progressBar[flashcardId]);
-
     standardButtons.classList.add("hidden");
     rankButtons.classList.add("hidden");
     nextButtons.classList.add("hidden");
@@ -206,104 +204,6 @@ function checkLearning() {
     }
 }
 
-randomCheck.addEventListener("change", function () {
-    if (this.checked) {
-        randomBool = true;
-    } else {
-        randomBool = false;
-    }
-});
-favoriteCheck.addEventListener("change", function () {
-    if (this.checked) {
-        favoriteBool = true;
-    } else {
-        favoriteBool = false;
-    }
-    console.log("changed");
-});
-// standardCheck.addEventListener("change", function () {
-//     if (this.checked) {
-//         standardBool = true;
-//     } else {
-//         standardBool = false;
-//     }
-//     checkLearning();
-// });
-// rankCheck.addEventListener("change", function () {
-//     if (this.checked) {
-//         rankBool = true;
-//     } else {
-//         rankBool = false;
-//     }
-//     checkLearning();
-// });
-multipleCheck.addEventListener("click", function () {
-    // console.log("Button CLICK")
-    multipleCheck.classList.toggle("on-button");
-
-    if (!multipleBool) {
-        multipleBool = true;
-    } else {
-        multipleBool = false;
-    }
-    checkLearning();
-});
-keyboardCheck.addEventListener("click", function () {
-    keyboardCheck.classList.toggle("on-button");
-
-    if (!keyboardBool) {
-        keyboardBool = true;
-    } else {
-        keyboardBool = false;
-    }
-    checkLearning();
-});
-// drawingCheck.addEventListener("change", function () {
-//     if (this.checked) {
-//         drawingBool = true;
-//     } else {
-//         drawingBool = false;
-//     }
-//     console.log("changed");
-// });
-flashcardTypeCheck.addEventListener("click", function () {
-    if (standardBool || rankBool) {
-        if (standardBool) {
-            standardBool = false;
-            rankBool = true;
-
-            flashcardTypeCheck.value = "Ranked";
-
-        } else if (rankBool) {
-            rankBool = false;
-            standardBool = false;
-
-            flashcardTypeCheck.value = "None";
-        }
-    } else {
-        rankBool = false;
-        standardBool = true;
-
-        flashcardTypeCheck.value = "Right/Wrong";
-    }
-
-    checkLearning();
-});
-
-
-//------------------------------------------------------------------------------
-
-//1-20: 31%
-//21-40: 26%
-//41-60: 21%
-//61-80: 16%
-//81-100: 6%
-
-let maxLevel = selectQueue.getMaxLevel();
-let minLevel = selectQueue.getMinLevel();
-let maxPercent = 31;
-let minPercent = 0;
-
 function updateMaxMinLevel() {
     let maxLevel = selectQueue.getMaxLevel();
     let minLevel = selectQueue.getMinLevel();
@@ -335,8 +235,6 @@ function updateMaxMinLevel() {
 }
 
 function updateIds() {
-    // console.log("update id");
-
     let oldId = flashcardId;
 
     updateMaxMinLevel();
@@ -382,13 +280,10 @@ function updateIds() {
 
     } else if (randomNumber <= 31)  {
         //pull from seen queue
-        // console.log("getSeen");
         flashcardId = selectQueue.getSeen();
-        // console.log(flashcardId);
         
     } else if (randomNumber <= 57)  {
         //pull from recognize queue
-        // console.log("getRecognize");
         flashcardId = selectQueue.getRecognize();
         
         if (flashcardId == -1) {
@@ -397,7 +292,6 @@ function updateIds() {
         
     } else if (randomNumber <= 78)  {
         //pull from retained queue
-        // console.log("getRetained");
         flashcardId = selectQueue.getRetained();
 
         if (flashcardId == -1) {
@@ -410,7 +304,6 @@ function updateIds() {
         
     } else if (randomNumber <= 96)  {
         //pull from proficent queue
-        // console.log("getProficent");
         flashcardId = selectQueue.getProficent();
 
         if (flashcardId == -1) {
@@ -427,7 +320,6 @@ function updateIds() {
         
     } else if (randomNumber > 96)  {
         //pull from mastered queue
-        // console.log("getMastered");
         flashcardId = selectQueue.getMastered();
         
     }
@@ -488,8 +380,6 @@ function calculateLearnMode(progress) {
 
 function updateInQueue(curProgress, newProgress) {
     let progress = progressBar[flashcardId];
-
-    // console.log("progress: " + progress);
 
     if (progress <= 20) {
         // console.log("addSeen");
@@ -631,22 +521,6 @@ function getNewCard() {
     }
 }
 
-/***
- * Next button - after seeing the flashcard for the first time
- * move to the next possible card. Should add current care to 
- * the proability queue
- */
-next.addEventListener("click", function() {
-    //update progress to 1
-    progressBar[flashcardId]++;
-
-    //add id to seen queue
-    updateInQueue(0, 1);
-    
-    //get new card
-    getNewCard();
-});
-
 function decreaseProgress() {
     let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
     let curProgress = progressBar[flashcardId];
@@ -664,7 +538,6 @@ function decreaseProgress() {
 
     //add id to seen queue
     updateInQueue(curProgress, progressBar[flashcardId]);
-    // getNewCard();
 }
 
 function increaseProgress() {
@@ -684,7 +557,6 @@ function increaseProgress() {
 
     //add id to seen queue
     updateInQueue(curProgress, progressBar[flashcardId]);
-    // getNewCard();
 }
 
 function rankedProgress(rank) {
@@ -710,20 +582,143 @@ function rankedProgress(rank) {
     return newProgress;
 }
 
+async function prePageChange() {
+    /**
+     * File SETUP:
+     * numCards,PROGRESS
+     * fav:favArray
+     * grw:progressBar
+     * id,question,answer
+     * id,question,answer
+     * ...
+     */
+
+    let totalProgress = 0;
+
+    const formData = new FormData();
+    formData.append("setid", setid);
+    formData.append("userid", userid);
+
+    for (let i = 0; i < numCards; i++) {
+        if (i < favArray.length) {
+            formData.append("favorite[]", favArray[i]);
+        }
+
+        if (progressBar[i] > 96) {
+            progressBar[i] = 100;
+        }
+
+        let string = i + "," + progressBar[i];
+        formData.append("carddata[]", string);
+
+        totalProgress += Math.min(progressBar[i], 100);
+    }
+
+    totalProgress = Math.floor(totalProgress / numCards);
+    formData.append("totalprogess", totalProgress);
+
+    try {
+        // Send the data via POST request to login-process.php
+        const response = await fetch('scripts/save-progress.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        console.log(response);
+    } catch (error) {
+        //print to console any errors that occur
+        console.error('Error sending data:', error);
+    }
+}
+
+//------------------------------------------------------------------------------
+//Event Listeners --------------------------------------------------------------
+//------------------------------------------------------------------------------
+randomCheck.addEventListener("change", function () {
+    if (this.checked) {
+        randomBool = true;
+    } else {
+        randomBool = false;
+    }
+});
+favoriteCheck.addEventListener("change", function () {
+    if (this.checked) {
+        favoriteBool = true;
+    } else {
+        favoriteBool = false;
+    }
+    console.log("changed");
+});
+multipleCheck.addEventListener("click", function () {
+    // console.log("Button CLICK")
+    multipleCheck.classList.toggle("on-button");
+
+    if (!multipleBool) {
+        multipleBool = true;
+    } else {
+        multipleBool = false;
+    }
+    checkLearning();
+});
+keyboardCheck.addEventListener("click", function () {
+    keyboardCheck.classList.toggle("on-button");
+
+    if (!keyboardBool) {
+        keyboardBool = true;
+    } else {
+        keyboardBool = false;
+    }
+    checkLearning();
+});
+flashcardTypeCheck.addEventListener("click", function () {
+    if (standardBool || rankBool) {
+        if (standardBool) {
+            standardBool = false;
+            rankBool = true;
+
+            flashcardTypeCheck.value = "Ranked";
+
+        } else if (rankBool) {
+            rankBool = false;
+            standardBool = false;
+
+            flashcardTypeCheck.value = "None";
+        }
+    } else {
+        rankBool = false;
+        standardBool = true;
+
+        flashcardTypeCheck.value = "Right/Wrong";
+    }
+
+    checkLearning();
+});
+
+/***
+ * Next button - after seeing the flashcard for the first time
+ * move to the next possible card. Should add current care to 
+ * the proability queue
+ */
+next.addEventListener("click", function() {
+    //update progress to 1
+    progressBar[flashcardId]++;
+
+    //add id to seen queue
+    updateInQueue(0, 1);
+    
+    //get new card
+    getNewCard();
+});
+
 rankOne.addEventListener("click", function() {
     decreaseProgress();
     getNewCard();
 });
 rankTwo.addEventListener("click", function() {
-    // decreaseProgress();
-    // getNewCard();
-
     let oldProgress = progressBar[flashcardId];
     let newProgress = rankedProgress(2);
 
     progressBar[flashcardId] = newProgress;
-    // let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-
 
     updateInQueue(oldProgress, progressBar[flashcardId]);
     getNewCard();
@@ -733,8 +728,6 @@ rankThree.addEventListener("click", function() {
     let newProgress = rankedProgress(3);
 
     progressBar[flashcardId] = newProgress;
-    // let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-
 
     updateInQueue(oldProgress, progressBar[flashcardId]);
     getNewCard();
@@ -745,13 +738,9 @@ rankFour.addEventListener("click", function() {
     let newProgress = rankedProgress(4);
 
     progressBar[flashcardId] = newProgress;
-    // let checkNum = standardBool + rankBool + multipleBool + keyboardBool;
-
 
     updateInQueue(oldProgress, progressBar[flashcardId]);
     getNewCard();
-    // increaseProgress();
-    // getNewCard();
 });
 rankFive.addEventListener("click", function() {
     increaseProgress();
@@ -767,9 +756,6 @@ standCorrect.addEventListener("click", function() {
     getNewCard();
 });
 
-let rightWrongContainer = document.getElementById("right-wrong-container");
-let rightWrongButton = document.getElementById("right-wrong-button");
-let rightWrongMessage = document.getElementById("right-wrong-message");
 
 rightWrongButton.addEventListener("click", function() {
     rightWrongContainer.classList.toggle("hidden");
@@ -867,59 +853,6 @@ flashcards.addEventListener("click", function () {
         }
     }
 });
-
-//------------------------------------------------------------------------------
-let homeButton = document.getElementById("home-button");
-let newsetButton = document.getElementById("newset-button");
-
-async function prePageChange() {
-    /**
-     * File SETUP:
-     * numCards,PROGRESS
-     * fav:favArray
-     * grw:progressBar
-     * id,question,answer
-     * id,question,answer
-     * ...
-     */
-
-    let totalProgress = 0;
-
-    const formData = new FormData();
-    formData.append("setid", setid);
-    formData.append("userid", userid);
-
-    for (let i = 0; i < numCards; i++) {
-        if (i < favArray.length) {
-            formData.append("favorite[]", favArray[i]);
-        }
-
-        if (progressBar[i] > 96) {
-            progressBar[i] = 100;
-        }
-
-        let string = i + "," + progressBar[i];
-        formData.append("carddata[]", string);
-
-        totalProgress += Math.min(progressBar[i], 100);
-    }
-
-    totalProgress = Math.floor(totalProgress / numCards);
-    formData.append("totalprogess", totalProgress);
-
-    try {
-        // Send the data via POST request to login-process.php
-        const response = await fetch('scripts/save-progress.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        console.log(response);
-    } catch (error) {
-        //print to console any errors that occur
-        console.error('Error sending data:', error);
-    }
-}
 
 homeButton.addEventListener("click", async function() {
     await prePageChange();
