@@ -105,5 +105,5 @@
     </div>
 
     <script src="js-scripts/data-structures.js"></script>
-    <script type="module" src="js-scripts/flashcard.js"></script>
+    <script type="module" src="js-scripts/learn.js"></script>
 </body>

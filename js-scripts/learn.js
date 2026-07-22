@@ -902,7 +902,7 @@ async function prePageChange() {
 
     try {
         // Send the data via POST request to login-process.php
-         const response = await fetch('scripts/save-progress.php', {
+        const response = await fetch('scripts/save-progress.php', {
             method: 'POST',
             body: formData
         });
