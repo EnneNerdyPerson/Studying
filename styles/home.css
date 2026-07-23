@@ -15,6 +15,19 @@ button {
     margin: 0 7px;
 }
 
+/* Website Name Styling/Animation */
+/* add animation to website name */
+#website-name {
+    animation-name: page-name-animate;
+    animation-duration: 5s;
+}
+
+/* add animation to just letter f */
+#letter-f {
+    animation-name: show-f;
+    animation-duration: 5s;
+}
+
 /* Homepage Set Styling */
 .home-set-container {
     /* Box Model Styling */

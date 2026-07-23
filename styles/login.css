@@ -23,6 +23,19 @@ input[type=button]:hover, input[type=submit]:hover {
     /* background-color: #70566D; */
 }
 
+/* Website Name Styling/Animation */
+/* add animation to website name */
+#website-name {
+    animation-name: page-name-animate;
+    animation-duration: 5s;
+}
+
+/* add animation to just letter f */
+#letter-f {
+    animation-name: show-f;
+    animation-duration: 5s;
+}
+
 /* center item in middle of page */
 .center-page {
     width: 36vw;

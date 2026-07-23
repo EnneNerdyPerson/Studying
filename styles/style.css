@@ -84,27 +84,20 @@ body {
     margin: 0 10px;
 }
 
+/* Website Name Styling */
 #website-name {
     position: relative;
-    left: -10px;
     font-style: italic;
-    /* font-style: normal; */
-    margin: 2px 0 0 0;
 
-    animation-name: page-name-animate;
-    animation-duration: 5s;
+    /* Box Model Styling */
+    left: -10px;
+    margin: 2px 0 0 0;
 }
 
+/* Website Name Animations */
 @keyframes page-name-animate {
   from   {left: -58px; font-style: italic;}
   to    {left: -10px;}
-}
-
-#letter-f {
-    /* font-style: normal; */
-
-    animation-name: show-f;
-    animation-duration: 5s;
 }
 
 @keyframes show-f {
