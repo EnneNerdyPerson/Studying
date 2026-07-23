@@ -27,7 +27,7 @@ input[type=button]:hover, input[type=submit]:hover {
 .center-page {
     width: 36vw;
     /* height: 30vh; */
-    margin: 17vh 32vw 0 32vw;
+    margin: 20vh 32vw 0 32vw;
 }
 
 .form-item {
