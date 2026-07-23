@@ -32,8 +32,8 @@ button {
 .home-set-container {
     /* Box Model Styling */
     width: 200px;
-    height: 400px;
-    margin: 0 45px;
+    height: 275px;
+    margin: 35px 45px 0 45px;
 
     /* Flex styling */
     display: flex;
@@ -69,8 +69,17 @@ button {
     background-color: #9EE493;
 }
 
+/* Body Centering Styling */
+#body-centering{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Body of webpage styling */
 #body {
+    width: max-content;
+    max-width: 1160px;
     margin: 0 100px;
 
     /* Flex styling */

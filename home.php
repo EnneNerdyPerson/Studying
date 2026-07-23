@@ -66,7 +66,9 @@
     </div>
 
     <!--Body of webpage-->
-    <div id="body">
+    <div id="body-centering">
+        <div id="body">
+        </div>
     </div>
 
     <!--Script for webpage-->
