@@ -80,5 +80,35 @@ body {
 
 /* logo styling */
 #logo {
-    margin: 0 10px 0 0;
+    width: 150px;
+    margin: 0 10px;
+}
+
+#website-name {
+    position: relative;
+    left: -10px;
+    font-style: italic;
+    /* font-style: normal; */
+    margin: 2px 0 0 0;
+
+    animation-name: page-name-animate;
+    animation-duration: 5s;
+}
+
+@keyframes page-name-animate {
+  from   {left: -58px; font-style: italic;}
+  to    {left: -10px;}
+}
+
+#letter-f {
+    /* font-style: normal; */
+
+    animation-name: show-f;
+    animation-duration: 5s;
+}
+
+@keyframes show-f {
+  0%  {opacity: 0;  font-style: italic;}
+  90%    {opacity: 1;}
+  100%    {opacity: 1;}
 }
