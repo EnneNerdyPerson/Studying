@@ -17,8 +17,9 @@
     <div class="header flex-container">
         <!--Logo and Website Name-->
         <div class="flex-container">
-            <h1 id="logo">Logo</h1>
-            <h2>Flashcard Learning</h2>
+            <!-- <h1 id="logo">Logo</h1> -->
+            <img id="logo" src="/Logo.png" alt="Logo">
+            <h2 id="website-name">Flash Study</h2>
         </div>
 
         <!--Buttons for banner header-->
