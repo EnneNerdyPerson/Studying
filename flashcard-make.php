@@ -17,7 +17,7 @@
         <!--Logo and Website Name-->
         <div class="flex-container">
             <!-- <h1 id="logo" >Logo</h1> -->
-            <img id="logo" src="/Logo.png" alt="Logo">
+            <img id="logo" src="images/Logo.png" alt="Logo">
             <h2 id="website-name">Flash Study</h2>
         </div>
 

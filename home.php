@@ -21,7 +21,7 @@
         <!--Logo and Website Name-->
         <div class="flex-container">
             <!-- <h1 id="logo">Logo</h1> -->
-            <img id="logo" src="/Logo.png" alt="Logo">
+            <img id="logo" src="images/Logo.png" alt="Logo">
             <div id="website-name" class="flex-container">
                 <h2 id="letter-f">F</h2><h2 >lash Study</h2>
             </div>
