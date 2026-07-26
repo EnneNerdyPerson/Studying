@@ -244,11 +244,11 @@ function folderClose(img, setid) {
  * or going behind the folder. This function also has locks for this
  * animation
  * 
- * @param {*} ccArray - container for the cards (array)
- * @param {*} containerArray - cards in an array
+ * @param {*} containerArray - container for the cards (array)
+ * @param {*} cardArray - cards in an array
  * @param {*} setid - set whoes ares are being displayed
  */
-function displayCards(ccArray, containerArray, setid) {
+function displayCards(containerArray, cardArray, setid) {
     //intialize variables for the function
     let id = null;
     let pos = 0;
@@ -256,177 +256,142 @@ function displayCards(ccArray, containerArray, setid) {
     let done = false;
     let reverse = false
     let opening = false;
+    let rotate = false;
 
     //check if set is open (on display) and locked
     if (setStatus.get(setid) == "open" && !setLock.get(setid)) {
         //lock set
         setLock.set(setid, true);
+    } else if (setStatus.get(setid) == "close" && !setLock.get(setid)) {
+        setLock.set(setid, true);
+        opening = true;             //opening card right now
+    } else {
+        return;
+    }
 
-        //initalize more vairables
-        let length = cardMap.get(setid).length;
-        let index = length - 1;
-        let rotate = false;
+    //initalize more vairables
+    let length = cardMap.get(setid).length;
+    let index = 0;
 
-        let container = containerArray[index];
-        let cc = ccArray[index];
+    let card = null;
+    let conainter = null;
+
+    if (!opening) {
+        index = length - 1;
+
+        card = cardArray[index];
+        conainter = containerArray[index];
+
         index--;
+    } else {
+        card = cardArray[index];
+        conainter = containerArray[index];
 
-        //set up animation
-        clearInterval(id);
-        id = setInterval(cardAnimation, 5);
+        index++;
+    }
 
-        //create function for animation
-        function cardAnimation() {
-            //check if position is -1 and finish condition is met
-            if (pos == -1 && done) {
-                //unlock cards in set
-                setLock.set(setid, false);         
+    //set up animation
+    clearInterval(id);
+    id = setInterval(cardAnimation, 5);
 
+    //create function for animation
+    function cardAnimation() {
+        //check if position is -1 and finish condition is met
+        if (pos == -1 && done) {
+            //unlock cards in set
+            setLock.set(setid, false);         
+
+            if (!opening) {
                 //set cards in set to close
                 setStatus.set(setid, "close");
-
-                //finish animation
-                clearInterval(id);
             } else {
-                //check if card should no longer rotate
-                if (!rotate) {
-                    //updating styling
-                    container.style.transform = "";
+                //set cards in set to open
+                setStatus.set(setid, "open");
+            }
 
-                    //set back to true so it won't change again
-                    rotate = true;
-                }
+            //finish animation
+            clearInterval(id);
+        } else {
+            //check if card should no longer rotate
+            if (!rotate && !opening) {
+                //updating styling
+                card.style.transform = "";
 
-                //move cards (left or right)
-                container.style.left = pos + 'px';
-                
-                //check if cards has finished one movement
-                if (pos == 100) {
-                    //reverse movement
-                    reverse = true;
+                //set back to true so it won't change again
+                rotate = true;
+            }
 
+            //move cards (left or right)
+            card.style.left = pos + 'px';
+            
+            //check if cards has finished one movement
+            if (pos == 100) {
+                //reverse movement
+                reverse = true;
+
+                if (!opening) {
                     //flip card
-                    cc.classList.toggle("flipped");
+                    conainter.classList.toggle("flipped");
 
                     //move card to back
                     setTimeout(() => {
-                        cc.style.zIndex = 0;
-                    }, 300);
-
-                }
-
-                //if reverse, decreases position
-                if (reverse) {
-                    pos--;
+                        conainter.style.zIndex = 0;
+                    }, 200);
                 } else {
-                    //else increase position
-                    pos++;
-                }
-
-                //if position is -1 (current card finished movement)
-                if (pos == -1) {
-                    //move onto next card
-                    if (index < containerArray.length && index < length) {
-                        container = containerArray[index];
-                        cc = ccArray[index];
-                    }
-                    
-                    //reset reverse and rotate values
-                    reverse = false;
-                    rotate = false;
-
-                    //check if finished iterating through cards
-                    if (index == -1) {
-                        done = true;
-                    } 
-
-                    //move to index of next card
-                    index--;
-                } 
-            }
-        }
-    } else if (setStatus.get(setid) == "close" && !setLock.get(setid)) {
-        //lock set
-        setLock.set(setid, true);
-        opening = true;             //opening card right now
-
-        //initalize more vairables
-        let legnth = cardMap.get(setid).length;
-        let container = containerArray[0];
-        let cc = ccArray[0];
-        let index = 1;
-
-        //set up animation
-        clearInterval(id);
-        id = setInterval(cardAnimation, 5);
-
-        //create function for animation
-        function cardAnimation() {
-            //check if position is -1 and finish condition is met
-            if (pos == -1 && done) {
-                //unlock cards in set
-                setLock.set(setid, false);
-
-                //set cards in set to open
-                setStatus.set(setid, "open");
-
-                //finish animation
-                clearInterval(id);
-            } else {
-                //move cards (left or right)
-                container.style.left = pos + 'px';
-                
-                //check if cards has finished one movement
-                if (pos == 100) {
-                    //reverse movement
-                    reverse = true;
-
                     //move card to front
-                    cc.style.zIndex = 3;
+                    conainter.style.zIndex = 3;
 
                     //flip card
-                    cc.classList.toggle("flipped");
+                    conainter.classList.toggle("flipped");
                 }
+            }
 
-                //if reverse, decreases position
-                if (reverse) {
-                    pos--;
-                } else {
-                    //else increase position
-                    pos++;
-                }
+            //if reverse, decreases position
+            if (reverse) {
+                pos--;
+            } else {
+                //else increase position
+                pos++;
+            }
 
-                //if position is -1 (current card finished movement)
-                if (pos == -1) {
+            //if position is -1 (current card finished movement)
+            if (pos == -1) {
+                if (opening) {
                     //rotate cards to set all cards in deck later
                     //cards are rotated in different directions for better look
                     if (index % 2 == 0) {
-                        container.style.transform = "rotateY(-180deg) rotate("+ (((4 - index) * 2) + 3) + "deg)";
+                        card.style.transform = "rotateY(-180deg) rotate("+ (((4 - index) * 2) + 3) + "deg)";
                     } else {
-                        container.style.transform = "rotateY(-180deg) rotate(-"+ (((4 - index) * 2) + 3) + "deg)";
+                        card.style.transform = "rotateY(-180deg) rotate(-"+ (((4 - index) * 2) + 3) + "deg)";
                     }
-                    
-                    //move onto next card
-                    if (index < containerArray.length && index < legnth) {
-                        container = containerArray[index];
-                        cc = ccArray[index];
-                    }
-                    
+                }
 
-                    //reset reverse
-                    reverse = false;
+                //move onto next card
+                if (index < cardArray.length && index < length) {
+                    card = cardArray[index];
+                    conainter = containerArray[index];
+                }
+                
+                //reset reverse and rotate values
+                reverse = false;
+                rotate = false;
 
-                    //check if finished iterating through cards
-                    if (index == legnth) {
-                        done = true;
-                    } 
+                //check if finished iterating through cards
+                if (index == -1 && !opening) {
+                    done = true;
+                } else if (index == length && opening) {
+                    done = true;
+                }
 
-                    //move to index of next card
+                //move to index of next card
+                if (!opening) {
+                    index--;
+                } else {
                     index++;
-                } 
-            }
+                }
+            } 
         }
-    } 
+    }
 }
 
 /**
