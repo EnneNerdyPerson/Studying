@@ -3,8 +3,23 @@ body {
     flex-direction: column;
 }
 
-p {
-    margin: 5px;
+.name-p {
+    position: absolute;
+    z-index: 2;
+    color: white;
+    text-shadow: black 1px 1px;
+
+    /* Alignment Styling */
+    text-align: center;
+    align-content: center;
+
+    /* Box Model Styling */
+    width: 160px;
+    height: 130px;
+    padding: 5px 10px 0 10px;
+    margin: 28px 5px 0 5px;
+
+    /* z-index: */
 }
 
 button {
@@ -13,6 +28,10 @@ button {
     /* Box Model Styling */
     padding: 3px 5px;
     margin: 0 7px;
+}
+
+img {
+    z-index: 1;
 }
 
 /* Website Name Styling/Animation */
@@ -43,11 +62,14 @@ button {
 
 .home-set {
     /* Box Model Styling */
-    width: 75%;
+    /* width: 75%;
     height: 150px;
+    margin: 10px; */
+    width: 120%;
+    height: 170px;
     margin: 10px;
 
-    background-color: grey;
+    /* background-color: grey; */
 }
 
 /* Progress Bar Styling */
@@ -59,6 +81,8 @@ button {
     /* Box Model Styling */
     width: 70%;
     height: 5px;
+
+    margin: -15px 0 15px 0;
 }
 
 .progress-bar {
@@ -110,4 +134,64 @@ button {
 
 #delete-warn-text {
     color: red;
+}
+
+/* Drafting... */
+
+.card {
+    position: absolute;
+
+    text-align: center;
+    align-content: center;
+
+    background-color: white;
+    color: black;
+    text-shadow: none;
+    font-size: 13px;
+
+    width: 130px;
+    height: 90px;
+    padding: 5px 10px 0 10px;
+    margin: 0;
+
+    backface-visibility: hidden;
+    transform: rotateY(180deg);  
+
+    z-index: 0;
+}
+
+.card-container {
+    position: absolute; 
+
+    transform-style: preserve-3d;
+    transition: transform 0.5s; 
+    background-color: white;
+
+    border: grey solid 1px;
+
+    width: 150px;
+    height: 100px;
+
+    z-index: 0;
+}
+
+
+.card-container-container {
+    width: 150px;
+    /* margin: 51px 0 0 0; */
+    position: absolute;
+
+    perspective: 1000px;
+    z-index: 0;
+}
+
+.card-ccc {
+    width: 150px;
+    margin: 51px 0 0 0;
+    position: absolute;
+}
+
+.card-container-container.flipped .card-container {
+  /* rotates flashcard and text in flashcard */
+  transform: rotateY(-180deg);
 }
