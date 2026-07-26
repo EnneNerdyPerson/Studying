@@ -34,10 +34,15 @@ let noDeleteButton = document.getElementById("no-delete");
 let deleteContainer = null;
 let deleteSetid = 0;
 
-let cardMap = new Map();
-let folderLock = new Map(); 
-let setLock = new Map(); 
-let setStatus = new Map();
+let cardMap = new Map();        //map of cards' question in a set
+
+let folderLock = new Map();     //lock for folder opening/closing
+let setLock = new Map();        //lock for displaying cards
+let setStatus = new Map();      //status of cards
+
+//TODO: need to implement queue for this
+let closeFunctionQueue = new Array();        //queue for closing folder
+let setidInQueue = new Array();   //queue for knowning which sets are in functionQueue
 
 //------------------------------------------------------------------------------
 // Event functions -------------------------------------------------------------
@@ -115,6 +120,350 @@ function checkDeleteSet(container, setid, setname) {
     deletionContainer.classList.toggle("hidden");
 }
 
+/**
+ * folderOpen
+ * 
+ * Animate the folder opening if folder is not already opening or
+ * closing. Once the animation is done, check if there are close
+ * functions in the queue. If they are in the queue, run the folderClose
+ * function
+ * 
+ * @param {*} img - the image of the folder that needs to change
+ * @param {*} setid - the id of the set whoes folder changes
+ */
+function folderOpen(img, setid) {
+    //check if folder is being opened or close right now
+    if (!folderLock.get(setid)) {
+        //if not currently animated, lock this folder
+        folderLock.set(setid, true);
+    } else {
+        //stop animating
+        return;
+    }
+
+    //set timeouts so that folder cycles through image
+    //animations every 1ms
+    setTimeout(() => {
+        img.src = "images/folder-open-2.png";
+    }, 100);
+    setTimeout(() => {
+        img.src = "images/folder-open-3.png";
+    }, 200);
+    setTimeout(() => {
+        img.src = "images/folder-open-4.png";
+    }, 300);
+    setTimeout(() => {
+        img.src = "images/folder-open-5.png";
+    }, 400);
+    setTimeout(() => {
+        img.src = "images/folder-open-6.png";
+
+        //once folder is open, unlock this folder
+        folderLock.set(setid, false);
+
+        //check for any close function in queue
+        if (closeFunctionQueue.length > 0) {
+            //remove setid
+            setidInQueue.pop();
+
+            //run floderClose function
+            let functionItems = closeFunctionQueue.pop();
+            folderClose(functionItems[0], functionItems[1]);
+        }
+    }, 500);
+}
+
+/**
+ * folderClose
+ * 
+ * Animate the folder opening if folder is not already opening or
+ * closing. Once the animation is done, check if there are close
+ * functions in the queue. If they are in the queue, run the folderClose
+ * function
+ * 
+ * @param {*} img - the image of the folder that needs to change
+ * @param {*} setid - the id of the set whoes folder changes
+ */
+function folderClose(img, setid) {
+    //check if folder is being opened or close right now
+    if (!folderLock.get(setid)) {
+        //if not currently animated, lock this folder
+        folderLock.set(setid, true);
+    } else {
+        //check if set is already in close function queue
+        if (!setidInQueue.includes(setid)) {
+            //if not in queue, add to queue
+            let functionItems = [img, setid];
+            closeFunctionQueue.push(functionItems);
+
+            //add setid in setid queue
+            setidInQueue.push(setid);
+        }
+        
+        //stop animating
+        return;
+    }
+
+    //set timeouts so that folder cycles through image
+    //animations every 1ms
+    setTimeout(() => {
+        img.src = "images/folder-open-5.png";
+    }, 100);
+    setTimeout(() => {
+        img.src = "images/folder-open-4.png";
+    }, 200);
+    setTimeout(() => {
+        img.src = "images/folder-open-3.png";
+    }, 300);
+    setTimeout(() => {
+        img.src = "images/folder-open-2.png";
+    }, 400);
+    setTimeout(() => {
+        img.src = "images/Folder.png";
+
+        //once folder is open, unlock this folder
+        folderLock.set(setid, false);
+
+        //check for any close function in queue
+        if (closeFunctionQueue.length > 0) {
+            //remove setid
+            setidInQueue.pop();
+
+            //run floderClose function
+            let functionItems = closeFunctionQueue.pop();
+            folderClose(functionItems[0], functionItems[1]);
+        }
+        
+    }, 500);
+}
+
+/**
+ * displayCards
+ * 
+ * Animate four (or less) cards flipping onto the top of the folder
+ * or going behind the folder. This function also has locks for this
+ * animation
+ * 
+ * @param {*} ccArray - container for the cards (array)
+ * @param {*} containerArray - cards in an array
+ * @param {*} setid - set whoes ares are being displayed
+ */
+function displayCards(ccArray, containerArray, setid) {
+    //intialize variables for the function
+    let id = null;
+    let pos = 0;
+
+    let done = false;
+    let reverse = false
+    let opening = false;
+
+    //check if set is open (on display) and locked
+    if (setStatus.get(setid) == "open" && !setLock.get(setid)) {
+        //lock set
+        setLock.set(setid, true);
+
+        //initalize more vairables
+        let length = cardMap.get(setid).length;
+        let index = length - 1;
+        let rotate = false;
+
+        let container = containerArray[index];
+        let cc = ccArray[index];
+        index--;
+
+        //set up animation
+        clearInterval(id);
+        id = setInterval(cardAnimation, 5);
+
+        //create function for animation
+        function cardAnimation() {
+            //check if position is -1 and finish condition is met
+            if (pos == -1 && done) {
+                //unlock cards in set
+                setLock.set(setid, false);         
+
+                //set cards in set to close
+                setStatus.set(setid, "close");
+
+                //finish animation
+                clearInterval(id);
+            } else {
+                //check if card should no longer rotate
+                if (!rotate) {
+                    //updating styling
+                    container.style.transform = "";
+
+                    //set back to true so it won't change again
+                    rotate = true;
+                }
+
+                //move cards (left or right)
+                container.style.left = pos + 'px';
+                
+                //check if cards has finished one movement
+                if (pos == 100) {
+                    //reverse movement
+                    reverse = true;
+
+                    //flip card
+                    cc.classList.toggle("flipped");
+
+                    //move card to back
+                    setTimeout(() => {
+                        cc.style.zIndex = 0;
+                    }, 300);
+
+                }
+
+                //if reverse, decreases position
+                if (reverse) {
+                    pos--;
+                } else {
+                    //else increase position
+                    pos++;
+                }
+
+                //if position is -1 (current card finished movement)
+                if (pos == -1) {
+                    //move onto next card
+                    if (index < containerArray.length && index < length) {
+                        container = containerArray[index];
+                        cc = ccArray[index];
+                    }
+                    
+                    //reset reverse and rotate values
+                    reverse = false;
+                    rotate = false;
+
+                    //check if finished iterating through cards
+                    if (index == -1) {
+                        done = true;
+                    } 
+
+                    //move to index of next card
+                    index--;
+                } 
+            }
+        }
+    } else if (setStatus.get(setid) == "close" && !setLock.get(setid)) {
+        //lock set
+        setLock.set(setid, true);
+        opening = true;             //opening card right now
+
+        //initalize more vairables
+        let legnth = cardMap.get(setid).length;
+        let container = containerArray[0];
+        let cc = ccArray[0];
+        let index = 1;
+
+        //set up animation
+        clearInterval(id);
+        id = setInterval(cardAnimation, 5);
+
+        //create function for animation
+        function cardAnimation() {
+            //check if position is -1 and finish condition is met
+            if (pos == -1 && done) {
+                //unlock cards in set
+                setLock.set(setid, false);
+
+                //set cards in set to open
+                setStatus.set(setid, "open");
+
+                //finish animation
+                clearInterval(id);
+            } else {
+                //move cards (left or right)
+                container.style.left = pos + 'px';
+                
+                //check if cards has finished one movement
+                if (pos == 100) {
+                    //reverse movement
+                    reverse = true;
+
+                    //move card to front
+                    cc.style.zIndex = 3;
+
+                    //flip card
+                    cc.classList.toggle("flipped");
+                }
+
+                //if reverse, decreases position
+                if (reverse) {
+                    pos--;
+                } else {
+                    //else increase position
+                    pos++;
+                }
+
+                //if position is -1 (current card finished movement)
+                if (pos == -1) {
+                    //rotate cards to set all cards in deck later
+                    //cards are rotated in different directions for better look
+                    if (index % 2 == 0) {
+                        container.style.transform = "rotateY(-180deg) rotate("+ (((4 - index) * 2) + 3) + "deg)";
+                    } else {
+                        container.style.transform = "rotateY(-180deg) rotate(-"+ (((4 - index) * 2) + 3) + "deg)";
+                    }
+                    
+                    //move onto next card
+                    if (index < containerArray.length && index < legnth) {
+                        container = containerArray[index];
+                        cc = ccArray[index];
+                    }
+                    
+
+                    //reset reverse
+                    reverse = false;
+
+                    //check if finished iterating through cards
+                    if (index == legnth) {
+                        done = true;
+                    } 
+
+                    //move to index of next card
+                    index++;
+                } 
+            }
+        }
+    } 
+}
+
+/**
+ * getCards
+ * 
+ * Update the card in the cardTextArray with the queuestions from
+ * the cards in the set, given by setid
+ * 
+ * @param {*} cardTextArray - the paragraph (cards) that need updating
+ * @param {*} setid - id of the set the cards are from
+ */
+async function getCards(cardTextArray, setid) {
+    try { //request from server set information
+        //call getCardsHome function
+        let response = await fetch('http://localhost:3000/api/getCardsHome?userid='+userid
+            +"&setid=" + setid
+        );
+
+        //format data with json format
+        let data = await response.json();
+
+        cardMap.set(setid, data.data);
+
+        //save datat variable for codeing ease
+        let cardArray = data.data;
+
+        //update the text of the cardText
+        for (let i = 0; i < cardArray.length; i++) {
+            cardTextArray[i].innerHTML = cardArray[i]["question"];
+        }
+
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
 //------------------------------------------------------------------------------
 // Event listeners added to buttons --------------------------------------------
 //------------------------------------------------------------------------------
@@ -158,11 +507,13 @@ yesDeleteButton.addEventListener("click", async function () {
  * Start the homepage. This is done by adding set information from SQL database
  * to hompage with HTML elements
  */
-function start() {
+async function start() {
     //iterate through all rows from SQL query (each row is a set)
     for (let i = 0; i < dataArray.length; i++) {
         //save row to info variable (for ease of coding)
         let info = dataArray[i];
+
+        //set up locks and card display status
         folderLock.set(info["set_id"], false);
         setLock.set(info["set_id"], false);
         setStatus.set(info["set_id"], "close");
@@ -172,97 +523,106 @@ function start() {
         setContainer.classList.add("home-set-container");
 
         //create 'image' of set
-        // let setImage = document.createElement("div");
-        // setImage.classList.add("home-set");
         let setImage = document.createElement("img");
         setImage.classList.add("home-set");
         setImage.src = "images/Folder.png";
 
-        //create cards
-        let callCardContainer =  document.createElement("div");
-        callCardContainer.classList.add("card-ccc");
+        //create cards and containers (for flipping)
+        //create a container for all cards
+        let allCardContainer =  document.createElement("div");
+        allCardContainer.classList.add("card-ccc");
 
-        let cardContainerContainer1 = document.createElement("div");
-        cardContainerContainer1.classList.add("card-container-container");
+        //create containers for cards (needed to flipping animation)
+        let cardContainerOne = document.createElement("div");
+        cardContainerOne.classList.add("card-container-container");
 
-        let cardContainerContainer2 = document.createElement("div");
-        cardContainerContainer2.classList.add("card-container-container");
+        let cardContainerTwo = document.createElement("div");
+        cardContainerTwo.classList.add("card-container-container");
 
-        let cardContainerContainer3 = document.createElement("div");
-        cardContainerContainer3.classList.add("card-container-container");
+        let cardContainerThree = document.createElement("div");
+        cardContainerThree.classList.add("card-container-container");
 
-        let cardContainerContainer4 = document.createElement("div");
-        cardContainerContainer4.classList.add("card-container-container");
+        let cardContainerFour = document.createElement("div");
+        cardContainerFour.classList.add("card-container-container");
         
+        //create cards
+        let cardOne = document.createElement("div");
+        cardOne.classList.add("card-container");
 
-        let cardContainer1 = document.createElement("div");
-        cardContainer1.classList.add("card-container");
+        let cardTwo = document.createElement("div");
+        cardTwo.classList.add("card-container");
 
-        let cardContainer2 = document.createElement("div");
-        cardContainer2.classList.add("card-container");
+        let cardThree = document.createElement("div");
+        cardThree.classList.add("card-container");
 
-        let cardContainer3 = document.createElement("div");
-        cardContainer3.classList.add("card-container");
+        let cardFour = document.createElement("div");
+        cardFour.classList.add("card-container");
 
-        let cardContainer4 = document.createElement("div");
-        cardContainer4.classList.add("card-container");
+        //create text for each card
+        let cardTextOne = document.createElement("p");
+        cardTextOne.classList.add("card");
 
+        let cardTextTwo = document.createElement("p");
+        cardTextTwo.classList.add("card");
 
-        let cardOne = document.createElement("p");
-        cardOne.classList.add("card");
+        let cardTextThree= document.createElement("p");
+        cardTextThree.classList.add("card");
 
-        let cardTwo = document.createElement("p");
-        cardTwo.classList.add("card");
+        let cardTextFour= document.createElement("p");
+        cardTextFour.classList.add("card");
 
-        let cardThree= document.createElement("p");
-        cardThree.classList.add("card");
+        //add cards' text to card
+        cardOne.append(cardTextOne);
+        cardTwo.append(cardTextTwo);
+        cardThree.append(cardTextThree);
+        cardFour.append(cardTextFour);
 
-        let cardFour= document.createElement("p");
-        cardFour.classList.add("card");
+        //add cards to their containers
+        cardContainerOne.append(cardOne);
+        cardContainerTwo.append(cardTwo);
+        cardContainerThree.append(cardThree);
+        cardContainerFour.append(cardFour);
 
-        cardContainer1.append(cardOne);
-        cardContainer2.append(cardTwo);
-        cardContainer3.append(cardThree);
-        cardContainer4.append(cardFour);
+        //add cards containers to all card container
+        allCardContainer.append(cardContainerOne);
+        allCardContainer.append(cardContainerTwo);
+        allCardContainer.append(cardContainerThree);
+        allCardContainer.append(cardContainerFour);
 
-        cardContainerContainer1.append(cardContainer1);
-        cardContainerContainer2.append(cardContainer2);
-        cardContainerContainer3.append(cardContainer3);
-        cardContainerContainer4.append(cardContainer4);
-
-        callCardContainer.append(cardContainerContainer1);
-        callCardContainer.append(cardContainerContainer2);
-        callCardContainer.append(cardContainerContainer3);
-        callCardContainer.append(cardContainerContainer4);
-
+        //create arrays for cards and their containers
+        let cardTextArray = new Array();
         let cardArray = new Array();
         let cardContainerArray = new Array();
-        let cardCCArray = new Array();
+
+        cardTextArray.push(cardTextOne);
+        cardTextArray.push(cardTextTwo);
+        cardTextArray.push(cardTextThree);
+        cardTextArray.push(cardTextFour);
+
+        //update the card's text
+        getCards(cardTextArray, info["set_id"]);
 
         cardArray.push(cardOne);
         cardArray.push(cardTwo);
         cardArray.push(cardThree);
         cardArray.push(cardFour);
 
-        cardContainerArray.push(cardContainer1);
-        cardContainerArray.push(cardContainer2);
-        cardContainerArray.push(cardContainer3);
-        cardContainerArray.push(cardContainer4);
-
-        cardCCArray.push(cardContainerContainer1);
-        cardCCArray.push(cardContainerContainer2);
-        cardCCArray.push(cardContainerContainer3);
-        cardCCArray.push(cardContainerContainer4);
+        cardContainerArray.push(cardContainerOne);
+        cardContainerArray.push(cardContainerTwo);
+        cardContainerArray.push(cardContainerThree);
+        cardContainerArray.push(cardContainerFour);
 
         //HTML for displaying set name
         let setName = document.createElement("p");
         setName.innerHTML = info["set_name"];
         setName.classList.add("name-p");
-        setName.addEventListener("click", 
-            () => displayCards(cardCCArray, cardContainerArray, cardArray, info["set_id"]));
 
-        callCardContainer.addEventListener("click", 
-            () => displayCards(cardCCArray, cardContainerArray, cardArray, info["set_id"]));
+        //when setname or cards are clicks, display  cards
+        setName.addEventListener("click", 
+            () => displayCards(cardContainerArray, cardArray, info["set_id"]));
+        allCardContainer.addEventListener("click", 
+            () => displayCards(cardContainerArray, cardArray, info["set_id"]));
+
 
         //create progress bar elements
         let progressBarContainer = document.createElement("div");
@@ -314,8 +674,7 @@ function start() {
 
         //Add everything to setContainer
         setContainer.append(setImage);
-        setContainer.append(callCardContainer);
-        // setContainer.append(cardContainer);
+        setContainer.append(allCardContainer);
         setContainer.append(setName);
         setContainer.append(progressBarContainer);
         setContainer.append(buttonContainer);
@@ -327,249 +686,3 @@ function start() {
 
 //start homepage
 start();
-
-// Drafting
-let folderPosition = 0;
-
-//TODO: need to implement queue for this
-let functionQueue = new Array();        //not a queue but a stack (need to change)
-let functionQueueSetId = new Array();
-
-function folderOpen(img, setid) {
-    if (!folderLock.get(setid)) {
-        folderLock.set(setid, true);
-    } else {
-        return;
-    }
-
-    let beginPosition = folderPosition;
-    let time = 0;
-
-    setTimeout(() => {
-        img.src = "images/folder-open-2.png";
-    }, 100);
-    setTimeout(() => {
-        img.src = "images/folder-open-3.png";
-    }, 200);
-    setTimeout(() => {
-        img.src = "images/folder-open-4.png";
-    }, 300);
-    setTimeout(() => {
-        img.src = "images/folder-open-5.png";
-    }, 400);
-    setTimeout(() => {
-        img.src = "images/folder-open-6.png";
-        folderLock.set(setid, false);
-
-        if (functionQueue.length > 0) {
-            functionQueueSetId.pop();
-            let functionItems = functionQueue.pop();
-            folderClose(functionItems[0], functionItems[1]);
-        }
-    }, 500);
-}
-
-function folderClose(img, setid) {
-    if (!folderLock.get(setid)) {
-        folderLock.set(setid, true);
-    } else {
-        if (!functionQueueSetId.includes(setid)) {
-            let functionItems = [img, setid];
-            functionQueue.push(functionItems);
-            functionQueueSetId.push(setid);
-        }
-        
-        return;
-    }
-
-    setTimeout(() => {
-        img.src = "images/folder-open-5.png";
-    }, 100);
-    setTimeout(() => {
-        img.src = "images/folder-open-4.png";
-    }, 200);
-    setTimeout(() => {
-        img.src = "images/folder-open-3.png";
-    }, 300);
-    setTimeout(() => {
-        img.src = "images/folder-open-2.png";
-    }, 400);
-    setTimeout(() => {
-        img.src = "images/Folder.png";
-
-        folderLock.set(setid, false);
-        if (functionQueue.length > 0) {
-            functionQueueSetId.pop();
-            let functionItems = functionQueue.pop();
-            folderClose(functionItems[0], functionItems[1]);
-        }
-        
-    }, 500);
-}
-
-function displayCards(ccArray, containerArray, cardArray, setid) {
-    let id = null;
-    let pos = 0;
-    let done = false;
-    let reverse = false
-
-    if (setStatus.get(setid) == "open" && !setLock.get(setid)) {
-        setLock.set(setid, true);
-
-        let length = cardMap.get(setid).length;
-        let index = length - 1;
-        let rotate = false;
-
-        let card = cardArray[index];
-        let container = containerArray[index];
-        let cc = ccArray[index];
-        index--;
-
-        clearInterval(id);
-        id = setInterval(frame, 5);
-
-        function frame() {
-            if (pos == -1 && done) {
-                setLock.set(setid, false);         
-                setStatus.set(setid, "close");
-                clearInterval(id);
-            } else {
-                if (!rotate) {
-                    container.style.transform = "";
-                    rotate = true;
-                }
-
-                container.style.left = pos + 'px';
-                
-                if (pos == 100) {
-                    reverse = true;
-
-                    cc.classList.toggle("flipped");
-
-                    setTimeout(() => {
-                        container.style.zIndex = 0;
-                        card.style.zIndex = 0;
-                        cc.style.zIndex = 0;
-                    }, 300);
-
-                }
-
-                if (reverse) {
-                    pos--;
-                } else {
-                    pos++;
-                }
-
-                if (pos == -1) {
-                    if (index < cardArray.length && index < length) {
-                        card = cardArray[index];
-                        container = containerArray[index];
-                        cc = ccArray[index];
-                    }
-                    
-                    reverse = false;
-                    rotate = false;
-
-                    if (index == -1) {
-                        done = true;
-                    } 
-
-                    index--;
-                } 
-            }
-        }
-    } else if (setStatus.get(setid) == "close" && !setLock.get(setid)) {
-        setLock.set(setid, true);
-
-        let card = cardArray[0];
-        let container = containerArray[0];
-        let cc = ccArray[0];
-        card.innerHTML = cardMap.get(setid)[0]["question"];
-
-        let index = 1;
-
-        clearInterval(id);
-        id = setInterval(frame, 5);
-
-        let questionArray = cardMap.get(setid);
-
-        function frame() {
-            if (pos == -1 && done) {
-                setLock.set(setid, false);
-                setStatus.set(setid, "open");
-                clearInterval(id);
-            } else {
-                container.style.left = pos + 'px';
-                
-                if (pos == 100) {
-                    reverse = true;
-
-                    container.style.zIndex = 3;
-                    card.style.zIndex = 3;
-                    cc.style.zIndex = 3;
-
-                    cc.classList.toggle("flipped");
-                }
-
-                if (reverse) {
-                    pos--;
-                } else {
-                    pos++;
-                }
-
-                if (pos == -1) {
-
-                    if (index % 2 == 0) {
-                        container.style.transform = "rotateY(-180deg) rotate("+ (((4 - index) * 2) + 3) + "deg)";
-                    } else {
-                        container.style.transform = "rotateY(-180deg) rotate(-"+ (((4 - index) * 2) + 3) + "deg)";
-                    }
-                    
-                    if (index < cardArray.length && index < questionArray.length) {
-                        card = cardArray[index];
-                        container = containerArray[index];
-                        cc = ccArray[index];
-                        card.innerHTML = questionArray[index]["question"];
-                    }
-                    
-
-                    reverse = false;
-
-                    if (index == questionArray.length) {
-                        done = true;
-                    } 
-
-                    index++;
-                } 
-            }
-        }
-    } 
-}
-
-async function getCards() {
-    for (let i = 0; i < dataArray.length; i++) {
-        //save row to info variable (for ease of coding)
-        let info = dataArray[i];
-
-        try { //request from server set information
-            //call homepage function
-            let response = await fetch('http://localhost:3000/api/getCardsHome?userid='+userid
-                +"&setid=" + info["set_id"]
-            );
-
-            //format data with json format
-            let data = await response.json();
-            // console.log(data);
-            cardMap.set(info["set_id"], data.data);
-            console.log(data.data);
-
-            //save data in dataArray variable
-            // dataArray = data.data;
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
-}
-
-await getCards();
