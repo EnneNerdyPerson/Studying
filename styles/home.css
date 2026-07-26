@@ -3,25 +3,6 @@ body {
     flex-direction: column;
 }
 
-.name-p {
-    position: absolute;
-    z-index: 2;
-    color: white;
-    text-shadow: black 1px 1px;
-
-    /* Alignment Styling */
-    text-align: center;
-    align-content: center;
-
-    /* Box Model Styling */
-    width: 160px;
-    height: 130px;
-    padding: 5px 10px 0 10px;
-    margin: 28px 5px 0 5px;
-
-    /* z-index: */
-}
-
 button {
     font-size: 15px;
 
@@ -78,6 +59,26 @@ img {
     margin: 10px;
 
     /* background-color: grey; */
+}
+
+/* Set Name Styling */
+.name-p {
+    color: white;
+    text-shadow: black 1px 1px;
+
+    /* Alignment Styling */
+    text-align: center;
+    align-content: center;
+
+    /* Position Styling */
+    position: absolute;
+    z-index: 2;
+
+    /* Box Model Styling */
+    width: 160px;
+    height: 130px;
+    padding: 5px 10px 0 10px;
+    margin: 28px 5px 0 5px;
 }
 
 /* Progress Bar Styling */
@@ -146,6 +147,7 @@ img {
     color: red;
 }
 
+/* Delete Buttons Styling */
 #yes-delete {
     background-color: #e96f6b;
 }
