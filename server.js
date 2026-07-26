@@ -308,6 +308,38 @@ app.get('/api/deleteCard', (req, res) => {
     res.json({ data: 'sucess'});
 });
 
+/** getCardsHome SQL function
+ * 
+ * Get 4 cards in a set for home page. This function returns 4 questions from
+ * a set that will be displayed on the home page.
+ * 
+ * parameters: 
+ *      userid - the id of the user associated with set to be displayed
+ *      setid - the id of the set to be displayed
+ * sends: card_id, question, answer, percent, favorite for all cards in set
+ */
+app.get('/api/getCardsHome', (req, res) => {
+    //save parameters from client's query
+    const userid = req.query.userid;
+    const setid = req.query.setid;
+
+    //create query to get all cards/card info from a given set
+    let sql = "SELECT question FROM CARD WHERE user_id = ? AND set_id = ? ORDER BY card_id LIMIT 4;";
+
+    //run query on connection
+    con.query(sql, [userid, setid], function (err, result, fields) {
+        if (err) { 
+            throw err;
+            return;
+        }
+
+        console.log("getCardsHome worked!");
+
+        //send result of query
+        res.json({ data: result});
+    });
+});
+
 /** getCardsStudy SQL function
  * 
  * Get all cards in a set for studying. This function returns all attributes for
