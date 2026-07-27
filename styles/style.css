@@ -59,6 +59,7 @@ body {
 
 /* header buttons styling */
 .header-button {
+    color: black;
     background-color: transparent;
     font-size: 20px;
     border-style: none;
