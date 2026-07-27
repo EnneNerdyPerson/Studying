@@ -131,7 +131,7 @@ function checkDeleteSet(container, setid, setname) {
  * @param {*} img - the image of the folder that needs to change
  * @param {*} setid - the id of the set whoes folder changes
  */
-function folderOpen(img, setid) {
+function folderOpen(img, setname, setid) {
     //check if folder is being opened or close right now
     if (!folderLock.get(setid)) {
         //if not currently animated, lock this folder
@@ -140,6 +140,9 @@ function folderOpen(img, setid) {
         //stop animating
         return;
     }
+
+    setname.classList.toggle("folder-open");
+    setname.classList.toggle("folder-close");
 
     //set timeouts so that folder cycles through image
     //animations every 1ms
@@ -166,9 +169,9 @@ function folderOpen(img, setid) {
             //remove setid
             setidInQueue.pop();
 
-            //run floderClose function
+            //run folderClose function
             let functionItems = closeFunctionQueue.pop();
-            folderClose(functionItems[0], functionItems[1]);
+            folderClose(functionItems[0], functionItems[1], functionItems[2]);
         }
     }, 500);
 }
@@ -184,7 +187,7 @@ function folderOpen(img, setid) {
  * @param {*} img - the image of the folder that needs to change
  * @param {*} setid - the id of the set whoes folder changes
  */
-function folderClose(img, setid) {
+function folderClose(img, setname, setid) {
     //check if folder is being opened or close right now
     if (!folderLock.get(setid)) {
         //if not currently animated, lock this folder
@@ -193,7 +196,7 @@ function folderClose(img, setid) {
         //check if set is already in close function queue
         if (!setidInQueue.includes(setid)) {
             //if not in queue, add to queue
-            let functionItems = [img, setid];
+            let functionItems = [img, setname, setid];
             closeFunctionQueue.push(functionItems);
 
             //add setid in setid queue
@@ -203,6 +206,9 @@ function folderClose(img, setid) {
         //stop animating
         return;
     }
+
+    setname.classList.toggle("folder-open");
+    setname.classList.toggle("folder-close");
 
     //set timeouts so that folder cycles through image
     //animations every 1ms
@@ -229,9 +235,9 @@ function folderClose(img, setid) {
             //remove setid
             setidInQueue.pop();
 
-            //run floderClose function
+            //run folderClose function
             let functionItems = closeFunctionQueue.pop();
-            folderClose(functionItems[0], functionItems[1]);
+            folderClose(functionItems[0], functionItems[1], functionItems[2]);
         }
         
     }, 500);
@@ -491,50 +497,51 @@ async function start() {
         let setImage = document.createElement("img");
         setImage.classList.add("home-set");
         setImage.src = "images/Folder.png";
+        // setImage.src = "images/folder-open-6.png";
 
         //create cards and containers (for flipping)
         //create a container for all cards
         let allCardContainer =  document.createElement("div");
-        allCardContainer.classList.add("card-ccc");
+        allCardContainer.classList.add("all-card-container");
 
         //create containers for cards (needed to flipping animation)
         let cardContainerOne = document.createElement("div");
-        cardContainerOne.classList.add("card-container-container");
+        cardContainerOne.classList.add("card-container");
 
         let cardContainerTwo = document.createElement("div");
-        cardContainerTwo.classList.add("card-container-container");
+        cardContainerTwo.classList.add("card-container");
 
         let cardContainerThree = document.createElement("div");
-        cardContainerThree.classList.add("card-container-container");
+        cardContainerThree.classList.add("card-container");
 
         let cardContainerFour = document.createElement("div");
-        cardContainerFour.classList.add("card-container-container");
+        cardContainerFour.classList.add("card-container");
         
         //create cards
         let cardOne = document.createElement("div");
-        cardOne.classList.add("card-container");
+        cardOne.classList.add("card");
 
         let cardTwo = document.createElement("div");
-        cardTwo.classList.add("card-container");
+        cardTwo.classList.add("card");
 
         let cardThree = document.createElement("div");
-        cardThree.classList.add("card-container");
+        cardThree.classList.add("card");
 
         let cardFour = document.createElement("div");
-        cardFour.classList.add("card-container");
+        cardFour.classList.add("card");
 
         //create text for each card
         let cardTextOne = document.createElement("p");
-        cardTextOne.classList.add("card");
+        cardTextOne.classList.add("card-text");
 
         let cardTextTwo = document.createElement("p");
-        cardTextTwo.classList.add("card");
+        cardTextTwo.classList.add("card-text");
 
         let cardTextThree= document.createElement("p");
-        cardTextThree.classList.add("card");
+        cardTextThree.classList.add("card-text");
 
         let cardTextFour= document.createElement("p");
-        cardTextFour.classList.add("card");
+        cardTextFour.classList.add("card-text");
 
         //add cards' text to card
         cardOne.append(cardTextOne);
@@ -581,6 +588,7 @@ async function start() {
         let setName = document.createElement("p");
         setName.innerHTML = info["set_name"];
         setName.classList.add("name-p");
+        setName.classList.add("folder-close");
 
         //when setname or cards are clicks, display  cards
         setName.addEventListener("click", 
@@ -633,9 +641,9 @@ async function start() {
         buttonContainer.append(delteButton);    
         
         setContainer.addEventListener("mouseenter", 
-            () => folderOpen(setImage, info["set_id"]));
+            () => folderOpen(setImage, setName, info["set_id"]));
         setContainer.addEventListener("mouseleave", 
-            () => folderClose(setImage, info["set_id"]));
+            () => folderClose(setImage, setName, info["set_id"]));
 
         //Add everything to setContainer
         setContainer.append(setImage);

@@ -19,6 +19,12 @@ button {
     border-radius: 2px;
 }
 
+button:hover {
+    background-color: #42273B;
+    box-shadow: 4px 2px 2px #3d333b;
+    border-radius: 5px;
+}
+
 img {
     z-index: 1;
 }
@@ -49,16 +55,12 @@ img {
     align-items: center;
 }
 
+/* Folder Image Styling */
 .home-set {
     /* Box Model Styling */
-    /* width: 75%;
-    height: 150px;
-    margin: 10px; */
     width: 120%;
     height: 170px;
     margin: 10px;
-
-    /* background-color: grey; */
 }
 
 /* Set Name Styling */
@@ -79,6 +81,17 @@ img {
     height: 130px;
     padding: 5px 10px 0 10px;
     margin: 28px 5px 0 5px;
+}
+
+/* Name Styling During Animation */
+.folder-open {
+    transform: skewX(-7deg) translate(10px);
+    transition: transform 0.5s; 
+}
+
+.folder-close {
+    transform: skewX(0deg) translate(0px);
+    transition: transform 0.5s; 
 }
 
 /* Progress Bar Styling */
@@ -166,62 +179,71 @@ img {
     margin: 10px 10px;
 }
 
-/* Drafting... */
+/* Card Styling */
+/* card-text (the question of the card) */
+.card-text {
+    font-size: 13px;
 
-.card {
+    /* Position Styling */
     position: absolute;
+    z-index: 0;
 
+    /* Text Centering */
     text-align: center;
     align-content: center;
 
+    /* Color Styling */
     background-color: white;
     color: black;
     text-shadow: none;
-    font-size: 13px;
 
+    /* Box Model Styling */
     width: 130px;
     height: 90px;
     padding: 5px 10px 0 10px;
     margin: 0;
 
+    /* Animation Necessities */
     backface-visibility: hidden;
     transform: rotateY(180deg);  
-
-    z-index: 0;
 }
 
-.card-container {
-    position: absolute; 
-
-    transform-style: preserve-3d;
-    transition: transform 0.5s; 
+/* card styling (visual card) */
+.card {
     background-color: white;
-
     border: grey solid 1px;
 
+    /* Position Styling */
+    position: absolute; 
+    z-index: 0;
+
+    /* Animation Styling */
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+
+    /* Box Model Styling */
     width: 150px;
     height: 100px;
-
-    z-index: 0;
 }
 
-
-.card-container-container {
+/* card container styling (for animation) */
+.card-container {
     width: 150px;
-    /* margin: 51px 0 0 0; */
-    position: absolute;
 
+    /* Animation Styling */
+    position: absolute;
     perspective: 1000px;
     z-index: 0;
 }
 
-.card-ccc {
+/* all card container position styling */
+.all-card-container {
     width: 150px;
     margin: 51px 0 0 0;
     position: absolute;
 }
 
-.card-container-container.flipped .card-container {
-  /* rotates flashcard and text in flashcard */
-  transform: rotateY(-180deg);
+ /* rotates flashcard and text in flashcard */
+.card-container.flipped .card {
+    transform: rotateY(-180deg);
 }
