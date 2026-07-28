@@ -68,23 +68,23 @@
             <!--Learn Modes Contianer-->
             <div class="learning-items">
                 <!--Dropdown for learn modes: hover to change learn modes-->
-                <p class="dropdown" id="learn-mode">Learn Mode</p>
+                <p id="learn-mode" class="dropdown">Learn Mode</p>
 
                 <!--Dropdown content of different learn modes-->
-                <div class="dropdown-content" id="learn-mode-content">
+                <div id="learn-mode-content" class="dropdown-content">
                     <!--Flashcard Learn Style: 
                         Right/Wrong: labeling flashcard as correct or not
                         Rank: ranking understanding of flashcard 1-5 
                         None: don't use flashcards when studying-->
-                    <input id="standard-vs-ranked" class="button"
+                    <input id="standard-vs-ranked" class="learn-button"
                         type="button" value="Right/Wrong">
 
                     <!--Use multiple choice options when studying-->
-                    <input id="multi" class="button"
+                    <input id="multi" class="learn-button"
                         type="button"  value="Multiple Choice">
 
                     <!--Use written input when studying-->
-                    <input id="writt-key" class="button"
+                    <input id="writt-key" class="learn-button"
                         type="button" name="writt-key" value="Typed">
                 </div>
             </div>
@@ -107,17 +107,17 @@
 
         <!--Ranking Buttons-->
         <div id="ranked-buttons" class="flex-container spacing hidden">
-            <button id="rank-1" class="learn-button">1</button>
-            <button id="rank-2" class="learn-button">2</button>
-            <button id="rank-3" class="learn-button">3</button>
-            <button id="rank-4" class="learn-button">4</button>
-            <button id="rank-5" class="learn-button">5</button>
+            <button id="rank-1" class="rank-button">1</button>
+            <button id="rank-2" class="rank-button">2</button>
+            <button id="rank-3" class="rank-button">3</button>
+            <button id="rank-4" class="rank-button">4</button>
+            <button id="rank-5" class="rank-button">5</button>
         </div>
 
         <!--Right/Wrong Buttons-->
         <div id="standard-buttons" class="flex-container spacing">
-            <button id="correct" class="button">Correct</button>
-            <button id="wrong" class="button">Wrong</button>
+            <button id="correct" class="stand-button">Correct</button>
+            <button id="wrong" class="stand-button">Wrong</button>
         </div>
 
         <!--Multiple Choice Buttons-->
@@ -137,21 +137,22 @@
             If not correct, lets user know correct response-->
         <div id="right-wrong-container" class="hidden">
             <p id="right-wrong-message"></p>
-            <button id="right-wrong-button">
+            <button id="right-wrong-button" class="button">
                 Next
             </button>
         </div>
 
         <!--Written Buttons: for written response learning-->
-        <div id="written-buttons" class="flex-container hidden">
-            <input id="written-input" type="text">
+        <div id="written-buttons" class="flex-container hidden spacing">
+            <!-- <input id="written-input" type="text"> -->
+             <textarea id="written-input" name="written-input" rows="2" cols="50" placeholder="Type your message here..."></textarea>
             <button id="written-button" class="button">
                 Submit
             </button>
         </div>
 
         <!--First Look Buttons: get new card after first look at flashcard -->
-        <div id="next-buttons" class="flex-container hidden">
+        <div id="next-buttons" class="flex-container hidden spacing">
             <button id="next-buttons" class="button">
                 First Look Done
             </button>
