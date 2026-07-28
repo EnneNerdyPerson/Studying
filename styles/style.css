@@ -23,8 +23,8 @@ body {
     position: absolute;
 
     /* Box Model Styling */
-    width: 0;
-    height: 0;
+    /* width: 0;
+    height: 0; */
 }
 
 /* button styling */

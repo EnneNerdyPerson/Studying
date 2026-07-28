@@ -145,7 +145,7 @@
         <!--Written Buttons: for written response learning-->
         <div id="written-buttons" class="flex-container hidden spacing">
             <!-- <input id="written-input" type="text"> -->
-            <textarea id="written-input" name="written-input" rows="2" cols="50" placeholder="Type your message here..."></textarea>
+            <textarea id="written-input" name="written-input" rows="1" cols="50" placeholder="Type your message here..."></textarea>
             <button id="written-button" class="button">
                 Submit
             </button>
