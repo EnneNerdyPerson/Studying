@@ -21,10 +21,6 @@ body {
 .hidden {
     visibility: hidden;
     position: absolute;
-
-    /* Box Model Styling */
-    /* width: 0;
-    height: 0; */
 }
 
 /* button styling */
