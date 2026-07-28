@@ -141,8 +141,8 @@ function folderOpen(img, setname, setid) {
         return;
     }
 
-    setname.classList.toggle("folder-open");
-    setname.classList.toggle("folder-close");
+    // setname.classList.toggle("folder-open");
+    // setname.classList.toggle("folder-close");
 
     //set timeouts so that folder cycles through image
     //animations every 1ms
@@ -207,8 +207,8 @@ function folderClose(img, setname, setid) {
         return;
     }
 
-    setname.classList.toggle("folder-open");
-    setname.classList.toggle("folder-close");
+    // setname.classList.toggle("folder-open");
+    // setname.classList.toggle("folder-close");
 
     //set timeouts so that folder cycles through image
     //animations every 1ms
