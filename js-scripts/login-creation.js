@@ -20,15 +20,25 @@ const userMakeInput = document.getElementById("user-make");
 const passwordMakeInput = document.getElementById("pass-make");
 const passwordCheckMakeInput = document.getElementById("pass-check");
 
+usernameInput.value = "";
+passwordInput.value = "";
+userMakeInput.value = "";
+passwordMakeInput.value = "";
+passwordCheckMakeInput.value = "";
+
 //------------------------------------------------------------------------------
 //Functions --------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //switch visibility of login or create account form
 function switchForm() {
+    usernameInput.value = "";
+    passwordInput.value = "";
+    userMakeInput.value = "";
+    passwordMakeInput.value = "";
+    passwordCheckMakeInput.value = "";
+
     createForm.classList.toggle("hidden");
     logInForm.classList.toggle("hidden");
-
-    console.log("switch!");
 
     let loginZIndex = window.getComputedStyle(document.getElementById("login-form-div")).zIndex;
     let createZIndex =  window.getComputedStyle(document.getElementById("create-form-div")).zIndex;

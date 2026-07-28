@@ -20,8 +20,11 @@
     <div class="header flex-container">
         <!--Logo and Website Name-->
         <div class="flex-container">
-            <h1 id="logo">Logo</h1>
-            <h2>Flashcard Learning</h2>
+            <!-- <h1 id="logo">Logo</h1> -->
+            <img id="logo" src="images/Logo.png" alt="Logo">
+            <div id="website-name" class="flex-container">
+                <h2 id="letter-f">F</h2><h2 >lash Study</h2>
+            </div>
         </div>
 
         <!--Buttons for banner header-->
@@ -63,7 +66,9 @@
     </div>
 
     <!--Body of webpage-->
-    <div id="body">
+    <div id="body-centering">
+        <div id="body">
+        </div>
     </div>
 
     <!--Script for webpage-->

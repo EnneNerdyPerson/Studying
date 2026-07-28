@@ -16,8 +16,8 @@
     <div class="header flex-container">
         <!--Logo and Website Name-->
         <div class="flex-container">
-            <h1 id="logo" >Logo</h1>
-            <h2>Flashcard editor</h2>
+            <img id="logo" src="images/Logo.png" alt="Logo">
+            <h2 id="website-name">Flash Study</h2>
         </div>
 
         <!--Buttons for banner header-->
@@ -51,7 +51,7 @@
     <!-- Set Name Elements -->
     <div id="name-container" class="flex-container">
         <!--Displaying the set name-->
-        <label>Set Name: </label>
+        <!-- <label>Set Name: </label> -->
         <h2 id="set-name">Untitled</h2>
 
         <!--Button for changing the set name-->
@@ -64,9 +64,9 @@
     <!-- Flash Cards Elements (form) -->
     <form method="post" class="" id="flashcard-maker">
         <!--Set Name Change Elements-->
-        <div class="flex-container hidden" id="name-change-container">
+        <div id="name-change-container" class="flex-container hidden">
             <!--New Set Name Input-->
-            <label for="set-name-change">Set Name: </label>
+            <!-- <label for="set-name-change">Set Name: </label> -->
             <input id="set-name-change" 
                 type="text" 
                 name="set-name-change" 

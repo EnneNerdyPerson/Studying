@@ -9,19 +9,7 @@ button, label {
 
 /* Standard Spacing Styling */
 .spacing {
-  margin: 20px 0 15px 0;
-}
-
-#center {
-  /* Box Model Styling */
-  width: 100%;
-  margin: 30px 0 20px 0;
-
-  /* Felx Styling */
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
+  margin: 30px 0 15px 0;
 }
 
 /* Standard Button Styling */
@@ -35,11 +23,21 @@ button, label {
   background-color: #42273B;
 }
 
+/* Centering All Elements */
+#center-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* Learning Mode Styling */
 .learning-container {
   position: absolute; /* have learning mode on side of page */
   z-index: 5; /* have learning mode at front */
   width: 150px;
+  margin: 5px 0 0 5px; 
+
+  left: 0;
 }
 
 .learning-items {
@@ -47,7 +45,7 @@ button, label {
   width: 125px;
   height: 30px;
   padding: 5px;
-  margin: 5px;
+  margin: 10px 5px;
   margin-top: 0;
 
   /* Border Styling */
@@ -55,27 +53,24 @@ button, label {
   border-radius: 2;
 }
 
-.learn-button:hover {
-  box-shadow: 2px 2px 2px 2px #888888;
-}
-
+/* Learning Mode Button Styling */
 .learn-button {
-  font-size: 26px;
+  font-size: 15px;
 
-  /* Border Styling */
-  border: solid grey 1px;
-  border-radius: 100%;
+  padding: 6px 0;
+  margin: 5px;
 
-  /* Box Model Styling */
-  width: 50px;
-  height: 50px;
-  margin: 0 15px;
+  color: whitesmoke;
+  background-color: #70566D;
+
+  border: gray groove 1px;
+  border-radius: 3px;
 }
 
 /* Pressed Learn Button Styling */
 .on-button {
-  border: outset 5px grey;
-  background-color: #42273B;
+  border: ridge 2px grey !important;
+  background-color: #42273B !important;
 }
 
 /* Drop Down for Learn Mode Styling */
@@ -85,11 +80,13 @@ button, label {
 
 /* on hover, display dropdown content */
 .dropdown:hover + .dropdown-content{
-  display: block;
+  display: flex;
+  flex-direction: column;
   z-index: 3;
 }
 .dropdown-content:hover {
-  display: block;
+  display: flex;
+  flex-direction: column;
   z-index: 3;
 }
 
@@ -100,11 +97,12 @@ button, label {
   background-color: #abc8c0d5;
 
   /* Box Model Styling */
-  width: 175px;
+  width: 121px;
   margin-left: -5px;
-  padding: 5px;
+  padding: 7px;
 }
 
+/* Learn Mode Styling */
 #learn-mode {
   font-size: 18px;
   text-align: center;
@@ -115,6 +113,19 @@ button, label {
   padding: 2px 0 10px 0;
 }
 
+/* Centering Flashcard Styling */
+#center {
+  /* Box Model Styling */
+  width: 100%;
+  margin: 30px 0 20px 0;
+
+  /* Felx Styling */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Flashcard-Flip Styling */
 .flip-container {
   perspective: 1000px; /* Gives 3D depth to the flip */
@@ -122,7 +133,7 @@ button, label {
   /* Box Model Styling */
   min-width: 300px;
   width: 70%;
-  height: 60vh;
+  height: 55vh;
 }
 
 /* when 'Flipped' Styling */
@@ -193,6 +204,68 @@ button, label {
   align-items: center;
 }
 
+/* Standard Right/Wrong Button Styling */
+.stand-button {
+  /* background-color:  */
+  width: 200px;
+  padding: 7px 0;
+  margin: 10px 30px;
+
+  font-size: 24px;
+
+  border: solid 1px rgb(127, 127, 127);
+  border-radius: 5px;
+}
+
+.stand-button:hover {
+  border: solid 1px black;
+  border-radius: 7px;
+}
+
+/* Correct Button Styling */
+#correct {
+  background-color: #7aea92;
+}
+
+#correct:hover {
+  background-color: #5eff81;
+  box-shadow: #edfaee 3px 1px 1px;
+}
+
+/* Wrong Button Styling */
+#wrong {
+  background-color: #e96f6b;
+}
+
+#wrong:hover {
+  background-color: #f7605b;
+  box-shadow: #faeded 3px 1px 1px;
+}
+
+/* Rank Button Container Styling (Spacing) */
+#ranked-buttons {
+  width: 45%;
+  justify-content: space-around;
+}
+
+/* Rank Buttons Styling */
+.rank-button {
+  font-size: 30px;
+
+  /* Border Styling */
+  border: solid grey 1px;
+  border-radius: 100%;
+
+  /* Box Model Styling */
+  width: 60px;
+  height: 60px;
+  margin: 0 10px;
+}
+
+.rank-button:hover {
+  box-shadow: 2px 2px 2px 2px #888888;
+}
+
 /* Rank Button Colors */
 #rank-1 {
   background-color: #e96f6b;
@@ -215,14 +288,14 @@ button, label {
   font-size: 20px;
 
   /* Box Model Styling */
-  width: 60%;
+  width: 100%;
+  height: min-content;
   padding: 5px;
   margin: 5px;
 }
 
-#correct, #wrong {
-  font-size: 24px;
-  margin: 0 40px;
+#written-buttons {
+  width: 60%;
 }
 
 /* Multiple Choice Button Styling */
@@ -238,7 +311,8 @@ button, label {
   /* Box Model Styling */
   min-width: 25vw;
   padding: 7px;
-  margin: 15px 0;
+  margin: 15px 20px;
+  border: ridge 2px lightslategray;
 }
 
 /* Right-Wrong Message Styling */
@@ -248,12 +322,12 @@ button, label {
 
   /* Position Styling */
   position: absolute;
-  top: 30vh;
-  left: 35vw;
+  z-index: 5;
   
   /* Box Model Styling */
-  width: 30vw;
-  height: 30vh;
+  width: 100vw;
+  height: calc(100% - 75px);
+  margin-top: -10px;
 
   /* Flex Sytling */
   display: flex;
@@ -263,5 +337,12 @@ button, label {
 }
 
 #right-wrong-message {
-  font-size: 15px;
+  font-size: 30px;
+  margin-top: -70px;
+}
+
+/* Next Button Styling */
+#next-buttons {
+  font-size: 24px;
+  padding: 5px 20px;
 }

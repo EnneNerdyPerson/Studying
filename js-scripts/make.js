@@ -140,13 +140,15 @@ function newCard(num, id, questionValue, answerValue) {
     qContainerDiv.append(questionLabel);
 
     //question input
-    let questionInput = document.createElement("input");
-    questionInput.type = "text";
+    // let questionInput = document.createElement("input");
+        // questionInput.type = "text";
+    let questionInput = document.createElement("textarea");
+    questionInput.rows = "1";
+    questionInput.cols = "45";
     questionInput.name = "question[]";      //question form data array
     questionInput.id = id;                  //card_id for question
     questionInput.value = questionValue;
     qContainerDiv.append(questionInput);
-
 
     // Answer Creation
     let aContainerDiv = document.createElement("div");
@@ -159,8 +161,11 @@ function newCard(num, id, questionValue, answerValue) {
     aContainerDiv.append(answerText);
 
     //answer input
-    let answerInput = document.createElement("input");
-    answerInput.type = "text";
+    // let answerInput = document.createElement("input");
+    // answerInput.type = "text";
+    let answerInput = document.createElement("textarea");
+    answerInput.rows = "1";
+    answerInput.cols = "45";
     answerInput.name = "answer[]";      //answer form data array
     answerInput.id = id;                //card_id for question
     answerInput.value = answerValue;

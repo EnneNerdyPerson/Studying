@@ -17,8 +17,9 @@
     <div class="header flex-container">
         <!--Logo and Website Name-->
         <div class="flex-container">
-            <h1 id="logo">Logo</h1>
-            <h2>Flashcard Learning</h2>
+            <!-- <h1 id="logo">Logo</h1> -->
+            <img id="logo" src="images/Logo.png" alt="Logo">
+            <h2 id="website-name">Flash Study</h2>
         </div>
 
         <!--Buttons for banner header-->
@@ -47,114 +48,118 @@
         </div>
     </div>
 
-    <!-- Learning Settings -->
-    <div class="learning-container">
-        <!--Randomize Check: randomize order of flashcards-->
-        <div class="learning-items">
-            <input id="random" class="learn-checkbox"
-                type="checkbox"  name="random"  value="random">
-            <label for="random">Randomize</label>
-        </div>
-
-        <!--Favorite Check: only study favorited cards-->
-        <div class="learning-items">
-            <input id="favorite" class="learn-checkbox"
-                type="checkbox"  name="favorite"  value="favorite">
-            <label for="favorite">Favorites</label>
-        </div>
-
-        <!--Learn Modes Contianer-->
-        <div class="learning-items">
-            <!--Dropdown for learn modes: hover to change learn modes-->
-            <p class="dropdown" id="learn-mode">Learn Mode</p>
-
-            <!--Dropdown content of different learn modes-->
-            <div class="dropdown-content" id="learn-mode-content">
-                <!--Flashcard Learn Style: 
-                    Right/Wrong: labeling flashcard as correct or not
-                    Rank: ranking understanding of flashcard 1-5 
-                    None: don't use flashcards when studying-->
-                <input id="standard-vs-ranked" class="button"
-                    type="button" value="Right/Wrong">
-
-                <!--Use multiple choice options when studying-->
-                <input id="multi" class="button"
-                    type="button"  value="Multiple Choice">
-
-                <!--Use written input when studying-->
-                <input id="writt-key" class="button"
-                    type="button" name="writt-key" value="Typed">
-            </div>
-        </div>
-    </div>
-
-    <!--Flashcard Elemments-->
-    <div id="center" class="flip-container spacing">
-        <div id="flashcard" class="flipper">
-            <!--Question of Flashcard (front)-->
-            <div id="question" class="front flashcard-container">
-                <p id="que-text">Question</p>
+    <div id="center-flex">
+        <!-- Learning Settings -->
+        <div class="learning-container">
+            <!--Randomize Check: randomize order of flashcards-->
+            <div class="learning-items">
+                <input id="random" class="learn-checkbox"
+                    type="checkbox"  name="random"  value="random">
+                <label for="random">Randomize</label>
             </div>
 
-            <!--Answer of Flashcard (back)-->
-            <div id="answer" class="back flashcard-container">
-                <p id="ans-text">Answer</p>
+            <!--Favorite Check: only study favorited cards-->
+            <div class="learning-items">
+                <input id="favorite" class="learn-checkbox"
+                    type="checkbox"  name="favorite"  value="favorite">
+                <label for="favorite">Favorites</label>
+            </div>
+
+            <!--Learn Modes Contianer-->
+            <div class="learning-items">
+                <!--Dropdown for learn modes: hover to change learn modes-->
+                <p id="learn-mode" class="dropdown">Learn Mode</p>
+
+                <!--Dropdown content of different learn modes-->
+                <div id="learn-mode-content" class="dropdown-content">
+                    <!--Flashcard Learn Style: 
+                        Right/Wrong: labeling flashcard as correct or not
+                        Rank: ranking understanding of flashcard 1-5 
+                        None: don't use flashcards when studying-->
+                    <input id="standard-vs-ranked" class="learn-button"
+                        type="button" value="Right/Wrong">
+
+                    <!--Use multiple choice options when studying-->
+                    <input id="multi" class="learn-button"
+                        type="button"  value="Multiple Choice">
+
+                    <!--Use written input when studying-->
+                    <input id="writt-key" class="learn-button"
+                        type="button" name="writt-key" value="Typed">
+                </div>
             </div>
         </div>
-    </div>
 
-    <!--Ranking Buttons-->
-    <div id="ranked-buttons" class="flex-container spacing hidden">
-        <button id="rank-1" class="learn-button">1</button>
-        <button id="rank-2" class="learn-button">2</button>
-        <button id="rank-3" class="learn-button">3</button>
-        <button id="rank-4" class="learn-button">4</button>
-        <button id="rank-5" class="learn-button">5</button>
-    </div>
+        <!--Flashcard Elemments-->
+        <div id="center" class="flip-container spacing">
+            <div id="flashcard" class="flipper">
+                <!--Question of Flashcard (front)-->
+                <div id="question" class="front flashcard-container">
+                    <p id="que-text">Question</p>
+                </div>
 
-    <!--Right/Wrong Buttons-->
-    <div id="standard-buttons" class="flex-container spacing">
-        <button id="correct" class="button">Correct</button>
-        <button id="wrong" class="button">Wrong</button>
-    </div>
-
-    <!--Multiple Choice Buttons-->
-    <div id="multi-buttons" class="hidden">
-        <div class="multi-container">
-            <button id="multi-1" class="mutli-button button">Choice 1</button>
-            <button id="multi-2" class="mutli-button button">Choice 2</button>
+                <!--Answer of Flashcard (back)-->
+                <div id="answer" class="back flashcard-container">
+                    <p id="ans-text">Answer</p>
+                </div>
+            </div>
         </div>
-        <div class="multi-container">
-            <button id="multi-3" class="mutli-button button">Choice 3</button>
-            <button id="multi-4" class="mutli-button button">Choice 4</button>
+
+        <!--Ranking Buttons-->
+        <div id="ranked-buttons" class="flex-container spacing hidden">
+            <button id="rank-1" class="rank-button">1</button>
+            <button id="rank-2" class="rank-button">2</button>
+            <button id="rank-3" class="rank-button">3</button>
+            <button id="rank-4" class="rank-button">4</button>
+            <button id="rank-5" class="rank-button">5</button>
         </div>
-    </div>
 
-    <!--Message for Correct/Inccorect Learning:
-        Tells user if multiple choice button or written response is correct.
-        If not correct, lets user know correct response-->
-    <div id="right-wrong-container" class="hidden">
-        <p id="right-wrong-message"></p>
-        <button id="right-wrong-button">
-            Next
-        </button>
-    </div>
+        <!--Right/Wrong Buttons-->
+        <div id="standard-buttons" class="flex-container spacing">
+            <button id="correct" class="stand-button">Correct</button>
+            <button id="wrong" class="stand-button">Wrong</button>
+        </div>
 
-    <!--Written Buttons: for written response learning-->
-    <div id="written-buttons" class="flex-container hidden">
-        <input id="written-input" type="text">
-        <button id="written-button" class="button">
-            Submit
-        </button>
-    </div>
+        <!--Multiple Choice Buttons-->
+        <div id="multi-buttons" class="hidden">
+            <div class="multi-container">
+                <button id="multi-1" class="mutli-button button">Choice 1</button>
+                <button id="multi-2" class="mutli-button button">Choice 2</button>
+            </div>
+            <div class="multi-container">
+                <button id="multi-3" class="mutli-button button">Choice 3</button>
+                <button id="multi-4" class="mutli-button button">Choice 4</button>
+            </div>
+        </div>
 
-    <!--First Look Buttons: get new card after first look at flashcard -->
-    <div id="next-buttons" class="flex-container hidden">
-        <button id="next-buttons" class="button">
-            First Look Done
-        </button>
-    </div>
+        <!--Message for Correct/Inccorect Learning:
+            Tells user if multiple choice button or written response is correct.
+            If not correct, lets user know correct response-->
+        <div id="right-wrong-container" class="hidden">
+            <p id="right-wrong-message"></p>
+            <button id="right-wrong-button" class="button">
+                Next
+            </button>
+        </div>
 
+        <!--Written Buttons: for written response learning-->
+        <div id="written-buttons" class="flex-container hidden spacing">
+            <!-- <input id="written-input" type="text"> -->
+            <textarea id="written-input" name="written-input" rows="1" cols="50" placeholder="Type your message here..."></textarea>
+            <button id="written-button" class="button">
+                Submit
+            </button>
+        </div>
+
+        <!--First Look Buttons: get new card after first look at flashcard -->
+        <div id="next-buttons" class="flex-container hidden spacing">
+            <button id="next-buttons" class="button">
+                First Look Done
+            </button>
+        </div>
+
+    </div>
+    
     <!-- Scripts -->
     <script src="js-scripts/data-structures.js"></script>
     <script type="module" src="js-scripts/learn.js"></script>

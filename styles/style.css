@@ -21,10 +21,6 @@ body {
 .hidden {
     visibility: hidden;
     position: absolute;
-
-    /* Box Model Styling */
-    width: 0;
-    height: 0;
 }
 
 /* button styling */
@@ -39,9 +35,15 @@ body {
     margin: 0 5px;
 
     /* Border Styling */
-    background-color: #42273B;
-    border: solid #70566D 1px;
+    background-color: #70566D;
+    border: solid #726771 1px;
     border-radius: 3px;
+}
+
+.button:hover {
+    background-color: #42273B;
+    box-shadow: 4px 2px 2px #3d333b;
+    border-radius: 5px;
 }
 
 /* Banner header styling */
@@ -59,6 +61,7 @@ body {
 
 /* header buttons styling */
 .header-button {
+    color: black;
     background-color: transparent;
     font-size: 20px;
     border-style: none;
@@ -80,5 +83,28 @@ body {
 
 /* logo styling */
 #logo {
-    margin: 0 10px 0 0;
+    width: 150px;
+    margin: 0 10px;
+}
+
+/* Website Name Styling */
+#website-name {
+    position: relative;
+    font-style: italic;
+
+    /* Box Model Styling */
+    left: -10px;
+    margin: 2px 0 0 0;
+}
+
+/* Website Name Animations */
+@keyframes page-name-animate {
+  from   {left: -58px; font-style: italic;}
+  to    {left: -10px;}
+}
+
+@keyframes show-f {
+  0%  {opacity: 0;  font-style: italic;}
+  90%    {opacity: 1;}
+  100%    {opacity: 1;}
 }

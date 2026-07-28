@@ -5,12 +5,25 @@ h2 {
 label {
     margin: 0 10px;
     font-size: 18px;
+    font-weight: bold;
+    align-content: center;
 }
 
 input[type=text] {
+    font-size: 15px;
     width: 75%;
     height: 20px;
     padding: 5px;
+}
+
+textarea {
+    font-size: 16px;
+    font-family: "Tirra", cursive;
+
+    width: 75%;
+    height: 20px;
+    padding: 5px;
+    
 }
 
 /* Styling for Card item */
@@ -24,23 +37,39 @@ input[type=text] {
     border: solid black 1px;
     border-radius: 5px;
 
+    display: flex;
+    flex-direction: row;
+
     background-color: #DAF7DC;
 }
 
-/* Styling for Button Container */
+/* Styling for Buttons */
 .button-container {
     width: 50px;
     border-style: none;
     background-color: transparent;
 }
 
+.button {
+    font-size: 18px;
+    padding: 5px;
+}
+
+.form-button {
+    margin: 10px 30px;
+}
+
 /* Styling for Delete Button */
 .delete-button {
-    padding: 5px 10px;
-    font-size: 17px;
+    padding: 5px 13px;
+    font-size: 18px;
 }
 
 /* Change Set Name Set Styling */
+#name-change-container {
+    height: 81px;
+}
+
 #change-set-name, #fin-set-name {
     /* Color Styling */
     color: black;
