@@ -39,9 +39,15 @@ body {
     margin: 0 5px;
 
     /* Border Styling */
-    background-color: #42273B;
-    border: solid #70566D 1px;
+    background-color: #70566D;
+    border: solid #726771 1px;
     border-radius: 3px;
+}
+
+.button:hover {
+    background-color: #42273B;
+    box-shadow: 4px 2px 2px #3d333b;
+    border-radius: 5px;
 }
 
 /* Banner header styling */
